@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   before_action :show_pending_achievement_notifications!
   before_action :apply_dev_override_ref
   before_action :allow_profiler
-  
+
   # Track who makes changes in PaperTrail
   def user_for_paper_trail
     current_user&.id
