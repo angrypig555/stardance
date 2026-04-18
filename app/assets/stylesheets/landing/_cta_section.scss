@@ -1,0 +1,76 @@
+// "Make this summer count." CTA section.
+// The shared .rsvp-form input/button styles live in _rsvp_form.scss.
+.cta-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 2rem 3rem;
+  color: white;
+
+  &__title {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: clamp(36px, 4.4vw, 56px);
+    text-align: center;
+    margin: 0 0 1rem;
+
+    &--italic {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+    }
+  }
+
+  &__subtitle {
+    font-family: 'Exo 2', sans-serif;
+    font-size: clamp(16px, 1.6vw, 22px);
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 2rem;
+    max-width: 600px;
+  }
+
+  &__caption {
+    font-family: 'Exo 2', sans-serif;
+    font-style: italic;
+    font-size: 18px;
+    color: #eee7bb;
+    text-align: center;
+    margin: 0.5rem 0 0;
+  }
+
+  &__form {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .rsvp-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+
+    &__row {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 6px;
+      flex-wrap: nowrap;
+      position: relative;
+    }
+
+    &__star {
+      position: absolute;
+      right: 61.8px;
+      top: -47.2px;
+      width: 100px;
+      height: auto;
+      transform: rotate(1.48deg);
+      pointer-events: none;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+}

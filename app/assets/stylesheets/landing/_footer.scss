@@ -1,0 +1,130 @@
+.footer {
+  padding: 1em 2em;
+  background-color: #7a4841;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("landing/pattern.avif");
+    background-repeat: repeat;
+    background-size: 1200px;
+    opacity: 0.1;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  @media (max-width: 960px) {
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+  }
+
+  .about {
+    width: 60%;
+    font-family: var(--font-family-text);
+    padding: 2em 4em;
+    color: var(--color-bg);
+
+    @media (max-width: 960px) {
+      width: 90%;
+      padding: 0;
+    }
+
+    &__text {
+      h2 {
+        font-size: 2rem;
+        font-weight: normal;
+      }
+
+      p {
+        font-size: 1.2rem;
+        margin: 1.5rem 0;
+        line-height: 1.6;
+        font-family: var(--font-family-text);
+      }
+    }
+
+    &__links {
+      display: flex;
+      flex-direction: row;
+      gap: 1em;
+
+      h3 {
+        font-size: 1.3rem;
+        font-family: var(--font-family-subtitle);
+      }
+
+      a {
+        color: var(--color-bg);
+        text-decoration: none;
+        cursor: pointer;
+        font-size: 1.3rem;
+        font-weight: normal;
+        font-family: var(--font-family-text);
+
+        &:hover { text-decoration: underline; }
+      }
+    }
+
+    &__links-hackclub,
+    &__links-resources {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
+    }
+  }
+
+  .credits {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+
+    @media (max-width: 960px) { width: 90%; }
+
+    &__image {
+      max-height: 500px;
+      width: auto;
+      height: auto;
+      margin-top: 2rem;
+      pointer-events: auto;
+      display: block;
+
+      @media (max-width: 960px) {
+        max-height: none;
+        width: 100%;
+      }
+    }
+  }
+
+  .links {
+    background-color: var(--color-brown-400);
+    border-radius: 1.5rem;
+    padding: 1rem 2rem;
+    display: flex;
+    flex-direction: row;
+    gap: 3rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+
+    a {
+      color: var(--color-brown-700);
+      font-size: 1.5em;
+      font-family: var(--font-family-text);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--color-bg);
+        cursor: pointer;
+      }
+
+      @media (max-width: 600px) { font-size: 1.3em; }
+    }
+  }
+}

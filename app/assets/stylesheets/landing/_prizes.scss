@@ -1,0 +1,197 @@
+// Prizes section — scattered collage of product images.
+// Positions: Figma pixel coords ÷ 1280 (web viewport width).
+// Vertical: normalised to prize-bar height (613px Figma → ~480px web).
+.prizes {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1280 / 450;
+  overflow: visible;
+  overflow-x: clip;
+  margin-top: 1rem;
+  margin-bottom: 6rem;
+
+  &__text {
+    position: absolute;
+    right: 15%;
+    top: 15%;
+    text-align: right;
+    z-index: 2;
+  }
+
+  &__title {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: clamp(32px, 3.6vw, 56px);
+    color: white;
+    margin: 0;
+  }
+
+  &__subtitle {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 400;
+    font-size: clamp(14px, 1.4vw, 22px);
+    color: white;
+    max-width: 22em;
+    margin: 0.5em 0 0 auto;
+    text-align: right;
+  }
+
+  &__bar {
+    position: absolute;
+    inset: 0;
+  }
+
+  &__item {
+    position: absolute;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  &__item-img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  &__label {
+    position: absolute;
+    font-family: 'Exo 2', sans-serif;
+    font-style: italic;
+    font-size: clamp(10px, 1.15vw, 18px);
+    color: #eee7bb;
+    white-space: nowrap;
+    pointer-events: none;
+
+    // Per-label positioning relative to parent item, compensating for rotation.
+    &--bambu    { right: 7.2%; bottom: -4.1%; transform: rotate(-6.43deg); left: 25.8%; }
+    &--8bitdo   { left: 15.8%; top: 10%; transform: rotate(-14.47deg); }
+    &--raspi    { right: -9%; bottom: 29.4%; transform: rotate(-59deg); }
+    &--airpods  { left: 15.4%; bottom: -6.9%; transform: rotate(-0.04deg); }
+    &--polaroid { left: 28.5%; top: -14%; transform: rotate(0.44deg); }
+    &--flipper  { left: 23.7%; bottom: 126.5%; transform: rotate(0.29deg); top: -15.2%; width: 18%; z-index: 2; right: -4.2%; }
+    &--blahaj   { left: 8.1%; bottom: 1.3%; rotate: 5deg; z-index: 5; }
+    &--mouse    { right: 42.3%; bottom: -11.3%; transform: rotate(2.56deg); }
+    &--playdate { left: 18.1%; top: -8.1%; transform: rotate(0.93deg); }
+  }
+
+  &__item-star {
+    position: absolute;
+    width: 60px;
+    height: auto;
+    pointer-events: none;
+  }
+
+  // ---- Per-item positioning (Figma px ÷ 1280) ----
+
+  &__item--bambu {
+    left: -1.9%;
+    top: -11.3%;
+    width: 20.5%;
+    transform: rotate(10.8deg);
+    z-index: 5;
+  }
+  &__item-star--bambu {
+    top: 12.7%;
+    right: 8.1%;
+    width: 95px;
+    transform: rotate(0.52deg);
+    z-index: 2;
+  }
+
+  &__item--8bitdo {
+    left: 14.7%;
+    top: 30.6%;
+    width: 30%;
+  }
+
+  &__item--raspi {
+    left: 12.4%;
+    top: 55.5%;
+    width: 17.5%;
+    transform: rotate(30.32deg);
+  }
+
+  &__item--airpods {
+    left: 29.8%;
+    top: 52%;
+    width: 13%;
+    transform: rotate(2.4deg);
+    z-index: 7;
+  }
+
+  &__item--polaroid {
+    left: 41.4%;
+    top: 50.1%;
+    width: 16%;
+    transform: rotate(-4.16deg);
+    z-index: 6;
+  }
+
+  &__item--flipper {
+    left: 54.5%;
+    top: 56.1%;
+    width: 19%;
+    transform: rotate(-14.49deg);
+    z-index: 6;
+  }
+  &__item-star--flipper {
+    top: -26.6%;
+    right: -5.9%;
+    transform: rotate(51.88deg);
+    width: 100px;
+  }
+
+  &__item--blahaj {
+    left: 43.1%;
+    top: 59.7%;
+    width: 25.2%;
+    transform: rotate(3.64deg);
+    z-index: 7;
+  }
+  &__item-star--blahaj {
+    top: 63.8%;
+    left: 66.2%;
+    transform: rotate(-202.18deg);
+    width: 50px;
+    scale: 1.5;
+  }
+
+  &__item--mouse {
+    left: 68%;
+    top: 56%;
+    width: 18.2%;
+    transform: rotate(-7.98deg);
+    z-index: 7;
+  }
+
+  &__item--playdate {
+    left: 83.1%;
+    top: 52%;
+    width: 21%;
+    transform: rotate(8.11deg);
+    z-index: 2;
+  }
+
+  @media (max-width: 900px) {
+    aspect-ratio: auto;
+    min-height: 500px;
+
+    &__text {
+      position: relative;
+      right: auto;
+      top: auto;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    &__subtitle {
+      margin: 0.5em auto 0;
+      text-align: center;
+    }
+
+    &__bar {
+      position: relative;
+      min-height: 400px;
+    }
+  }
+}

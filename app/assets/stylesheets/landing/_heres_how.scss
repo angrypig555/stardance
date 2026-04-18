@@ -1,0 +1,217 @@
+.heres-how {
+  background: transparent;
+  margin-top: 0;
+  padding: 1rem 2rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2rem;
+  overflow-x: clip;
+  overflow-y: visible;
+  margin-bottom: 10rem;
+
+  &__nebula,
+  &__streak {
+    position: absolute;
+    height: auto;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  &__nebula {
+    top: -80.8%;
+    left: -21.2%;
+    width: 138%;
+    opacity: 0.38;
+    transform: scaleY(-1) rotate(10.99deg);
+  }
+
+  &__streak {
+    top: -60.7%;
+    left: -12.7%;
+    width: 130%;
+    opacity: 0.15;
+    transform: rotate(-171deg);
+  }
+
+  &__title {
+    font-family: 'Exo 2', sans-serif;
+    font-size: clamp(36px, 4.5vw, 58px);
+    font-weight: 700;
+    color: white;
+    margin: 0 0 0 max(2rem, calc(50% - 412px));
+    text-align: left;
+  }
+
+  &__cards {
+    display: flex;
+    flex-direction: row;
+    gap: 55px;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+
+    // Cascading stagger: each card sits 88px lower than the previous (Figma).
+    > .heres-how__card--0 { margin-top: -106px; margin-left: -260px; }
+    > .heres-how__card--2 { margin-top: 88px; }
+    > .heres-how__card--3 { margin-top: 176px; margin-right: -260px; }
+  }
+
+  &__card {
+    position: relative;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+    padding: 2rem 2.5rem;
+    width: 386px;
+    min-height: 214px;
+    height: 214px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    text-align: center;
+    flex-shrink: 0;
+
+    &--2 { width: 396px; }
+
+    // Peek cards (left & right): blue border, image bg, image clipped inside
+    // but the card itself doesn't clip (so star can hang off).
+    &--peek {
+      border-color: #7886ae;
+      background: transparent;
+      padding: 0;
+
+      .heres-how__card-image-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: inherit;
+      }
+    }
+
+    .heres-how__card-image {
+      position: absolute;
+      max-width: none;
+      display: block;
+
+      &--fill {
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      &--crop {
+        width: 305.06%;
+        height: 183.37%;
+        left: -204.54%;
+        top: -44.88%;
+        object-fit: cover;
+      }
+    }
+
+    // --3 lets the star hang outside the card; the image is still clipped
+    // by .heres-how__card-image-wrap.
+    &--3 { overflow: visible; }
+
+    &--placeholder {
+      opacity: 0;
+      pointer-events: none;
+      flex-shrink: 0;
+
+      @media (max-width: 900px) { display: none; }
+    }
+  }
+
+  &__card-sparkles {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // Figma uses two separate sparkle instances per card.
+  &__card-sparkle {
+    position: absolute;
+    width: 32px;
+    height: auto;
+    pointer-events: none;
+    z-index: 0;
+
+    &--left  { left: -17px; top: 55%; }
+    &--right { right: -17px; top: 20%; }
+  }
+
+  &__card-title {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(28px, 3vw, 40px);
+    color: white;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__card p {
+    font-family: 'Exo 2', sans-serif;
+    font-size: clamp(16px, 1.5vw, 20px);
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+  }
+
+  // Card 1: star hangs off bottom-left, upside down.
+  // Card 3: star hangs off top-left, upright.
+  &__card-star {
+    position: absolute;
+    width: 120px;
+    height: auto;
+    pointer-events: none;
+    z-index: 3;
+
+    &--1 {
+      bottom: -57px;
+      left: -32px;
+      transform: scaleY(-1);
+    }
+
+    &--3 {
+      top: -58px;
+      left: -32px;
+    }
+  }
+
+  &__repeat {
+    font-family: 'Exo 2', sans-serif;
+    font-style: italic;
+    font-size: clamp(16px, 1.4vw, 22px);
+    color: rgba(255, 255, 255, 0.7);
+    text-align: right;
+    margin: -1rem max(2rem, calc(50% - 412px)) 0 auto;
+    position: absolute;
+    right: 0;
+    bottom: 20%;
+  }
+
+  @media (max-width: 900px) {
+    &__cards {
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    &__card { width: min(386px, 100%); }
+    &__repeat { display: none; }
+  }
+}

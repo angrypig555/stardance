@@ -1,0 +1,52 @@
+// Project thumbnails bar — diagonal staircase of past project screenshots.
+.project-thumbs {
+  position: relative;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 36rem;
+  margin-top: -80px;
+  z-index: 5;
+  padding: 0 2rem;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    width: 19rem;
+    flex-shrink: 0;
+
+    // margin-top is set dynamically by the project-thumbs-scroll controller.
+    &--1, &--2, &--3, &--4, &--5 { margin-top: 0; }
+  }
+
+  &__tab {
+    background: white;
+    color: black;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 16px;
+    padding: 4px 10px 1px;
+    border-radius: 8px 8px 0 0;
+    width: fit-content;
+    white-space: nowrap;
+  }
+
+  &__img-wrap {
+    border: 2px solid white;
+    border-radius: 0 8px 8px 8px;
+    overflow: hidden;
+    height: 13rem;
+    width: auto;
+  }
+
+  &__img {
+    display: block;
+    width: 100%;
+    height: 13rem;
+    object-fit: cover;
+  }
+
+  @media (max-width: 900px) {
+    display: none;
+  }
+}

@@ -1,0 +1,83 @@
+// "What is this?" section — layered bordered card.
+.what-is-this {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  overflow-x: clip;
+  color: white;
+  margin: 15rem 0;
+
+  &__moon {
+    position: absolute;
+    left: 85.9%;
+    top: 131.2%;
+    transform: translateY(-50%);
+    width: clamp(200px, 30vw, 400px);
+    height: auto;
+    pointer-events: none;
+    z-index: 0;
+    scale: 3;
+
+    @media (max-width: 900px) {
+      width: 160px;
+      left: 76.1%;
+      opacity: 0.5;
+    }
+  }
+
+  &__card-stack {
+    position: relative;
+    max-width: 824px;
+    width: 100%;
+  }
+
+  // Layered borders — outermost to innermost.
+  &__border {
+    position: absolute;
+    inset: 0;
+    border: 2px solid #eee7bb;
+    backdrop-filter: blur(12px);
+    background: #08061e;
+
+    &--1 { border-radius: 28px; opacity: 0.10; margin: 0; }
+    &--2 { border-radius: 22px; opacity: 0.20; margin: 10px; }
+    &--3 { border-radius: 16px; opacity: 0.40; margin: 19px; }
+    &--4 { border-radius: 12px; opacity: 0.70; margin: 28px; }
+  }
+
+  &__inner {
+    position: relative;
+    z-index: 1;
+    border: 2px solid #eee7bb;
+    border-radius: 8px;
+    backdrop-filter: blur(12px);
+    background: #08061e;
+    margin: 37px;
+    padding: clamp(2rem, 4vw, 3.5rem) clamp(2rem, 5vw, 4rem);
+    text-align: center;
+  }
+
+  &__title {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: clamp(36px, 4.4vw, 56px);
+
+    &--italic {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+    }
+  }
+
+  &__body {
+    font-weight: 400;
+    font-size: clamp(15px, 1.4vw, 18px);
+    line-height: 1.6;
+    max-width: 656px;
+
+    p {
+      margin: 1rem 0;
+      &:last-child { margin-bottom: 0; }
+    }
+  }
+}

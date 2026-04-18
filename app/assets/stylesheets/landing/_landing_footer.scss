@@ -1,0 +1,150 @@
+// 6 layered scene images over the page gradient, with content (logo/nav +
+// description) sitting inside the scene. Positions derive from the Figma frame
+// (795.735 × 852.781); each layer's bbox was recorded at PNG-export time and
+// expressed as percentages of that frame so the scene scales fluidly.
+.landing-footer {
+  position: relative;
+  margin-top: 0;
+  color: white;
+  font-family: 'Exo 2', sans-serif;
+  overflow: hidden;
+
+  // Override the global `* { font-family: Roboto }` from _base.scss.
+  * { font-family: 'Exo 2', sans-serif; }
+
+  &__scene {
+    position: relative;
+    width: 100%;
+    // Match the Figma frame aspect so layer positions stay accurate,
+    // cropped shorter to reduce empty space beneath the footer content.
+    aspect-ratio: 795.735 / 750;
+    pointer-events: none;
+  }
+
+  &__scene-layer {
+    position: absolute;
+    display: block;
+    max-width: none;
+    // Transparent pixels are cropped out; layers are tight sprites, so we
+    // rely on mix-blend-mode: screen to composite over the dark background.
+    mix-blend-mode: screen;
+
+    &--base {
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      mix-blend-mode: normal;
+    }
+
+    &--2 { left: 4.66%;  top: 32.04%; width: 20.38%; }
+    &--3 { left: 76.06%; top: 37.00%; width: 18.31%; }
+    &--4 { left: 68.13%; top: 28.66%; width: 13.08%; }
+    &--1 { left: 10.96%; top: 21.02%; width: 12.93%; }
+  }
+
+  &__content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    max-width: 1100px;
+    margin: 0 auto;
+    // Nudge the content box right so the yellow decoration hanging off the
+    // left edge (~105px) feels visually centered with the rest.
+    transform: translateX(50px);
+    padding: 0 clamp(2rem, 5vw, 6rem) clamp(6rem, 12vw, 14rem);
+  }
+
+  &__top-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 3rem;
+    width: 100%;
+  }
+
+  &__logo-col {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  &__logo {
+    width: clamp(180px, 18vw, 229px);
+    height: auto;
+  }
+
+  &__links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: clamp(18px, 1.9vw, 24px);
+    font-weight: 700;
+    text-align: left;
+    margin-top: 1.75rem;
+    letter-spacing: 0.07em;
+
+    a {
+      color: white;
+      text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
+  }
+
+  &__text {
+    max-width: 780px;
+    font-size: clamp(15px, 1.4vw, 18.27px);
+    font-weight: 300;
+    line-height: 1.55;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+
+    p {
+      margin: 0 0 1em;
+      &:last-child { margin-bottom: 0; }
+    }
+  }
+
+  &__creature {
+    position: absolute;
+    pointer-events: none;
+    height: auto;
+    z-index: 1;
+
+    &--left {
+      width: clamp(72px, 9vw, 110px);
+      left: -105px;
+      bottom: 102px;
+      opacity: 0.56;
+      transform: rotate(71.76deg) scaleY(-1);
+    }
+
+    &--right {
+      width: clamp(90px, 12vw, 150px);
+      left: 80.5%;
+      bottom: 38.5%;
+      opacity: 0.11;
+      transform: rotate(63.05deg);
+    }
+  }
+
+  &__rocket {
+    position: absolute;
+    width: clamp(280px, 38vw, 500px);
+    height: auto;
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  @media (max-width: 900px) {
+    &__top-row { flex-direction: column; }
+    &__links { text-align: left; }
+    &__content { padding: 0 1.5rem clamp(4rem, 10vw, 8rem); }
+    &__creature,
+    &__rocket { display: none; }
+  }
+}

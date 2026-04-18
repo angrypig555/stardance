@@ -1,0 +1,77 @@
+// Shared RSVP form styles — used by hero and CTA sections.
+// Figma-spec input: 54px tall, transparent white, cream border.
+// Figma-spec button: 137×54, cream bg, black bold Exo 22.
+.rsvp-form {
+  .input-red {
+    background: rgba(255, 255, 255, 0.25);
+    border: 2px solid #eee7bb;
+    border-radius: 2px;
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 54px;
+    display: flex;
+    align-items: center;
+
+    &:has(input:focus-visible) {
+      outline: 3px solid #eee7bb;
+      outline-offset: 2px;
+    }
+
+    > div {
+      background: transparent;
+      box-shadow: none;
+      color: white;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+
+      input {
+        background: transparent;
+        border: none;
+        outline: none;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        font-family: 'Exo 2', sans-serif;
+        font-size: 22px;
+        font-weight: 400;
+        color: white;
+
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.5);
+          text-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .btn--red.btn--striped {
+    background: #eee7bb;
+    border: none;
+    border-radius: 1px;
+    padding: 0;
+    height: 54px;
+    width: 137px;
+    flex: 0 0 auto;
+
+    > div {
+      background: #eee7bb;
+      color: #000;
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    &:hover > div { background: #e0d8a8; }
+  }
+}

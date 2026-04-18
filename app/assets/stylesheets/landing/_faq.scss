@@ -1,0 +1,161 @@
+.faq-section-second-border-wrapper {
+  --jagged-depth: 40px;
+  --jagged-border-polygon: polygon(
+    0 var(--jagged-depth),
+    4% 0,
+    10% var(--jagged-depth),
+    19% 5px,
+    24% var(--jagged-depth),
+    32% 2px,
+    43% 65px,
+    51% 5px,
+    56% var(--jagged-depth),
+    64% 2px,
+    70% 30px,
+    74% 0,
+    79% var(--jagged-depth),
+    85% 5px,
+    96% 65px,
+    99.99% 20px,
+    100% 100%,
+    0% 100%
+  );
+
+  @media (max-width: 600px) {
+    --jagged-border-polygon: polygon(
+      0 var(--jagged-depth),
+      24% 10px,
+      51% 65px,
+      74% 0,
+      96% 50px,
+      99.99% 20px,
+      100% 100%,
+      0% 100%
+    );
+  }
+
+  padding-top: 1rem;
+  clip-path: var(--jagged-border-polygon);
+  background-color: #f8e8d1;
+  margin-top: -8rem;
+
+  .faq-section-border-wrapper {
+    padding-top: 1rem;
+    clip-path: var(--jagged-border-polygon);
+    background-color: #d5c3a0;
+
+    .faq {
+      position: relative;
+      background-color: #f8e8d1;
+      padding: 8rem 1rem 4rem 1rem;
+      clip-path: var(--jagged-border-polygon);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .title {
+        margin-bottom: 4rem;
+        color: var(--color-brown-700);
+        font-size: 3rem;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 22rem));
+        gap: 3.5rem;
+        margin-bottom: 4rem;
+        width: 90%;
+        justify-content: center;
+
+        @media (min-width: 1600px) { gap: 6rem; }
+        @media (max-width: 1200px) { grid-template-columns: repeat(3, minmax(0, 22rem)); }
+        @media (max-width: 900px)  { grid-template-columns: repeat(2, minmax(0, 22rem)); }
+        @media (max-width: 600px) {
+          grid-template-columns: 1fr;
+          width: 95%;
+        }
+
+        .card {
+          position: relative;
+          padding: 1rem;
+          color: var(--color-bg);
+          border-radius: 16px;
+          box-shadow: var(--shadow);
+          display: flex;
+          flex-direction: column;
+          background: #4f8fba;
+          background-image: repeating-conic-gradient(
+            from 0deg,
+            rgba(0, 0, 0, 0.02) 0deg 90deg,
+            transparent 90deg 180deg
+          );
+          background-size: 100px 100px;
+          background-repeat: repeat;
+
+          &::after {
+            content: "";
+            position: absolute;
+            top: -0.8em;
+            left: -0.8em;
+            width: calc(100% + 1.6em);
+            height: calc(100% + 1.6em);
+            border-radius: 16px;
+            z-index: -2;
+            box-shadow: var(--shadow);
+          }
+
+          .question {
+            font-size: 1.7rem;
+            font-family: var(--font-family-subtitle);
+
+            @media (max-width: 960px) { font-size: 1.4rem; }
+          }
+
+          .answer {
+            min-height: 8em;
+            height: auto;
+            border-radius: 0 0 12px 12px;
+            font-size: 1.2rem;
+            font-family: var(--font-family-text);
+
+            @media (max-width: 960px) { min-height: 0; }
+
+            a {
+              color: var(--color-bg);
+              text-decoration: underline;
+            }
+          }
+        }
+
+        @mixin card-color($bg, $halo) {
+          background-color: $bg;
+          &::after { background: $halo; }
+        }
+
+        .card-yellow { @include card-color(#be772b, #e7c06d); }
+        .card-green  { @include card-color(#75a743, #d0da91); }
+        .card-blue   { @include card-color(#4f8fba, #a4dddb); }
+        .card-red    { @include card-color(#be4d54, #f9b2a0); }
+      }
+
+      // Subtle pattern overlay.
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("landing/pattern.avif") repeat center center / 1200px;
+        opacity: 0.1;
+        z-index: 0;
+      }
+    }
+  }
+}
+
+.under-faq {
+  width: 100%;
+  height: 16px;
+  background-color: #ad7757;
+}

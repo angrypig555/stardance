@@ -1,0 +1,222 @@
+.hero {
+  background: transparent;
+  align-items: flex-start;
+  justify-content: flex-start;
+  // overflow-x clip keeps the moon/satellite from triggering horizontal scroll;
+  // overflow-y visible lets space art extend past the section boundary.
+  overflow-x: clip;
+  overflow-y: visible;
+  padding: 0;
+
+  .rsvp-container {
+    position: relative;
+    z-index: 1;
+    margin-left: 2.5rem;
+    margin-top: 210px;
+    margin-bottom: 5rem;
+    width: clamp(524px, 42vw, 760px);
+    max-width: calc(100vw - 5rem);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    @media (max-width: 900px) {
+      margin-left: 2rem;
+      margin-top: 140px;
+      width: auto;
+      max-width: calc(100vw - 4rem);
+    }
+
+    @media (max-width: 600px) {
+      margin-left: 1.5rem;
+      margin-top: 120px;
+      max-width: calc(100vw - 3rem);
+    }
+
+    .rsvp-form {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      // Roughly tracks the "Build something" headline width.
+      max-width: clamp(343px, 36vw, 750px);
+      gap: 0.6rem;
+
+      &__row {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        gap: 6px;
+        flex-wrap: nowrap;
+        position: relative;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      &__links {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        margin-top: 0.25rem;
+      }
+
+      .sign-back-in-link {
+        display: inline-block;
+        margin: 0;
+
+        .link-btn {
+          background: none;
+          border: none;
+          padding: 0;
+          font-size: 0.8rem;
+          color: rgba(255, 255, 255, 0.55);
+          cursor: pointer;
+          text-decoration: underline;
+
+          &:hover { color: rgba(255, 255, 255, 0.9); }
+        }
+      }
+
+      .success,
+      .error {
+        color: white;
+        box-shadow: var(--shadow);
+        font-size: 1.2rem;
+        padding: 0.5rem 0.4rem;
+        border-radius: 0.5rem;
+        text-align: center;
+      }
+
+      .success { background-color: #75a743; }
+      .error { background-color: var(--color-red-400); }
+    }
+
+    @keyframes carat-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-16px); }
+    }
+
+    .carat {
+      margin-top: 50px;
+      // Center the 48px arrow under the 137px RSVP button: (137 - 48) / 2 ≈ 44px
+      align-self: flex-end;
+      margin-right: 44px;
+      animation: carat-bounce 1.2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+      filter: brightness(0) saturate(100%) invert(94%) sepia(15%) saturate(540%) hue-rotate(8deg) brightness(96%) contrast(89%);
+    }
+  }
+}
+
+.hero__eyebrow {
+  font-family: 'Exo 2', sans-serif;
+  font-size: clamp(22px, 2.4vw, 52px);
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  margin: 0 0 0.2em;
+}
+
+.hero__headline {
+  font-family: 'Exo 2', sans-serif;
+  font-size: clamp(44px, 4.6vw, 96px);
+  font-weight: 700;
+  color: #fefdfb;
+  line-height: 1;
+  margin: 0 0 0.35em;
+  display: flex;
+  flex-direction: column;
+
+  // App-wide `* { font-family: Jua }` breaks inheritance into spans;
+  // force Exo 2 on descendants and restore Playfair on the italic one.
+  span {
+    font-family: 'Exo 2', sans-serif;
+    display: block;
+    white-space: nowrap;
+  }
+
+  &--italic,
+  span.hero__headline--italic {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 700;
+    display: inline;
+  }
+}
+
+.hero__subhead {
+  font-family: 'Exo 2', sans-serif;
+  font-size: clamp(15px, 1.4vw, 28px);
+  color: white;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  margin: 0 0 3.25em;
+  line-height: 1.4;
+}
+
+// Star doodle: sits on the RSVP button, left arm dangling into the email
+// input as a checkmark (Figma match).
+.hero__doodle-arrow {
+  position: absolute;
+  width: 120px;
+  height: auto;
+  right: 46px;
+  top: -56px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hero__caption {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 18px;
+  font-style: italic;
+  color: #eee7bb;
+  margin: 0.6em 0 0;
+  align-self: flex-start;
+  text-align: left;
+}
+
+// Dark left gradient ensures text readability over the NASA photo.
+.hero__left-gradient {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(#0E0810 0%, #140D16 77%, rgb(8, 6, 30) 100%);
+  z-index: 0;
+  pointer-events: none;
+  padding-bottom: 25%;
+}
+
+// NASA hero photo — right side of hero.
+.hero__nasa-photo {
+  position: absolute;
+  right: 0;
+  top: 22%;
+  width: 65%;
+  max-width: 850px;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+
+  &-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform-origin: center center;
+  }
+
+  @media (max-width: 900px) {
+    width: 55%;
+    opacity: 0.6;
+  }
+
+  @media (max-width: 600px) {
+    width: 70%;
+    opacity: 0.4;
+  }
+}
