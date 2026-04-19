@@ -50,16 +50,15 @@ Rails.application.routes.draw do
   # Landing
   root "landing#index"
   # get "marketing", to: "landing#marketing"
-  get "login", to: redirect("/?login=1")
 
   # Start Flow
-  get  "/start",               to: "start#index"
-  post "/start/display_name",  to: "start#update_display_name"
-  # post "/start/experience",    to: "start#update_experience"
-  post "/start/project",       to: "start#update_project"
-  post "/start/prefill_project", to: "start#prefill_project"
-  post "/start/devlog",        to: "start#update_devlog"
-  post "/start/begin_sign_in", to: "start#begin_sign_in"
+  # get  "/start",               to: "start#index"
+  # post "/start/display_name",  to: "start#update_display_name"
+  # # post "/start/experience",    to: "start#update_experience"
+  # post "/start/project",       to: "start#update_project"
+  # post "/start/prefill_project", to: "start#prefill_project"
+  # post "/start/devlog",        to: "start#update_devlog"
+  # post "/start/begin_sign_in", to: "start#begin_sign_in"
 
   # RSVPs
   resources :rsvps, only: [ :create ]
@@ -131,7 +130,7 @@ Rails.application.routes.draw do
   get "dev_login/:id", to: "sessions#dev_login", as: :dev_login if Rails.env.development?
 
   # OAuth callback for HCA
-  get "/oauth/callback", to: "sessions#create"
+  # get "/oauth/callback", to: "sessions#create"
 
   # Kitchen
   get "kitchen", to: "kitchen#index"
