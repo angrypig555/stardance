@@ -1,7 +1,7 @@
 class Airtable::RsvpSyncJob < Airtable::BaseSyncJob
   def table_name = "_rsvps"
 
-  def records = Rsvp.all
+  def records = Rsvp.includes(:replies)
 
   def primary_key_field = "email"
 
@@ -14,6 +14,11 @@ class Airtable::RsvpSyncJob < Airtable::BaseSyncJob
       "user_agent" => rsvp&.user_agent,
       "ref" => rsvp&.ref,
       "created_at" => rsvp.created_at,
+      "updated_at" => rsvp.updated_at,
+      "signup_confirmation_sent_at" => rsvp.signup_confirmation_sent_at,
+      "click_confirmed_at" => rsvp.click_confirmed_at,
+      "reply_confirmed_at" => rsvp.reply_confirmed_at,
+      "replies_count" => rsvp.replies.size,
       "synced_at" => Time.now,
       "star_id" => rsvp.id.to_s
     }
