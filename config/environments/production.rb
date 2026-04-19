@@ -79,7 +79,7 @@ Rails.application.configure do
     address:         "smtp.loops.so",
     port:            587,
     user_name:       "loops",
-    password:        ENV["LOOPS_API_KEY"],
+    password:        Rails.application.credentials.dig(:loops, :api_key) || ENV["LOOPS_API_KEY"],
     authentication:  "plain",
     enable_starttls: true
   }

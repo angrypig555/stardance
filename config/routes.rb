@@ -63,6 +63,7 @@ Rails.application.routes.draw do
 
   # RSVPs
   resources :rsvps, only: [ :create ]
+  get "rsvps/confirm/:token", to: "rsvps#confirm", as: :confirm_rsvp
 
   # Shop
   get "shop", to: "shop#index"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_16_171242) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_19_191028) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -519,13 +519,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_16_171242) do
   end
 
   create_table "rsvps", force: :cascade do |t|
+    t.datetime "click_confirmed_at"
+    t.string "confirmation_token"
     t.datetime "created_at", null: false
     t.string "email", null: false
     t.string "ip_address"
     t.string "ref"
+    t.datetime "reply_confirmed_at"
+    t.datetime "signup_confirmation_sent_at"
     t.datetime "synced_at"
     t.datetime "updated_at", null: false
     t.string "user_agent"
+    t.index ["confirmation_token"], name: "index_rsvps_on_confirmation_token", unique: true
   end
 
   create_table "shop_card_grants", force: :cascade do |t|
