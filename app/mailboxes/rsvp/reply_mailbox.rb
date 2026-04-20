@@ -29,11 +29,11 @@ class Rsvp::ReplyMailbox < ApplicationMailbox
 
   def advance_game(rsvp)
     game = Rsvp::Game.current_for(rsvp) || Rsvp::Game.start_for(rsvp)
+    cell = parse_cell(extract_text_body)
 
-    if game.move_count.zero?
+    if cell.nil? && game.move_count.zero?
       Rsvp::Mailer.tic_tac_toe_start(game).deliver_later
     else
-      cell = parse_cell(extract_text_body)
       game.play_user_move(cell) if cell
       mailer_action = game.in_progress? ? :tic_tac_toe_move : :tic_tac_toe_over
       Rsvp::Mailer.public_send(mailer_action, game).deliver_later

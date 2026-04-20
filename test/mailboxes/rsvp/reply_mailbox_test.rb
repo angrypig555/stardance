@@ -124,6 +124,22 @@ class Rsvp::ReplyMailboxTest < ActionMailbox::TestCase
     assert_nil Rsvp::Game.current_for(rsvp)
   end
 
+  test "digit reply on a freshly-started game plays the move instead of resending start" do
+    rsvp = Rsvp.create!(email: "eager@example.com")
+    Rsvp::Game.start_for(rsvp)
+
+    receive_inbound_email_from_mail \
+      to: "rsvp@stardance.hackclub.com",
+      from: "eager@example.com",
+      subject: "Re: tic tac toe",
+      body: "3"
+
+    game = Rsvp::Game.current_for(rsvp) || rsvp.games.order(:created_at).last
+    assert_equal "X", game.board[2]
+    assert game.move_count >= 2
+    assert_enqueued_email_with Rsvp::Mailer, :tic_tac_toe_move, args: [ game ]
+  end
+
   test "first reply enqueues tic_tac_toe_start" do
     rsvp = Rsvp.create!(email: "starter@example.com")
 
