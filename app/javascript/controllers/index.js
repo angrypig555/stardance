@@ -136,9 +136,6 @@ application.register("sidebar-pin", SidebarPinController);
 import SnowController from "./snow_controller";
 application.register("snow", SnowController);
 
-import StartDevlogController from "./start_devlog_controller";
-application.register("start-devlog", StartDevlogController);
-
 import StatsHoverController from "./stats_hover_controller";
 application.register("stats-hover", StatsHoverController);
 

@@ -49,15 +49,6 @@ Rails.application.routes.draw do
   root "landing#index"
   # get "marketing", to: "landing#marketing"
 
-  # Start Flow
-  # get  "/start",               to: "start#index"
-  # post "/start/display_name",  to: "start#update_display_name"
-  # # post "/start/experience",    to: "start#update_experience"
-  # post "/start/project",       to: "start#update_project"
-  # post "/start/prefill_project", to: "start#prefill_project"
-  # post "/start/devlog",        to: "start#update_devlog"
-  # post "/start/begin_sign_in", to: "start#begin_sign_in"
-
   # RSVPs
   resources :rsvps, only: [ :create ]
   get "rsvps/confirm/:token", to: "rsvps#confirm", as: :confirm_rsvp
@@ -106,9 +97,6 @@ Rails.application.routes.draw do
   # Action Mailbox for incoming HCB and tracking emails
   mount ActionMailbox::Engine => "/rails/action_mailbox"
   mount ActiveInsights::Engine => "/insights"
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # hackatime should not create a new session; it's used for linking
   get "auth/hackatime/callback", to: "identities#hackatime"
