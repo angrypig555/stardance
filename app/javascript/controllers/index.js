@@ -25,9 +25,6 @@ application.register("reveal-on-scroll", RevealOnScrollController);
 import CustomsWarningController from "./customs_warning_controller";
 application.register("customs-warning", CustomsWarningController);
 
-import DebugOverlayController from "./debug_overlay_controller";
-application.register("debug-overlay", DebugOverlayController);
-
 import DevlogAttachmentSelectorController from "./devlog_attachment_selector_controller";
 application.register(
   "devlog-attachment-selector",
@@ -58,9 +55,6 @@ application.register(
 import HcbChartController from "./hcb_chart_controller";
 application.register("hcb-chart", HcbChartController);
 
-import HelloController from "./hello_controller";
-application.register("hello", HelloController);
-
 import HeroWarpController from "./hero_warp_controller";
 application.register("hero-warp", HeroWarpController);
 
@@ -75,9 +69,6 @@ application.register("lapse-modal", LapseModalController);
 
 import LazyLoadController from "./lazy_load_controller";
 application.register("lazy-load", LazyLoadController);
-
-import LightboxController from "./lightbox_controller";
-application.register("lightbox", LightboxController);
 
 import LoadMoreController from "./load_more_controller";
 application.register("load-more", LoadMoreController);
@@ -127,9 +118,6 @@ application.register("rocket-arc", RocketArcController);
 import RsvpCounterController from "./rsvp_counter_controller";
 application.register("rsvp-counter", RsvpCounterController);
 
-import ResponsiveImageMapController from "./responsive_image_map_controller";
-application.register("responsive-image-map", ResponsiveImageMapController);
-
 import SearchableSelectController from "./searchable_select_controller";
 application.register("searchable-select", SearchableSelectController);
 
@@ -157,9 +145,6 @@ application.register("stats-hover", StatsHoverController);
 import SuperMegaFunnelController from "./super_mega_funnel_controller";
 application.register("super-mega-funnel", SuperMegaFunnelController);
 
-import TimezoneController from "./timezone_controller";
-application.register("timezone", TimezoneController);
-
 import TooltipController from "./tooltip_controller";
 application.register("tooltip", TooltipController);
 
@@ -186,6 +171,3 @@ application.register("word-count", WordCountController);
 
 import WordCycleController from "./word_cycle_controller";
 application.register("word-cycle", WordCycleController);
-
-import XpWindowController from "./xp_window_controller";
-application.register("xp-window", XpWindowController);
