@@ -138,20 +138,18 @@
     &--4 { width: 15.23vw; margin-top: 10.08vw; }
     &--5 { width: 20.39vw; margin-top: 13.44vw; }
 
-    @media (hover: hover) and (pointer: fine) {
-      &:hover {
-        transform: translateY(-6px);
-        filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.45));
+    &:hover {
+      transform: translateY(-6px);
+      filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.45));
 
-        .project-thumbs__img {
-          transform: scale(1.04);
-        }
+      .project-thumbs__img {
+        transform: scale(1.04);
+      }
 
-        .project-thumbs__desc {
-          opacity: 1;
-          transform: translateY(0);
-          pointer-events: auto;
-        }
+      .project-thumbs__desc {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
       }
     }
   }

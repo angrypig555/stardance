@@ -4,13 +4,18 @@
   justify-content: flex-start;
   // overflow-x clip keeps the moon/satellite from triggering horizontal scroll;
   // overflow-y visible lets space art extend past the section boundary.
-  overflow-x: clip;
-  overflow-y: visible;
-  padding: 0;
+  overflow: clip;
+  padding: 0 0 5rem;
   margin-bottom: -4.7rem;
 
   @media (max-width: 600px) {
     margin-bottom: -3.5rem;
+    // Reserve space at the bottom for the absolute-positioned video so the
+    // hero's height stays constant whether the video is in-place or pinned.
+    // Padding = original 5rem + video height (16:9 of full-bleed width) +
+    // 1.5rem gap between rsvp text and video.
+    padding-bottom: calc(9rem + 10vw);
+    overflow: clip visible;
   }
 
   .rsvp-container {
@@ -61,8 +66,6 @@
       }
     }
   }
-  overflow: clip;
-  padding-bottom: 5rem;
 }
 
 .hero__eyebrow {
@@ -145,10 +148,11 @@
   width: 120px;
   height: auto;
   right: -22px;
-  top: 22px;
+  top: 42.4px;
   pointer-events: none;
   z-index: 2;
   transform: rotate(-9deg);
+	right: calc(-420px + 30vw);
 
   @media (max-width: 600px) {
     width: 96px;
@@ -303,8 +307,8 @@
   --nasa-opacity: 1;
   position: absolute;
   right: 0;
-  top: 22%;
-  width: 65%;
+  top: 57%;
+  width: 36%;
   max-width: 850px;
   z-index: 0;
   pointer-events: none;
@@ -329,6 +333,295 @@
   @media (max-width: 600px) {
     --nasa-opacity: 0.4;
     width: 70%;
+    // Pixel-anchored on mobile so the photo doesn't drift when the rsvp
+    // text height varies, or when the video pins / unpins.
+    top: 544px;
+    right: 3.4px;
+  }
+}
+
+// Vimeo background embed centered in the right half of the hero.
+// `background=1` on the player URL handles autoplay/muted/loop/no-chrome.
+//
+// 3D tilt (driven by `tilt_3d_controller`): writes `--tilt-x` / `--tilt-y` on
+// mousemove. We apply rotation here via CSS vars so it composes with the
+// translateY(-50%) used for vertical centering. `transform-style: preserve-3d`
+// lets the star's translateZ pop forward when the wrapper tilts.
+.hero__video {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --tilt-transition: 600ms;
+  // Vertical offset that the hero state uses for visual centering. Overridden
+  // to 0 when pinned so the wrapper anchors to the bottom-right corner.
+  --hero-y: -50%;
+  position: absolute;
+  right: 7.7vw;
+  top: 51.1%;
+  width: 42%;
+  max-width: 640px;
+  aspect-ratio: 16 / 9;
+  z-index: 1;
+  transform: translateY(var(--hero-y)) perspective(1000px)
+    rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+  transform-style: preserve-3d;
+  transition: transform var(--tilt-transition) cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  cursor: pointer;
+
+  iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 12px;
+    display: block;
+    // Let mousemove pass through the iframe to the wrapper so the tilt keeps
+    // tracking the cursor over the video itself.
+    pointer-events: none;
+  }
+
+  @media (max-width: 900px) {
+    width: 46%;
+    right: 3vw;
+  }
+
+  @media (max-width: 600px) {
+    // Absolute placement pinned to the bottom of the hero, sitting in the
+    // padding-bottom space reserved on `.hero`. Out of flex flow so the
+    // hero's row layout (rsvp + spaceship) is unaffected, and pin/unpin
+    // doesn't reflow the rest of the section.
+    position: absolute;
+    top: auto;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+    margin: 0;
+    transform: perspective(1000px) rotateX(var(--tilt-x))
+      rotateY(var(--tilt-y));
+  }
+}
+
+// Star peeking out of the corner of the video, mirroring the rightmost
+// card in the gain-stardust section. Sits in the same Z-plane as the card
+// so it tilts with the wrapper but doesn't pop out.
+.hero__video-star {
+  position: absolute;
+  width: 110px;
+  height: auto;
+  top: -52px;
+  right: -4.5%;
+  pointer-events: none;
+  z-index: 2;
+
+  @media (max-width: 900px) {
+    width: 84px;
+    top: -39px;
+    right: -21px;
+  }
+
+  @media (max-width: 600px) {
+    width: 77px;
+    top: -36px;
+    right: -4.75%;
+  }
+  scale: -1 1;
+}
+
+// Custom controls bar: play/pause, scrub, mute. Hidden until the user hovers
+// or focuses something inside the video. The bar sits inside the tilt'd
+// wrapper, so it tilts with the card.
+.hero__video-controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 0 0 12px 12px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0));
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+  pointer-events: none;
+  z-index: 3;
+
+  .hero__video:hover &,
+  .hero__video:focus-within & {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.hero__video-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  cursor: pointer;
+  transition: background 150ms ease-out;
+
+  &:hover { background: rgba(255, 255, 255, 0.18); }
+  &:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+}
+
+.hero__video-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+// Default state shows "play" + "unmuted" icons; the controller toggles
+// classes on .hero__video to swap them.
+.hero__video-icon--pause,
+.hero__video-icon--muted { display: none; }
+
+.hero__video--playing {
+  .hero__video-icon--play { display: none; }
+  .hero__video-icon--pause { display: block; }
+}
+
+.hero__video--muted {
+  .hero__video-icon--unmuted { display: none; }
+  .hero__video-icon--muted { display: block; }
+}
+
+// Visible track is 4px tall, but the input itself is taller so the click /
+// drag target is bigger than what's drawn. `--progress` (set by
+// vimeo_player_controller) drives the filled portion's gradient.
+.hero__video-scrub {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  accent-color: #fff;
+  --progress: 0%;
+
+  &::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 999px;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.85) var(--progress),
+      rgba(255, 255, 255, 0.22) var(--progress)
+    );
+  }
+
+  &::-moz-range-track {
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.22);
+  }
+
+  &::-moz-range-progress {
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.85);
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    margin-top: -4px; // center 12px thumb on 4px track
+    border-radius: 50%;
+    background: #fff;
+    border: 0;
+    cursor: pointer;
+  }
+
+  &::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #fff;
+    border: 0;
+    cursor: pointer;
+  }
+
+  &:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+}
+
+// Pinned mini-player: same DOM element as `.hero__video`, just re-anchored to
+// the bottom-right of the viewport once the hero scrolls past. The `pin-in`
+// keyframe slides it up from the right; afterward the static transform takes
+// over so the tilt-3d controller can keep driving the rotation vars.
+.hero__video--pinned {
+  --hero-y: 0%;
+  position: fixed;
+  top: auto;
+  left: auto;
+  right: 24px;
+  bottom: 24px;
+  width: 320px;
+  max-width: 40vw;
+  margin: 0;
+  z-index: 9999;
+  filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.45));
+  animation: hero-video-pin-in 520ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  // Re-anchor the star to the wrapper's right edge at a size that suits the
+  // mini-player; the original full-size coordinates would float off-canvas.
+  .hero__video-star {
+    width: 64px;
+    top: -30px;
+    left: auto;
+    right: -16px;
+  }
+
+  @media (max-width: 600px) {
+    width: 260px;
+    max-width: 60vw;
+    right: 16px;
+    bottom: 16px;
+  }
+
+  @media (min-width: 1200px) {
+    width: 380px;
+  }
+}
+
+// Slide-out animation. JS adds .--unpinning on top of .--pinned, the keyframe
+// reverses the slide, then `animationend` strips both classes to drop back
+// into the hero layout.
+.hero__video--unpinning {
+  animation: hero-video-pin-out 420ms cubic-bezier(0.7, 0, 0.84, 0) forwards;
+}
+
+@keyframes hero-video-pin-out {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+@keyframes hero-video-pin-in {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
   }
 }
 
@@ -405,10 +698,6 @@
 // Resting layout once the warp reveal lands; see landing/_warp.scss for the
 // animation flow that gets us here.
 html.warped {
-  .hero__nasa-photo {
-    top: 56%;
-    max-width: 700px;
-  }
 
   .hero__headline > span:nth-child(1) {
     margin: 1rem 0;

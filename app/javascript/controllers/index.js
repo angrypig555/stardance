@@ -142,6 +142,9 @@ application.register("stats-hover", StatsHoverController);
 import SuperMegaFunnelController from "./super_mega_funnel_controller";
 application.register("super-mega-funnel", SuperMegaFunnelController);
 
+import Tilt3dController from "./tilt_3d_controller";
+application.register("tilt-3d", Tilt3dController);
+
 import TooltipController from "./tooltip_controller";
 application.register("tooltip", TooltipController);
 
@@ -153,6 +156,9 @@ application.register("tutorial-video-modal", TutorialVideoModalController);
 
 import UploadFormController from "./upload_form_controller";
 application.register("upload-form", UploadFormController);
+
+import VimeoPlayerController from "./vimeo_player_controller";
+application.register("vimeo-player", VimeoPlayerController);
 
 import VoteCategoryController from "./vote_category_controller";
 application.register("vote-category", VoteCategoryController);

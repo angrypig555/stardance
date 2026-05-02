@@ -27,4 +27,33 @@
     <%= image_tag image_url("landing/hero/nasa-hero.png"), loading: "eager", fetchpriority: "high", alt: "NASA Orion spacecraft", class: "hero__nasa-photo-img" %>
   </div>
 
+  <div class="hero__video" data-controller="tilt-3d vimeo-player" data-tilt-3d-max-value="9" data-action="click->vimeo-player#wrapperClick">
+    <iframe
+      data-vimeo-player-target="iframe"
+      src="https://player.vimeo.com/video/1188569982?autoplay=1&muted=1&loop=1&playsinline=1&controls=0&dnt=1"
+      frameborder="0"
+      allow="autoplay; fullscreen; picture-in-picture"
+      allowfullscreen
+      title="Stardance hero video"
+      aria-hidden="true"
+    ></iframe>
+    <%= image_tag image_url("landing/how-this-works/card-star.png"), class: "hero__video-star", alt: "", aria: { hidden: true } %>
+
+    <div class="hero__video-controls">
+      <button type="button" class="hero__video-btn" data-action="click->vimeo-player#togglePlay" aria-label="Play or pause hero video">
+        <svg class="hero__video-icon hero__video-icon--play" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M4 2.5v11l10-5.5z"/></svg>
+        <svg class="hero__video-icon hero__video-icon--pause" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M4 2.5h3v11H4zm5 0h3v11H9z"/></svg>
+      </button>
+      <input type="range" class="hero__video-scrub"
+             min="0" max="0" step="0.01" value="0"
+             data-vimeo-player-target="scrub"
+             data-action="input->vimeo-player#scrubInput change->vimeo-player#scrubChange"
+             aria-label="Scrub hero video">
+      <button type="button" class="hero__video-btn" data-action="click->vimeo-player#toggleMute" aria-label="Mute or unmute hero video">
+        <svg class="hero__video-icon hero__video-icon--unmuted" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M3 6v4h2.5L9 13V3L5.5 6zm8.5 2c0-1.1-.6-2-1.5-2.5v5c.9-.5 1.5-1.4 1.5-2.5zm-1.5-5v1.5c1.7.7 3 2.4 3 4.5s-1.3 3.8-3 4.5V13c2.5-.7 4.5-3 4.5-5.5S12.5 2.7 10 2z"/></svg>
+        <svg class="hero__video-icon hero__video-icon--muted" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M3 6v4h2.5L9 13V3L5.5 6zm8.7 2l1.7-1.7-.9-.9L10.8 7l-1.7-1.7-.9.9L9.9 8 8.2 9.7l.9.9 1.7-1.7 1.7 1.7.9-.9z"/></svg>
+      </button>
+    </div>
+  </div>
+
 </div>
