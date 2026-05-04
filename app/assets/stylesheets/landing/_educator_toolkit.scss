@@ -136,6 +136,47 @@
     }
   }
 
+  &__nasa-attribution {
+    margin: var(--space-m) 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xxs);
+
+    @media (max-width: 820px) {
+      align-items: center;
+    }
+  }
+
+  &__nasa-attribution-label {
+    font-family: var(--font-family-text);
+    font-size: clamp(11px, 0.9vw, 13px);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-yellow-200);
+    margin: 0;
+  }
+
+  &__nasa-attribution-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs) var(--space-m);
+
+    a {
+      font-family: var(--font-family-text);
+      font-size: clamp(var(--font-size-s), 1.1vw, var(--font-size-m));
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-color: rgba(255, 255, 255, 0.3);
+
+      &:hover {
+        color: white;
+        text-decoration-color: rgba(255, 255, 255, 0.7);
+      }
+    }
+  }
+
   &__resources {
     max-width: var(--edu-container);
     margin: 0 auto;
@@ -157,6 +198,32 @@
     flex-direction: column;
     gap: var(--space-m);
     height: 100%;
+  }
+
+  &__resource-extras {
+    margin-top: var(--space-m);
+  }
+
+  &__resource-extras-label {
+    text-align: center;
+    margin: 0 0 var(--space-m);
+  }
+
+  &__resource-extras-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-m);
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__resource-patch-image {
+    display: block;
+    width: clamp(160px, 55%, 260px);
+    height: auto;
+    margin: 0 auto;
   }
 
   &__resource {
@@ -185,6 +252,30 @@
 
       .educator-toolkit__resource-body {
         padding: var(--space-m) var(--space-l) var(--space-l);
+      }
+    }
+
+    &--patch {
+      gap: var(--space-s);
+
+      .btn--yellow.btn--striped {
+        background: var(--color-yellow-200);
+        border: none;
+        border-radius: 4px;
+        padding: 0;
+        width: 100%;
+
+        > div {
+          background: var(--color-yellow-200);
+          color: #1a1608;
+          font-family: inherit;
+          font-weight: 700;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: var(--space-s) var(--space-m);
+        }
       }
     }
 

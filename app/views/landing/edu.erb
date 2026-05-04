@@ -22,6 +22,13 @@
         Everything you need to spread the word about Stardance Challenge.
         Show the video, get free posters, and request an Artemis mission patch.
       </p>
+      <div class="educator-toolkit__nasa-attribution">
+        <p class="educator-toolkit__nasa-attribution-label">Featured on NASA.gov</p>
+        <div class="educator-toolkit__nasa-attribution-links">
+          <a href="https://www.nasa.gov/learning-resources/space-out-this-summer-with-variety-of-nasa-stem-activities/" target="_blank" rel="noopener">Space Out This Summer &rarr;</a>
+          <a href="https://www.nasa.gov/stem-content/hack-club-stardance-challenge/" target="_blank" rel="noopener">Hack Club Stardance Challenge &rarr;</a>
+        </div>
+      </div>
       <p class="educator-toolkit__teen-cta">
         Teen? <a href="https://stardance.hackclub.com/edu-return">Head here instead &rarr;</a>
       </p>
@@ -46,7 +53,6 @@
   </section>
 
   <section class="educator-toolkit__resources">
-
     <div class="educator-toolkit__resource-layout">
       <div class="educator-toolkit__resource educator-toolkit__resource--featured educator-toolkit__resource--video">
         <div class="educator-toolkit__video-wrapper">
@@ -59,7 +65,7 @@
           </iframe>
         </div>
         <div class="educator-toolkit__resource-body">
-          <h3 class="educator-toolkit__resource-title">Step 1: Show the 2&#8209;minute classroom video</h3>
+          <h3 class="educator-toolkit__resource-title">Show the 2&#8209;minute classroom video</h3>
           <p class="educator-toolkit__resource-meta">
             Play this quick overview in class so students know what Stardance is
             and how they can join.
@@ -67,26 +73,33 @@
         </div>
       </div>
 
-      <div class="educator-toolkit__resource-stack">
-        <a class="educator-toolkit__resource educator-toolkit__resource--compact"
-           href="<%= patch_request_url %>"
-           target="_blank"
-           rel="noopener">
-          <span class="educator-toolkit__resource-body">
-            <span class="educator-toolkit__resource-title">Step 2: Request your Artemis II mission patch</span>
-            <span class="educator-toolkit__resource-meta">A sewn Artemis II mission patch, mailed to educators who show the video.</span>
-          </span>
-          <span class="educator-toolkit__resource-action">
-            Request patch <span aria-hidden="true">&rarr;</span>
-          </span>
-        </a>
+      <a class="educator-toolkit__resource educator-toolkit__resource--featured educator-toolkit__resource--patch"
+         href="<%= patch_request_url %>"
+         target="_blank"
+         rel="noopener">
+        <%= image_tag artemis_patch_image_url,
+                      alt: "",
+                      class: "educator-toolkit__resource-patch-image",
+                      loading: "lazy" %>
+        <div class="educator-toolkit__resource-body">
+          <h3 class="educator-toolkit__resource-title">Request your Artemis II mission patch</h3>
+          <p class="educator-toolkit__resource-meta">A sewn Artemis II mission patch, mailed to educators who show the video.</p>
+        </div>
+        <span class="btn btn--yellow btn--striped">
+          <div>Request patch &rarr;</div>
+        </span>
+      </a>
+    </div>
 
+    <div class="educator-toolkit__resource-extras">
+      <p class="educator-toolkit__resource-extras-label">Also available for educators</p>
+      <div class="educator-toolkit__resource-extras-grid">
         <a class="educator-toolkit__resource educator-toolkit__resource--compact"
            href="<%= poster_request_url %>"
            target="_blank"
            rel="noopener">
           <span class="educator-toolkit__resource-body">
-            <span class="educator-toolkit__resource-title">Request free classroom posters</span>
+            <span class="educator-toolkit__resource-title">Free classroom posters</span>
             <span class="educator-toolkit__resource-meta">Optional posters to help students remember where to sign up.</span>
           </span>
           <span class="educator-toolkit__resource-action">
@@ -98,7 +111,7 @@
            href="/downloads/branding-kit.zip"
            download="branding-kit.zip">
           <span class="educator-toolkit__resource-body">
-            <span class="educator-toolkit__resource-title">Download the printable branding kit</span>
+            <span class="educator-toolkit__resource-title">Printable branding kit</span>
             <span class="educator-toolkit__resource-meta">Stardance logo and branding assets for print.</span>
           </span>
           <span class="educator-toolkit__resource-action">
