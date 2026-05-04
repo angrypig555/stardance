@@ -58,10 +58,12 @@
   }
 
   &__arrow {
-    font-size: var(--font-subtitle);
+    width: 16px;
+    height: 16px;
     color: #7886ae;
     transition: transform 0.3s ease;
     margin-left: auto;
+    flex-shrink: 0;
   }
 
   &__answer {
