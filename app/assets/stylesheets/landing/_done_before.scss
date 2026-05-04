@@ -23,7 +23,7 @@
     }
     &--bottom {
       margin-top: var(--space-xxxxl);
-      margin-bottom: var(--space-s);
+      margin-bottom: calc(var(--space-xxxxl) * 2);
     }
   }
 
@@ -54,7 +54,11 @@
     margin-bottom: -0.25rem;
     position: absolute;
     z-index: 1;
-    top: 0;
+    // Center the artwork on the top border's horizontal line.
+    // Section padding-top (--space-xl) + border margin-top (--space-s) +
+    // half of the 32px border height to land on the line.
+    top: calc(var(--space-xl) + var(--space-s) + 16px);
+    transform: translateY(-50%);
   }
 
   &__title {

@@ -46,9 +46,9 @@
 
   &__moon {
     position: absolute;
-    left: 85.9%;
-    top: 131.2%;
-    transform: translateY(-50%);
+    left: 92%;
+    top: 140%;
+    transform: translateY(-50%) rotate(23deg);
     width: clamp(200px, 30vw, 400px);
     height: auto;
     pointer-events: none;

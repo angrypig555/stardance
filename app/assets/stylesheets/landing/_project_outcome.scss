@@ -214,16 +214,20 @@
     -webkit-backdrop-filter: blur(9px);
   }
 
-  // Sparkle hangs across the top edge of the meter (same pattern as
-  // done-before cards). SVG is naturally 31×69; rotated -90deg so the star
-  // reads horizontally, centered across the meter's top.
+  // Sparkle straddles the meter's top border, vertically centered on the
+  // line. SVG is naturally 31×69 and uses preserveAspectRatio="none"; we lock
+  // a fixed (slightly elongated) aspect-ratio so the post-rotate horizontal
+  // stretch is constant rather than scaling with screen size.
   &__meter-star {
     position: absolute;
-    top: -28px;
+    top: 0;
     left: 50%;
     width: 25px;
     height: auto;
-    transform: translateX(-50%) rotate(-90deg);
+    aspect-ratio: 31.107 / 80;
+    // top:0 anchors the box at the inner edge of the meter's 1.5px border;
+    // nudge up by half the border so the star centers on the line itself.
+    transform: translate(-50%, calc(-50% - 0.75px)) rotate(-90deg);
     z-index: 2;
     pointer-events: none;
   }

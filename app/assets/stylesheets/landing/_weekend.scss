@@ -9,6 +9,7 @@
   align-items: center;
   color: white;
   font-family: "Exo 2", sans-serif;
+  padding-bottom: calc(var(--space-xxxxl) * 2);
 
   // Top divider: full-bleed horizontal line with two decorative sparkles.
   // Line stretches; sparkles keep their intrinsic aspect ratio.
@@ -19,7 +20,7 @@
     max-width: 100%;
     height: 32px;
     margin-top: var(--space-s);
-    margin-bottom: var(--space-xl);
+    margin-bottom: calc(var(--space-xxxxl) * 2);
   }
 
   &__divider-line {

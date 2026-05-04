@@ -36,7 +36,10 @@
 
   &__bar {
     position: absolute;
-    inset: 0;
+    top: var(--space-xxl);
+    bottom: calc(-1 * var(--space-xxl));
+    left: 0;
+    right: 0;
   }
 
   &__item {
