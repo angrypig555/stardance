@@ -11,7 +11,7 @@
   &__text {
     position: absolute;
     right: 16%;
-    top: 17%;
+    top: 8%;
     text-align: right;
     z-index: 10;
   }
@@ -19,7 +19,7 @@
   &__title {
     font-family: "Exo 2", sans-serif;
     font-weight: 700;
-    font-size: clamp(45px, 3.6vw, 56px);
+    font-size: var(--font-h2);
     color: white;
     margin: 0;
   }
@@ -27,8 +27,8 @@
   &__subtitle {
     font-family: "Exo 2", sans-serif;
     font-weight: 400;
-    font-size: clamp(17px, 1.4vw, 22px);
-    color: white;
+    font-size: var(--font-body);
+    color: var(--color-body-text);
     max-width: 22em;
     margin: 0.5em 0 0 auto;
     text-align: right;
@@ -63,7 +63,7 @@
     position: absolute;
     font-family: "Exo 2", sans-serif;
     font-style: italic;
-    font-size: clamp(13px, 1.15vw, 18px);
+    font-size: var(--font-subtitle);
     color: var(--color-yellow-200);
     white-space: nowrap;
     pointer-events: none;
@@ -251,7 +251,7 @@
     }
 
     &__label {
-      font-size: 14px;
+      font-size: var(--font-subtitle);
     }
   }
 

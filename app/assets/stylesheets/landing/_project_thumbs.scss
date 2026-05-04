@@ -46,7 +46,7 @@
 
   &__step-heading {
     font-family: "Exo 2", sans-serif;
-    font-size: clamp(36px, 4.5vw, 58px);
+    font-size: var(--font-h2);
     font-weight: 700;
     color: white;
     margin: 0;
@@ -55,24 +55,12 @@
 
   &__step-lead {
     font-family: "Exo 2", sans-serif;
-    font-size: clamp(16px, 1.5vw, 22px);
-    color: rgba(255, 251, 228, 0.85);
+    font-size: var(--font-body);
+    color: var(--color-body-text);
     margin: 0 0 0 auto;
     max-width: 540px;
     text-align: right;
     line-height: var(--line-height-body);
-  }
-
-  &__title {
-    font-family: "Playfair Display", serif;
-    font-style: italic;
-    font-weight: 700;
-    font-size: clamp(28px, 3.1vw, 40px);
-    padding-bottom: 2rem;
-    color: white;
-    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-    text-align: center;
-    line-height: 1.1;
   }
 
   // "New to coding?" mini-block: sits below the gallery, left-aligned and small.
@@ -84,7 +72,7 @@
     max-width: 492px;
     width: 80%;
     margin: -6rem 20% 0px;
-    color: rgba(255, 251, 228, 0.9);
+    color: var(--color-body-text);
     font-family: "Exo 2", sans-serif;
     box-sizing: content-box;
 
@@ -101,13 +89,13 @@
 
   &__ntc-title {
     font-weight: 700;
-    font-size: 22px;
+    font-size: var(--font-body);
     color: white;
     margin: 0 0 0.4rem;
   }
 
   &__ntc-body {
-    font-size: clamp(15px, 4vw, 22px);
+    font-size: var(--font-body);
     line-height: 1.3;
     margin: 0;
   }
@@ -170,7 +158,7 @@
     background: white;
     color: black;
     font-family: "Exo 2", sans-serif;
-    font-size: 16px;
+    font-size: var(--font-subtitle);
     padding: 4px 10px 1px;
     border-radius: 8px 8px 0 0;
     width: fit-content;
@@ -218,7 +206,7 @@
     border-top: none;
     color: black;
     font-family: "Exo 2", sans-serif;
-    font-size: 14px;
+    font-size: var(--font-subtitle);
     line-height: 1.3;
     padding: 1rem 0.75rem 0.6rem;
     min-height: 3.6rem;

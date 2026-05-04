@@ -6,7 +6,7 @@
 .project-outcome {
   position: relative;
   padding: var(--space-xxxl) var(--space-m);
-  color: white;
+  color: var(--color-body-text);
   font-family: "Exo 2", sans-serif;
   max-width: 1280px;
   margin: 0 auto;
@@ -15,18 +15,23 @@
     font-family: "Playfair Display", serif;
     font-style: italic;
     font-weight: 700;
-    font-size: clamp(28px, 3.1vw, 40px);
+    font-size: var(--font-h3);
     color: white;
     margin: 0 auto var(--space-s);
     text-align: left;
     max-width: 946px;
     width: 100%;
+
+    &--italic {
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      font-weight: 700;
+    }
   }
 
   &__subtitle {
     font-family: "Exo 2", sans-serif;
-    font-size: clamp(16px, 1.5vw, 22px);
-    color: rgba(255, 251, 228, 0.85);
+    font-size: var(--font-body);
     margin: 0 auto var(--space-l);
     text-align: left;
     max-width: 946px;
@@ -102,7 +107,7 @@
     z-index: 2;
     margin-top: auto;
     padding: 0 0.75rem 0.75rem;
-    font-size: clamp(13px, 1.3vw, 16.8px);
+    font-size: var(--font-subtitle);
     line-height: 1.2;
     color: white;
     display: flex;
@@ -167,7 +172,7 @@
     margin: 0;
     font-family: "Exo 2", sans-serif;
     font-weight: 700;
-    font-size: clamp(13px, 1.3vw, 16.8px);
+    font-size: var(--font-subtitle);
     color: white;
     z-index: 2;
   }
@@ -235,7 +240,7 @@
   &__meter-text {
     font-family: "Exo 2", sans-serif;
     font-weight: 400;
-    font-size: clamp(13px, 1.3vw, 16.8px);
+    font-size: var(--font-subtitle);
     color: white;
     white-space: nowrap;
   }

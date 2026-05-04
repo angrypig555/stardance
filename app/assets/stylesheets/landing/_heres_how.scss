@@ -9,7 +9,7 @@
   gap: var(--space-xl);
   overflow-x: clip;
   overflow-y: visible;
-  margin-bottom: 10rem;
+  margin-bottom: 5rem;
 
   // Title + divider share a relative wrapper so the line stays vertically
   // centered on the heading regardless of font-size scaling.
@@ -75,7 +75,7 @@
 
   &__title {
     font-family: "Exo 2", sans-serif;
-    font-size: clamp(36px, 4.5vw, 58px);
+    font-size: var(--font-h2);
     font-weight: 700;
     color: white;
     margin: 0 auto;
@@ -102,8 +102,8 @@
 
   &__subtitle {
     font-family: "Exo 2", sans-serif;
-    font-size: clamp(16px, 1.5vw, 22px);
-    color: rgba(255, 251, 228, 0.85);
+    font-size: var(--font-body);
+    color: var(--color-body-text);
     text-align: center;
     margin: calc(-1 * var(--space-l)) auto 0;
     max-width: 720px;

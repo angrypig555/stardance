@@ -14,6 +14,20 @@ html body {
   height: fit-content;
 }
 
+// Bolded body copy — pop back to pure white so it stands out against the
+// translucent --color-body-text used for default body text.
+strong,
+b {
+  color: white;
+}
+
+// Body links share the FAQ link colour. Sections with brand-colour links
+// (header logo, footer nav, hero a's that read white/cream) keep their own
+// rules and override this default.
+a {
+  color: var(--color-yellow-200);
+}
+
 button {
   font-size: 1.2em;
 

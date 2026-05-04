@@ -39,7 +39,7 @@
     // Reach into the next section's "3. Earn prizes!" heading. The 14vw
     // term accounts for prizes' aspect-ratio box plus its title's offset
     // from the section top; tuned by eye against the rendered layout.
-    bottom: calc(-1 * (var(--space-m) + 14vw + 0.5 * clamp(54px, 4.3vw, 68px)));
+    bottom: calc(-1 * (var(--space-m) + 9.3vw + 0.5 * clamp(54px, 4.3vw, 68px)));
     right: 3.5vw;
     width: 28vw;
     pointer-events: none;
@@ -59,7 +59,7 @@
 
   &__title {
     font-family: "Exo 2", sans-serif;
-    font-size: clamp(36px, 4.5vw, 58px);
+    font-size: var(--font-h2);
     font-weight: 700;
     color: white;
     margin: 0 auto var(--space-xl);
@@ -204,7 +204,7 @@
     font-family: "Playfair Display", serif;
     font-style: italic;
     font-weight: 700;
-    font-size: clamp(28px, 3vw, 40px);
+    font-size: var(--font-h3);
     color: white;
     margin: 0;
     position: relative;
@@ -213,8 +213,8 @@
 
   &__card p {
     font-family: "Exo 2", sans-serif;
-    font-size: clamp(16px, 1.5vw, 20px);
-    color: rgba(255, 255, 255, 0.9);
+    font-size: var(--font-body);
+    color: var(--color-body-text);
     margin: 0;
     line-height: var(--line-height-body);
     position: relative;
@@ -240,19 +240,6 @@
       top: -58px;
       left: -32px;
     }
-  }
-
-  &__repeat {
-    font-family: "Exo 2", sans-serif;
-    font-style: italic;
-    font-size: clamp(16px, 1.4vw, 22px);
-    color: rgba(255, 255, 255, 0.7);
-    text-align: right;
-    margin: calc(-1 * var(--space-m)) max(var(--space-xl), calc(50% - 412px)) 0
-      auto;
-    position: absolute;
-    right: 0;
-    bottom: 20%;
   }
 
   @media (max-width: 900px) {

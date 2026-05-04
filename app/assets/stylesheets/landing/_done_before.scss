@@ -5,7 +5,7 @@
   flex-direction: column;
   align-items: center;
   padding: var(--space-xl) 0 var(--space-l);
-  color: white;
+  color: var(--color-body-text);
   font-family: "Exo 2", sans-serif;
 
   // Top/bottom dividers: full-bleed horizontal line with two decorative
@@ -64,7 +64,8 @@
   &__title {
     font-family: "Exo 2", sans-serif;
     font-weight: 700;
-    font-size: clamp(36px, 4.4vw, 56px);
+    font-size: var(--font-h2);
+    color: white;
     text-align: center;
     margin: 0;
   }
@@ -72,10 +73,10 @@
   &__subtitle {
     font-family: "Exo 2", sans-serif;
     font-weight: 400;
-    font-size: clamp(16px, 1.7vw, 22px);
+    font-size: var(--font-body);
     text-align: center;
     max-width: 593px;
-    margin: 0 0 var(--space-xl);
+    margin: var(--space-s) 0 3rem;
     line-height: var(--line-height-body);
   }
 
@@ -139,13 +140,14 @@
   &__card-number {
     font-family: "Exo 2", sans-serif;
     font-weight: 700;
-    font-size: clamp(36px, 4.4vw, 56px);
+    font-size: var(--font-h2);
+    color: white;
   }
 
   &__card-desc {
     font-family: "Exo 2", sans-serif;
     font-weight: 400;
-    font-size: clamp(16px, 1.7vw, 22px);
+    font-size: var(--font-body);
     max-width: 302px;
   }
 

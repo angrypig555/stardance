@@ -4,12 +4,13 @@
   flex-direction: column;
   align-items: center;
   padding: var(--space-xl);
-  color: white;
+  color: var(--color-body-text);
 
   &__title {
     font-family: "Exo 2", sans-serif;
     font-weight: 700;
-    font-size: clamp(46px, 5.5vw, 70px);
+    font-size: var(--font-h2);
+    color: white;
     text-align: center;
     margin: 0 0 var(--space-l);
   }
@@ -45,7 +46,8 @@
   &__question {
     font-family: "Exo 2", sans-serif;
     font-weight: 500;
-    font-size: clamp(16px, 1.7vw, 22px);
+    font-size: var(--font-body);
+    color: white;
   }
 
   &__number {
@@ -56,7 +58,7 @@
   }
 
   &__arrow {
-    font-size: 14px;
+    font-size: var(--font-subtitle);
     color: #7886ae;
     transition: transform 0.3s ease;
     margin-left: auto;
@@ -68,7 +70,7 @@
     overflow: hidden;
     transition: max-height 0.3s ease;
     font-family: "Exo 2", sans-serif;
-    font-size: clamp(14px, 1.4vw, 18px);
+    font-size: var(--font-body);
     color: rgba(255, 255, 255, 0.75);
     line-height: 1.6;
     text-align: left;

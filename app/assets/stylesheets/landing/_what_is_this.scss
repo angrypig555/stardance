@@ -5,7 +5,7 @@
   flex-direction: column;
   align-items: center;
   overflow-x: clip;
-  color: white;
+  color: var(--color-body-text);
   margin: 3rem 0 15rem;
 
   // Full-bleed horizontal line with two decorative sparkles. Line stretches;
@@ -115,7 +115,8 @@
   &__title {
     font-family: "Exo 2", sans-serif;
     font-weight: 700;
-    font-size: clamp(36px, 4.4vw, 56px);
+    font-size: var(--font-h2);
+    color: white;
 
     &--italic {
       font-family: "Playfair Display", serif;
@@ -125,7 +126,7 @@
 
   &__body {
     font-weight: 400;
-    font-size: clamp(15px, 1.4vw, 18px);
+    font-size: var(--font-body);
     line-height: 1.6;
     max-width: 656px;
     margin: 0 auto;
@@ -141,8 +142,8 @@
   &__footnote {
     margin: var(--space-m) auto 0;
     text-align: center;
-    font-size: clamp(14px, 1.2vw, 16px);
-    color: #fffbe4;
+    font-size: var(--font-subtitle);
+    color: var(--color-yellow-200);
 
     a {
       color: inherit;

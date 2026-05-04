@@ -5,12 +5,13 @@
   flex-direction: column;
   align-items: center;
   padding: calc(var(--space-xxxxl) * 3) var(--space-xl) var(--space-xxxl);
-  color: white;
+  color: var(--color-body-text);
 
   &__title {
     font-family: "Exo 2", sans-serif;
     font-weight: 700;
-    font-size: clamp(36px, 4.4vw, 56px);
+    font-size: var(--font-h2);
+    color: white;
     text-align: center;
     margin: 0 0 var(--space-m);
 
@@ -22,9 +23,8 @@
 
   &__subtitle {
     font-family: "Exo 2", sans-serif;
-    font-size: clamp(16px, 1.6vw, 22px);
+    font-size: var(--font-body);
     text-align: center;
-    color: rgba(255, 255, 255, 0.8);
     margin: 0 0 var(--space-xl);
     max-width: 600px;
   }
@@ -32,7 +32,7 @@
   &__caption {
     font-family: "Exo 2", sans-serif;
     font-style: italic;
-    font-size: 18px;
+    font-size: var(--font-subtitle);
     color: var(--color-yellow-200);
     text-align: center;
     margin: var(--space-xs) 0 0;
