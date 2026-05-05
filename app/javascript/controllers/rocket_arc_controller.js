@@ -7,12 +7,69 @@ export default class extends Controller {
 
   connect() {
     this.handleScroll = this.handleScroll.bind(this);
+    this.handleRocketClick = this.handleRocketClick.bind(this);
+    this.handleRocketCursorPointermove =
+      this.handleRocketCursorPointermove.bind(this);
+    this.rocketCursorElement = null;
+
     window.addEventListener("scroll", this.handleScroll, { passive: true });
+    this.rocketTarget.addEventListener("click", this.handleRocketClick);
     this.handleScroll();
   }
 
   disconnect() {
     window.removeEventListener("scroll", this.handleScroll);
+    this.rocketTarget.removeEventListener("click", this.handleRocketClick);
+    this.deactivateRocketCursor();
+  }
+
+  handleRocketClick(event) {
+    if (Number.parseFloat(this.rocketTarget.style.opacity || "0") === 0) return;
+    if (this.rocketCursorElement) return;
+
+    this.activateRocketCursor(event);
+  }
+
+  activateRocketCursor(event) {
+    const cursor = document.createElement("img");
+    cursor.src = this.rocketTarget.currentSrc || this.rocketTarget.src;
+    cursor.alt = "";
+    cursor.setAttribute("aria-hidden", "true");
+    cursor.className = "landing-rocket-cursor";
+    cursor.style.left = `${event.clientX}px`;
+    cursor.style.top = `${event.clientY}px`;
+
+    document.body.appendChild(cursor);
+    document.documentElement.classList.add("landing-rocket-cursor-active");
+    this.rocketTarget.style.visibility = "hidden";
+    this.rocketTarget.style.pointerEvents = "none";
+    this.rocketCursorElement = cursor;
+
+    document.addEventListener(
+      "pointermove",
+      this.handleRocketCursorPointermove,
+      { passive: true },
+    );
+  }
+
+  deactivateRocketCursor() {
+    if (!this.rocketCursorElement) return;
+
+    document.documentElement.classList.remove("landing-rocket-cursor-active");
+    this.rocketTarget.style.visibility = "";
+    this.rocketCursorElement.remove();
+    this.rocketCursorElement = null;
+    this.handleScroll();
+
+    document.removeEventListener(
+      "pointermove",
+      this.handleRocketCursorPointermove,
+    );
+  }
+
+  handleRocketCursorPointermove(event) {
+    this.rocketCursorElement.style.left = `${event.clientX}px`;
+    this.rocketCursorElement.style.top = `${event.clientY}px`;
   }
 
   // Get the center of an element as a % of the footer's dimensions
@@ -44,6 +101,7 @@ export default class extends Controller {
     // Don't show until scrolled 20% into the footer, hide when fully past
     if (progress < 0.2 || scrollEnd >= vh) {
       rocket.style.opacity = 0;
+      rocket.style.pointerEvents = "none";
       return;
     }
 
@@ -84,6 +142,7 @@ export default class extends Controller {
     rocket.style.top = `${y}%`;
     rocket.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
     rocket.style.opacity = 1;
+    rocket.style.pointerEvents = "auto";
 
     // Parallax: stars drift upward slightly as user scrolls down
     this.starTargets.forEach((star) => {

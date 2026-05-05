@@ -156,7 +156,7 @@
     position: absolute;
     width: clamp(280px, 38vw, 500px);
     height: auto;
-    pointer-events: none;
+    cursor: pointer;
     z-index: 5;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -200,4 +200,21 @@
       width: clamp(180px, 52vw, 280px);
     }
   }
+}
+
+.landing-rocket-cursor-active,
+.landing-rocket-cursor-active * {
+  cursor: none !important;
+}
+
+.landing-rocket-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 190px;
+  height: auto;
+  pointer-events: none;
+  transform: translate(-86%, -46%) rotate(-135deg);
+  transform-origin: 86% 46%;
+  z-index: 2147483647;
 }
