@@ -31,6 +31,9 @@ application.register("dropdown", DropdownController);
 import FaqAccordionController from "./faq_accordion_controller";
 application.register("faq-accordion", FaqAccordionController);
 
+import FallingStarController from "./falling_star_controller";
+application.register("falling-star", FallingStarController);
+
 import FileUploadController from "./file_upload_controller";
 application.register("file-upload", FileUploadController);
 

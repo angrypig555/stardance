@@ -235,7 +235,14 @@
     &--1 {
       bottom: -57px;
       left: -32px;
+      cursor: pointer;
+      pointer-events: auto;
       transform: scaleY(-1);
+
+      &.is-falling {
+        animation: gain-stardust-card-star-fall 1.2s ease-in forwards;
+        pointer-events: none;
+      }
     }
 
     &--3 {
@@ -277,4 +284,16 @@
     }
   }
   margin-bottom: 5rem;
+}
+
+@keyframes gain-stardust-card-star-fall {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0deg) scaleY(-1);
+  }
+
+  100% {
+    opacity: 0.15;
+    transform: translate3d(7rem, 115vh, 0) rotate(420deg) scaleY(-1);
+  }
 }

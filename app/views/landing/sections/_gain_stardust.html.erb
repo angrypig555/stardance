@@ -23,7 +23,7 @@
       <img src="<%= image_url("landing/how-this-works/sparkle.svg") %>" class="gain-stardust__card-sparkle gain-stardust__card-sparkle--right" aria-hidden="true" alt="">
       <h3 class="gain-stardust__card-title">Publish projects</h3>
       <p>Ship your project into the world for others to see! Anything open-source counts.</p>
-      <%= image_tag image_url("landing/how-this-works/card-star.png"), class: "gain-stardust__card-star gain-stardust__card-star--1", alt: "", aria: { hidden: true } %>
+      <%= image_tag image_url("landing/how-this-works/card-star.png"), class: "gain-stardust__card-star gain-stardust__card-star--1", alt: "", aria: { hidden: true }, data: { controller: "falling-star", action: "click->falling-star#fall" } %>
     </div>
 
     <div class="gain-stardust__card gain-stardust__card--2">

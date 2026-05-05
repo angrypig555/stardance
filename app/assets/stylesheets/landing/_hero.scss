@@ -145,10 +145,18 @@
   height: auto;
   right: -22px;
   top: 42.4px;
-  pointer-events: none;
-  z-index: 2;
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  z-index: 10;
   transform: rotate(-9deg);
   right: calc(-420px + 30vw);
+
+  &.is-falling {
+    animation: hero-doodle-arrow-fall 1.2s ease-in forwards !important;
+    pointer-events: none;
+  }
 
   @media (max-width: 600px) {
     width: 96px;
@@ -160,6 +168,22 @@
     width: 96px;
     right: -64.8px;
     top: 45.7px;
+  }
+}
+
+html.warped .hero__doodle-arrow.is-falling {
+  animation: hero-doodle-arrow-fall 1.2s ease-in forwards !important;
+}
+
+@keyframes hero-doodle-arrow-fall {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(-9deg);
+  }
+
+  100% {
+    opacity: 0.1;
+    transform: translate3d(6rem, 115vh, 0) rotate(390deg);
   }
 }
 
