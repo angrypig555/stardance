@@ -1,3 +1,341 @@
+# == Route Map
+#
+# Routes for application:
+#                                             Prefix Verb   URI Pattern                                                                                       Controller#Action
+#                                            sitemap GET    /sitemap.xml(.:format)                                                                            sitemaps#index {format: :xml}
+#                                           og_image GET    /og/:page(.:format)                                                                               og_images#show {format: :png}
+#                                               root GET    /                                                                                                 landing#index
+#                                              rsvps POST   /rsvps(.:format)                                                                                  rsvps#create
+#                                       confirm_rsvp GET    /rsvps/confirm/:token(.:format)                                                                   rsvps#confirm
+#                                            tic_tac GET    /tic_tac(.:format)                                                                                rsvps#tic_tac {format: :text}
+#                                               shop GET    /shop(.:format)                                                                                   shop#index
+#                                     shop_my_orders GET    /shop/my_orders(.:format)                                                                         shop#my_orders
+#                                  cancel_shop_order DELETE /shop/cancel_order/:order_id(.:format)                                                            shop#cancel_order
+#                                         shop_order GET    /shop/order(.:format)                                                                             shop#order
+#                                                    POST   /shop/order(.:format)                                                                             shop#create_order
+#                                 shop_update_region PATCH  /shop/update_region(.:format)                                                                     shop#update_region
+#                                   shop_suggestions POST   /shop_suggestions(.:format)                                                                       shop_suggestions#create
+#                                review_report_token GET    /report-reviews/review/:token(.:format)                                                           report_reviews#review
+#                               dismiss_report_token GET    /report-reviews/dismiss/:token(.:format)                                                          report_reviews#dismiss
+#                                         skip_votes POST   /votes/skip(.:format)                                                                             votes#skip
+#                                              votes GET    /votes(.:format)                                                                                  votes#index
+#                                                    POST   /votes(.:format)                                                                                  votes#create
+#                                           new_vote GET    /votes/new(.:format)                                                                              votes#new
+#                                      explore_index GET    /explore(.:format)                                                                                explore#index
+#                                    explore_gallery GET    /explore/gallery(.:format)                                                                        explore#gallery
+#                                  explore_following GET    /explore/following(.:format)                                                                      explore#following
+#                                 rails_health_check GET    /up(.:format)                                                                                     rails/health#show
+#                                         test_error GET    /test_error(.:format)                                                                             debug#error
+#                                  letter_opener_web        /letter_opener                                                                                    LetterOpenerWeb::Engine
+#                                  og_image_previews GET    /og_image_previews(.:format)                                                                      og_image_previews#index
+#                                   og_image_preview GET    /og_image_previews/*id(.:format)                                                                  og_image_previews#show
+#                                     action_mailbox        /rails/action_mailbox                                                                             ActionMailbox::Engine
+#                                    active_insights        /insights                                                                                         ActiveInsights::Engine
+#                            auth_hackatime_callback GET    /auth/hackatime/callback(.:format)                                                                identities#hackatime
+#                                                    GET    /auth/:provider/callback(.:format)                                                                sessions#create
+#                                       auth_failure GET    /auth/failure(.:format)                                                                           sessions#failure
+#                                             logout DELETE /logout(.:format)                                                                                 sessions#destroy
+#                                     dev_login_auto GET    /dev_login(.:format)                                                                              sessions#dev_login
+#                                          dev_login GET    /dev_login/:id(.:format)                                                                          sessions#dev_login
+#                                            kitchen GET    /kitchen(.:format)                                                                                kitchen#index
+#                                        leaderboard GET    /leaderboard(.:format)                                                                            leaderboard#index
+#                                         my_balance GET    /my/balance(.:format)                                                                             my#balance
+#                                        my_settings PATCH  /my/settings(.:format)                                                                            my#update_settings
+#                                    my_cookie_click POST   /my/cookie_click(.:format)                                                                        my#cookie_click
+#                                      dismiss_thing POST   /my/dismiss_thing(.:format)                                                                       my#dismiss_thing
+#                                            my_club DELETE /my/club(.:format)                                                                                my#unlink_club
+#                                    my_achievements GET    /my/achievements(.:format)                                                                        achievements#index
+#                        reveal_address_seller_order POST   /seller/orders/:id/reveal_address(.:format)                                                       seller/orders#reveal_address
+#                        mark_fulfilled_seller_order POST   /seller/orders/:id/mark_fulfilled(.:format)                                                       seller/orders#mark_fulfilled
+#                                      seller_orders GET    /seller/orders(.:format)                                                                          seller/orders#index
+#                                       seller_order GET    /seller/orders/:id(.:format)                                                                      seller/orders#show
+#                        complete_user_tutorial_step POST   /tutorial_steps/:id/complete(.:format)                                                            user/tutorial_steps#complete
+#                                 user_tutorial_step GET    /tutorial_steps/:id(.:format)                                                                     user/tutorial_steps#show
+#                                        helper_root GET    /helper(.:format)                                                                                 helper/application#index
+#                                balance_helper_user GET    /helper/users/:id/balance(.:format)                                                               helper/users#balance
+#                                       helper_users GET    /helper/users(.:format)                                                                           helper/users#index
+#                                        helper_user GET    /helper/users/:id(.:format)                                                                       helper/users#show
+#                             restore_helper_project POST   /helper/projects/:id/restore(.:format)                                                            helper/projects#restore
+#                                    helper_projects GET    /helper/projects(.:format)                                                                        helper/projects#index
+#                                     helper_project GET    /helper/projects/:id(.:format)                                                                    helper/projects#show
+#                                 helper_shop_orders GET    /helper/shop_orders(.:format)                                                                     helper/shop_orders#index
+#                                  helper_shop_order GET    /helper/shop_orders/:id(.:format)                                                                 helper/shop_orders#show
+#                               helper_support_vibes GET    /helper/support_vibes(.:format)                                                                   helper/support_vibes#index
+#                                         admin_root GET    /admin(.:format)                                                                                  admin/application#index
+#                                       admin_blazer        /admin/blazer                                                                                     Blazer::Engine
+#                                                           /admin/flipper                                                                                    Flipper::UI
+#                         admin_mission_control_jobs        /admin/jobs                                                                                       MissionControl::Jobs::Engine
+#                            promote_role_admin_user POST   /admin/users/:id/promote_role(.:format)                                                           admin/users#promote_role
+#                             demote_role_admin_user POST   /admin/users/:id/demote_role(.:format)                                                            admin/users#demote_role
+#                          toggle_flipper_admin_user POST   /admin/users/:id/toggle_flipper(.:format)                                                         admin/users#toggle_flipper
+#                          sync_hackatime_admin_user POST   /admin/users/:id/sync_hackatime(.:format)                                                         admin/users#sync_hackatime
+#                      mass_reject_orders_admin_user POST   /admin/users/:id/mass_reject_orders(.:format)                                                     admin/users#mass_reject_orders
+#                          adjust_balance_admin_user POST   /admin/users/:id/adjust_balance(.:format)                                                         admin/users#adjust_balance
+#                                     ban_admin_user POST   /admin/users/:id/ban(.:format)                                                                    admin/users#ban
+#                                   unban_admin_user POST   /admin/users/:id/unban(.:format)                                                                  admin/users#unban
+#                   cancel_all_hcb_grants_admin_user POST   /admin/users/:id/cancel_all_hcb_grants(.:format)                                                  admin/users#cancel_all_hcb_grants
+#                             impersonate_admin_user POST   /admin/users/:id/impersonate(.:format)                                                            admin/users#impersonate
+#                    refresh_verification_admin_user POST   /admin/users/:id/refresh_verification(.:format)                                                   admin/users#refresh_verification
+#                      toggle_voting_lock_admin_user POST   /admin/users/:id/toggle_voting_lock(.:format)                                                     admin/users#toggle_voting_lock
+#                                   votes_admin_user GET    /admin/users/:id/votes(.:format)                                                                  admin/users#votes
+#                        set_vote_balance_admin_user POST   /admin/users/:id/set_vote_balance(.:format)                                                       admin/users#set_vote_balance
+#              set_ysws_eligible_override_admin_user PATCH  /admin/users/:id/set_ysws_eligible_override(.:format)                                             admin/users#set_ysws_eligible_override
+#                     stop_impersonating_admin_users POST   /admin/users/stop_impersonating(.:format)                                                         admin/users#stop_impersonating
+#                                        admin_users GET    /admin/users(.:format)                                                                            admin/users#index
+#                                         admin_user GET    /admin/users/:id(.:format)                                                                        admin/users#show
+#                                                    PATCH  /admin/users/:id(.:format)                                                                        admin/users#update
+#                                                    PUT    /admin/users/:id(.:format)                                                                        admin/users#update
+#                              restore_admin_project POST   /admin/projects/:id/restore(.:format)                                                             admin/projects#restore
+#                               delete_admin_project POST   /admin/projects/:id/delete(.:format)                                                              admin/projects#delete
+#                   update_ship_status_admin_project POST   /admin/projects/:id/update_ship_status(.:format)                                                  admin/projects#update_ship_status
+#                          force_state_admin_project POST   /admin/projects/:id/force_state(.:format)                                                         admin/projects#force_state
+#                                votes_admin_project GET    /admin/projects/:id/votes(.:format)                                                               admin/projects#votes
+#                                     admin_projects GET    /admin/projects(.:format)                                                                         admin/projects#index
+#                                      admin_project GET    /admin/projects/:id(.:format)                                                                     admin/projects#show
+#                                   admin_user_perms GET    /admin/user-perms(.:format)                                                                       admin/users#user_perms
+#                                  admin_manage_shop GET    /admin/manage-shop(.:format)                                                                      admin/shop#index
+#                         admin_clear_carousel_cache POST   /admin/shop/clear-carousel-cache(.:format)                                                        admin/shop#clear_carousel_cache
+#                  preview_markdown_admin_shop_items POST   /admin/shop_items/preview_markdown(.:format)                                                      admin/shop_items#preview_markdown
+#                   request_approval_admin_shop_item POST   /admin/shop_items/:id/request_approval(.:format)                                                  admin/shop_items#request_approval
+#                                   admin_shop_items POST   /admin/shop_items(.:format)                                                                       admin/shop_items#create
+#                                new_admin_shop_item GET    /admin/shop_items/new(.:format)                                                                   admin/shop_items#new
+#                               edit_admin_shop_item GET    /admin/shop_items/:id/edit(.:format)                                                              admin/shop_items#edit
+#                                    admin_shop_item GET    /admin/shop_items/:id(.:format)                                                                   admin/shop_items#show
+#                                                    PATCH  /admin/shop_items/:id(.:format)                                                                   admin/shop_items#update
+#                                                    PUT    /admin/shop_items/:id(.:format)                                                                   admin/shop_items#update
+#                                                    DELETE /admin/shop_items/:id(.:format)                                                                   admin/shop_items#destroy
+#                    reveal_address_admin_shop_order POST   /admin/shop_orders/:id/reveal_address(.:format)                                                   admin/shop_orders#reveal_address
+#                      reveal_phone_admin_shop_order POST   /admin/shop_orders/:id/reveal_phone(.:format)                                                     admin/shop_orders#reveal_phone
+#                           approve_admin_shop_order POST   /admin/shop_orders/:id/approve(.:format)                                                          admin/shop_orders#approve
+#                      review_order_admin_shop_order POST   /admin/shop_orders/:id/review_order(.:format)                                                     admin/shop_orders#review_order
+#                            reject_admin_shop_order POST   /admin/shop_orders/:id/reject(.:format)                                                           admin/shop_orders#reject
+#                     place_on_hold_admin_shop_order POST   /admin/shop_orders/:id/place_on_hold(.:format)                                                    admin/shop_orders#place_on_hold
+#                 release_from_hold_admin_shop_order POST   /admin/shop_orders/:id/release_from_hold(.:format)                                                admin/shop_orders#release_from_hold
+#                    mark_fulfilled_admin_shop_order POST   /admin/shop_orders/:id/mark_fulfilled(.:format)                                                   admin/shop_orders#mark_fulfilled
+#             update_internal_notes_admin_shop_order POST   /admin/shop_orders/:id/update_internal_notes(.:format)                                            admin/shop_orders#update_internal_notes
+#                       assign_user_admin_shop_order POST   /admin/shop_orders/:id/assign_user(.:format)                                                      admin/shop_orders#assign_user
+#                  cancel_hcb_grant_admin_shop_order POST   /admin/shop_orders/:id/cancel_hcb_grant(.:format)                                                 admin/shop_orders#cancel_hcb_grant
+#              refresh_verification_admin_shop_order POST   /admin/shop_orders/:id/refresh_verification(.:format)                                             admin/shop_orders#refresh_verification
+#                   send_to_theseus_admin_shop_order POST   /admin/shop_orders/:id/send_to_theseus(.:format)                                                  admin/shop_orders#send_to_theseus
+#         approve_verification_call_admin_shop_order POST   /admin/shop_orders/:id/approve_verification_call(.:format)                                        admin/shop_orders#approve_verification_call
+#                       force_state_admin_shop_order POST   /admin/shop_orders/:id/force_state(.:format)                                                      admin/shop_orders#force_state
+#                                  admin_shop_orders GET    /admin/shop_orders(.:format)                                                                      admin/shop_orders#index
+#                                   admin_shop_order GET    /admin/shop_orders/:id(.:format)                                                                  admin/shop_orders#show
+#                      dismiss_admin_shop_suggestion POST   /admin/shop_suggestions/:id/dismiss(.:format)                                                     admin/shop_suggestions#dismiss
+#             disable_for_user_admin_shop_suggestion POST   /admin/shop_suggestions/:id/disable_for_user(.:format)                                            admin/shop_suggestions#disable_for_user
+#                             admin_shop_suggestions GET    /admin/shop_suggestions(.:format)                                                                 admin/shop_suggestions#index
+#               toggle_payout_admin_special_activity POST   /admin/special_activities/:id/toggle_payout(.:format)                                             admin/special_activities#toggle_payout
+#                 mark_winner_admin_special_activity POST   /admin/special_activities/:id/mark_winner(.:format)                                               admin/special_activities#mark_winner
+#               give_payout_admin_special_activities POST   /admin/special_activities/give_payout(.:format)                                                   admin/special_activities#give_payout
+#         mark_payout_given_admin_special_activities POST   /admin/special_activities/mark_payout_given(.:format)                                             admin/special_activities#mark_payout_given
+#               toggle_live_admin_special_activities POST   /admin/special_activities/toggle_live(.:format)                                                   admin/special_activities#toggle_live
+#                           admin_special_activities GET    /admin/special_activities(.:format)                                                               admin/special_activities#index
+#                                                    POST   /admin/special_activities(.:format)                                                               admin/special_activities#create
+#                                     admin_messages GET    /admin/messages(.:format)                                                                         admin/messages#index
+#                                                    POST   /admin/messages(.:format)                                                                         admin/messages#create
+#                                admin_support_vibes GET    /admin/support_vibes(.:format)                                                                    admin/support_vibes#index
+#                                                    POST   /admin/support_vibes(.:format)                                                                    admin/support_vibes#create
+#                                     admin_sw_vibes GET    /admin/sw_vibes(.:format)                                                                         admin/sw_vibes#index
+#                             admin_suspicious_votes GET    /admin/suspicious_votes(.:format)                                                                 admin/suspicious_votes#index
+#                                   admin_audit_logs GET    /admin/audit_logs(.:format)                                                                       admin/audit_logs#index
+#                                    admin_audit_log GET    /admin/audit_logs/:id(.:format)                                                                   admin/audit_logs#show
+#                  process_demo_broken_admin_reports POST   /admin/reports/process_demo_broken(.:format)                                                      admin/reports#process_demo_broken
+#                                review_admin_report POST   /admin/reports/:id/review(.:format)                                                               admin/reports#review
+#                               dismiss_admin_report POST   /admin/reports/:id/dismiss(.:format)                                                              admin/reports#dismiss
+#                                      admin_reports GET    /admin/reports(.:format)                                                                          admin/reports#index
+#                                       admin_report GET    /admin/reports/:id(.:format)                                                                      admin/reports#show
+#                            admin_payouts_dashboard GET    /admin/payouts_dashboard(.:format)                                                                admin/payouts_dashboard#index
+#                              admin_fraud_dashboard GET    /admin/fraud_dashboard(.:format)                                                                  admin/fraud_dashboard#index
+#                             admin_voting_dashboard GET    /admin/voting_dashboard(.:format)                                                                 admin/voting_dashboard#index
+#                          admin_vote_spam_dashboard GET    /admin/vote_spam_dashboard(.:format)                                                              admin/vote_spam_dashboard#index
+#                     admin_vote_spam_dashboard_user GET    /admin/vote_spam_dashboard/users/:user_id(.:format)                                               admin/vote_spam_dashboard#show
+#                       admin_vote_quality_dashboard GET    /admin/vote_quality_dashboard(.:format)                                                           admin/vote_quality_dashboard#index
+#                  admin_vote_quality_dashboard_user GET    /admin/vote_quality_dashboard/users/:user_id(.:format)                                            admin/vote_quality_dashboard#show
+#                            admin_ship_event_scores GET    /admin/ship_event_scores(.:format)                                                                admin/ship_event_scores#index
+#                         admin_super_mega_dashboard GET    /admin/super_mega_dashboard(.:format)                                                             admin/super_mega_dashboard#index
+#             admin_super_mega_dashboard_clear_cache DELETE /admin/super_mega_dashboard/clear_cache(.:format)                                                 admin/super_mega_dashboard#clear_cache
+#                         admin_flavortime_dashboard GET    /admin/flavortime_dashboard(.:format)                                                             admin/flavortime_dashboard#index
+#            admin_super_mega_dashboard_load_section GET    /admin/super_mega_dashboard/load_section(.:format)                                                admin/super_mega_dashboard#load_section
+#       admin_super_mega_dashboard_refresh_nps_vibes POST   /admin/super_mega_dashboard/refresh_nps_vibes(.:format)                                           admin/super_mega_dashboard#refresh_nps_vibes
+# send_letter_mail_admin_fulfillment_dashboard_index POST   /admin/fulfillment_dashboard/send_letter_mail(.:format)                                           admin/fulfillment_dashboard#send_letter_mail
+#                  admin_fulfillment_dashboard_index GET    /admin/fulfillment_dashboard(.:format)                                                            admin/fulfillment_dashboard#index
+#                   approve_admin_fulfillment_payout POST   /admin/fulfillment_payouts/:id/approve(.:format)                                                  admin/fulfillment_payouts#approve
+#                    reject_admin_fulfillment_payout POST   /admin/fulfillment_payouts/:id/reject(.:format)                                                   admin/fulfillment_payouts#reject
+#                  trigger_admin_fulfillment_payouts POST   /admin/fulfillment_payouts/trigger(.:format)                                                      admin/fulfillment_payouts#trigger
+#                          admin_fulfillment_payouts GET    /admin/fulfillment_payouts(.:format)                                                              admin/fulfillment_payouts#index
+#                           admin_fulfillment_payout GET    /admin/fulfillment_payouts/:id(.:format)                                                          admin/fulfillment_payouts#show
+#                                              queue GET    /queue(.:format)                                                                                  queue#index
+#                                project_memberships POST   /projects/:project_id/memberships(.:format)                                                       projects/memberships#create
+#                                         membership DELETE /memberships/:id(.:format)                                                                        projects/memberships#destroy
+#                            versions_project_devlog GET    /projects/:project_id/devlogs/:id/versions(.:format)                                              projects/devlogs#versions
+#                                    project_devlogs POST   /projects/:project_id/devlogs(.:format)                                                           projects/devlogs#create
+#                                 new_project_devlog GET    /projects/:project_id/devlogs/new(.:format)                                                       projects/devlogs#new
+#                                edit_project_devlog GET    /projects/:project_id/devlogs/:id/edit(.:format)                                                  projects/devlogs#edit
+#                                     project_devlog PATCH  /projects/:project_id/devlogs/:id(.:format)                                                       projects/devlogs#update
+#                                                    PUT    /projects/:project_id/devlogs/:id(.:format)                                                       projects/devlogs#update
+#                                                    DELETE /projects/:project_id/devlogs/:id(.:format)                                                       projects/devlogs#destroy
+#                                    project_reports POST   /projects/:project_id/reports(.:format)                                                           projects/reports#create
+#                                   project_og_image GET    /projects/:project_id/og_image(.:format)                                                          projects/og_images#show {format: :png}
+#                                  new_project_ships GET    /projects/:project_id/ships/new(.:format)                                                         projects/ships#new
+#                                      project_ships POST   /projects/:project_id/ships(.:format)                                                             projects/ships#create
+#                                     readme_project GET    /projects/:id/readme(.:format)                                                                    projects#readme
+#                                  mark_fire_project POST   /projects/:id/mark_fire(.:format)                                                                 projects#mark_fire
+#                                unmark_fire_project POST   /projects/:id/unmark_fire(.:format)                                                               projects#unmark_fire
+#                                     follow_project POST   /projects/:id/follow(.:format)                                                                    projects#follow
+#                                   unfollow_project DELETE /projects/:id/unfollow(.:format)                                                                  projects#unfollow
+#                                           projects GET    /projects(.:format)                                                                               projects#index
+#                                                    POST   /projects(.:format)                                                                               projects#create
+#                                        new_project GET    /projects/new(.:format)                                                                           projects#new
+#                                       edit_project GET    /projects/:id/edit(.:format)                                                                      projects#edit
+#                                            project GET    /projects/:id(.:format)                                                                           projects#show
+#                                                    PATCH  /projects/:id(.:format)                                                                           projects#update
+#                                                    PUT    /projects/:id(.:format)                                                                           projects#update
+#                                                    DELETE /projects/:id(.:format)                                                                           projects#destroy
+#                                        devlog_like DELETE /devlogs/:devlog_id/like(.:format)                                                                likes#destroy
+#                                                    POST   /devlogs/:devlog_id/like(.:format)                                                                likes#create
+#                                    devlog_comments POST   /devlogs/:devlog_id/comments(.:format)                                                            comments#create
+#                                     devlog_comment DELETE /devlogs/:devlog_id/comments/:id(.:format)                                                        comments#destroy
+#                                      user_og_image GET    /users/:user_id/og_image(.:format)                                                                users/og_images#show {format: :png}
+#                                               user GET    /users/:id(.:format)                                                                              users#show
+#                                                edu GET    /edu(.:format)                                                                                    landing#edu
+#                                                    GET    /:ref(.:format)                                                                                   landing#index {ref: /[a-z0-9][a-z0-9_-]{0,63}/}
+#                                  rails_performance        /rails/performance                                                                                RailsPerformance::Engine
+#                   turbo_recede_historical_location GET    /recede_historical_location(.:format)                                                             turbo/native/navigation#recede
+#                   turbo_resume_historical_location GET    /resume_historical_location(.:format)                                                             turbo/native/navigation#resume
+#                  turbo_refresh_historical_location GET    /refresh_historical_location(.:format)                                                            turbo/native/navigation#refresh
+#                      rails_postmark_inbound_emails POST   /rails/action_mailbox/postmark/inbound_emails(.:format)                                           action_mailbox/ingresses/postmark/inbound_emails#create
+#                         rails_relay_inbound_emails POST   /rails/action_mailbox/relay/inbound_emails(.:format)                                              action_mailbox/ingresses/relay/inbound_emails#create
+#                      rails_sendgrid_inbound_emails POST   /rails/action_mailbox/sendgrid/inbound_emails(.:format)                                           action_mailbox/ingresses/sendgrid/inbound_emails#create
+#                rails_mandrill_inbound_health_check GET    /rails/action_mailbox/mandrill/inbound_emails(.:format)                                           action_mailbox/ingresses/mandrill/inbound_emails#health_check
+#                      rails_mandrill_inbound_emails POST   /rails/action_mailbox/mandrill/inbound_emails(.:format)                                           action_mailbox/ingresses/mandrill/inbound_emails#create
+#                       rails_mailgun_inbound_emails POST   /rails/action_mailbox/mailgun/inbound_emails/mime(.:format)                                       action_mailbox/ingresses/mailgun/inbound_emails#create
+#                     rails_conductor_inbound_emails GET    /rails/conductor/action_mailbox/inbound_emails(.:format)                                          rails/conductor/action_mailbox/inbound_emails#index
+#                                                    POST   /rails/conductor/action_mailbox/inbound_emails(.:format)                                          rails/conductor/action_mailbox/inbound_emails#create
+#                  new_rails_conductor_inbound_email GET    /rails/conductor/action_mailbox/inbound_emails/new(.:format)                                      rails/conductor/action_mailbox/inbound_emails#new
+#                      rails_conductor_inbound_email GET    /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                                      rails/conductor/action_mailbox/inbound_emails#show
+#           new_rails_conductor_inbound_email_source GET    /rails/conductor/action_mailbox/inbound_emails/sources/new(.:format)                              rails/conductor/action_mailbox/inbound_emails/sources#new
+#              rails_conductor_inbound_email_sources POST   /rails/conductor/action_mailbox/inbound_emails/sources(.:format)                                  rails/conductor/action_mailbox/inbound_emails/sources#create
+#              rails_conductor_inbound_email_reroute POST   /rails/conductor/action_mailbox/:inbound_email_id/reroute(.:format)                               rails/conductor/action_mailbox/reroutes#create
+#           rails_conductor_inbound_email_incinerate POST   /rails/conductor/action_mailbox/:inbound_email_id/incinerate(.:format)                            rails/conductor/action_mailbox/incinerates#create
+#                                 rails_service_blob GET    /rails/active_storage/blobs/redirect/:signed_id/*filename(.:format)                               active_storage/blobs/redirect#show
+#                           rails_service_blob_proxy GET    /rails/active_storage/blobs/proxy/:signed_id/*filename(.:format)                                  active_storage/blobs/proxy#show
+#                                                    GET    /rails/active_storage/blobs/:signed_id/*filename(.:format)                                        active_storage/blobs/redirect#show
+#                          rails_blob_representation GET    /rails/active_storage/representations/redirect/:signed_blob_id/:variation_key/*filename(.:format) active_storage/representations/redirect#show
+#                    rails_blob_representation_proxy GET    /rails/active_storage/representations/proxy/:signed_blob_id/:variation_key/*filename(.:format)    active_storage/representations/proxy#show
+#                                                    GET    /rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format)          active_storage/representations/redirect#show
+#                                 rails_disk_service GET    /rails/active_storage/disk/:encoded_key/*filename(.:format)                                       active_storage/disk#show
+#                          update_rails_disk_service PUT    /rails/active_storage/disk/:encoded_token(.:format)                                               active_storage/disk#update
+#                               rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                                    active_storage/direct_uploads#create
+#
+# Routes for LetterOpenerWeb::Engine:
+#        Prefix Verb URI Pattern                      Controller#Action
+#       letters GET  /                                letter_opener_web/letters#index
+# clear_letters POST /clear(.:format)                 letter_opener_web/letters#clear
+#        letter GET  /:id(/:style)(.:format)          letter_opener_web/letters#show
+# delete_letter POST /:id/delete(.:format)            letter_opener_web/letters#destroy
+#               GET  /:id/attachments/:file(.:format) letter_opener_web/letters#attachment {file: /[^\/]+/}
+#
+# Routes for ActionMailbox::Engine:
+# No routes defined.
+#
+# Routes for ActiveInsights::Engine:
+#                          Prefix Verb URI Pattern                                                    Controller#Action
+#                        requests GET  /requests(.:format)                                            active_insights/requests#index
+#                            jobs GET  /jobs(.:format)                                                active_insights/jobs#index
+#                                 GET  /jobs/:date(.:format)                                          active_insights/jobs#index
+#                                 GET  /requests/:date(.:format)                                      active_insights/requests#index
+#                 rpm_redirection GET  /requests/rpm/redirection(.:format)                            active_insights/rpm#redirection
+#                             rpm GET  /requests/:date/rpm(.:format)                                  active_insights/rpm#index
+#   requests_p_values_redirection GET  /requests/p_values/redirection(.:format)                       active_insights/requests_p_values#redirection
+#               requests_p_values GET  /requests/:date/p_values(.:format)                             active_insights/requests_p_values#index
+#             controller_p_values GET  /requests/:date/:formatted_controller/p_values(.:format)       active_insights/requests_p_values#index
+# controller_p_values_redirection GET  /requests/:formatted_controller/p_values/redirection(.:format) active_insights/requests_p_values#redirection
+#                 jpm_redirection GET  /jobs/jpm/redirection(.:format)                                active_insights/jpm#redirection
+#                             jpm GET  /jobs/:date/jpm(.:format)                                      active_insights/jpm#index
+#       jobs_p_values_redirection GET  /jobs/p_values/redirection(.:format)                           active_insights/jobs_p_values#redirection
+#                   jobs_p_values GET  /jobs/:date/p_values(.:format)                                 active_insights/jobs_p_values#index
+#                    job_p_values GET  /jobs/:date/:job/p_values(.:format)                            active_insights/jobs_p_values#index
+#        job_p_values_redirection GET  /jobs/:job/p_values/redirection(.:format)                      active_insights/jobs_p_values#redirection
+#                    jobs_latency GET  /jobs/:date/latencies(.:format)                                active_insights/jobs_latencies#index
+#        jobs_latency_redirection GET  /jobs/latencies/redirection(.:format)                          active_insights/jobs_latencies#redirection
+#                            root GET  /                                                              active_insights/requests#index
+#
+# Routes for Blazer::Engine:
+#            Prefix Verb   URI Pattern                       Controller#Action
+#       run_queries POST   /queries/run(.:format)            blazer/queries#run
+#    cancel_queries POST   /queries/cancel(.:format)         blazer/queries#cancel
+#     refresh_query POST   /queries/:id/refresh(.:format)    blazer/queries#refresh
+#    tables_queries GET    /queries/tables(.:format)         blazer/queries#tables
+#    schema_queries GET    /queries/schema(.:format)         blazer/queries#schema
+#      docs_queries GET    /queries/docs(.:format)           blazer/queries#docs
+#           queries GET    /queries(.:format)                blazer/queries#index
+#                   POST   /queries(.:format)                blazer/queries#create
+#         new_query GET    /queries/new(.:format)            blazer/queries#new
+#        edit_query GET    /queries/:id/edit(.:format)       blazer/queries#edit
+#             query GET    /queries/:id(.:format)            blazer/queries#show
+#                   PATCH  /queries/:id(.:format)            blazer/queries#update
+#                   PUT    /queries/:id(.:format)            blazer/queries#update
+#                   DELETE /queries/:id(.:format)            blazer/queries#destroy
+#         run_check GET    /checks/:id/run(.:format)         blazer/checks#run
+#            checks GET    /checks(.:format)                 blazer/checks#index
+#                   POST   /checks(.:format)                 blazer/checks#create
+#         new_check GET    /checks/new(.:format)             blazer/checks#new
+#        edit_check GET    /checks/:id/edit(.:format)        blazer/checks#edit
+#             check PATCH  /checks/:id(.:format)             blazer/checks#update
+#                   PUT    /checks/:id(.:format)             blazer/checks#update
+#                   DELETE /checks/:id(.:format)             blazer/checks#destroy
+# refresh_dashboard POST   /dashboards/:id/refresh(.:format) blazer/dashboards#refresh
+#        dashboards POST   /dashboards(.:format)             blazer/dashboards#create
+#     new_dashboard GET    /dashboards/new(.:format)         blazer/dashboards#new
+#    edit_dashboard GET    /dashboards/:id/edit(.:format)    blazer/dashboards#edit
+#         dashboard GET    /dashboards/:id(.:format)         blazer/dashboards#show
+#                   PATCH  /dashboards/:id(.:format)         blazer/dashboards#update
+#                   PUT    /dashboards/:id(.:format)         blazer/dashboards#update
+#                   DELETE /dashboards/:id(.:format)         blazer/dashboards#destroy
+#              root GET    /                                 blazer/queries#home
+#
+# Routes for MissionControl::Jobs::Engine:
+#                      Prefix Verb   URI Pattern                                                    Controller#Action
+#     application_queue_pause DELETE /applications/:application_id/queues/:queue_id/pause(.:format) mission_control/jobs/queues/pauses#destroy
+#                             POST   /applications/:application_id/queues/:queue_id/pause(.:format) mission_control/jobs/queues/pauses#create
+#          application_queues GET    /applications/:application_id/queues(.:format)                 mission_control/jobs/queues#index
+#           application_queue GET    /applications/:application_id/queues/:id(.:format)             mission_control/jobs/queues#show
+#       application_job_retry POST   /applications/:application_id/jobs/:job_id/retry(.:format)     mission_control/jobs/retries#create
+#     application_job_discard POST   /applications/:application_id/jobs/:job_id/discard(.:format)   mission_control/jobs/discards#create
+#    application_job_dispatch POST   /applications/:application_id/jobs/:job_id/dispatch(.:format)  mission_control/jobs/dispatches#create
+#    application_bulk_retries POST   /applications/:application_id/jobs/bulk_retries(.:format)      mission_control/jobs/bulk_retries#create
+#   application_bulk_discards POST   /applications/:application_id/jobs/bulk_discards(.:format)     mission_control/jobs/bulk_discards#create
+#             application_job GET    /applications/:application_id/jobs/:id(.:format)               mission_control/jobs/jobs#show
+#            application_jobs GET    /applications/:application_id/:status/jobs(.:format)           mission_control/jobs/jobs#index
+#         application_workers GET    /applications/:application_id/workers(.:format)                mission_control/jobs/workers#index
+#          application_worker GET    /applications/:application_id/workers/:id(.:format)            mission_control/jobs/workers#show
+# application_recurring_tasks GET    /applications/:application_id/recurring_tasks(.:format)        mission_control/jobs/recurring_tasks#index
+#  application_recurring_task GET    /applications/:application_id/recurring_tasks/:id(.:format)    mission_control/jobs/recurring_tasks#show
+#                             PATCH  /applications/:application_id/recurring_tasks/:id(.:format)    mission_control/jobs/recurring_tasks#update
+#                             PUT    /applications/:application_id/recurring_tasks/:id(.:format)    mission_control/jobs/recurring_tasks#update
+#                      queues GET    /queues(.:format)                                              mission_control/jobs/queues#index
+#                       queue GET    /queues/:id(.:format)                                          mission_control/jobs/queues#show
+#                         job GET    /jobs/:id(.:format)                                            mission_control/jobs/jobs#show
+#                        jobs GET    /:status/jobs(.:format)                                        mission_control/jobs/jobs#index
+#                        root GET    /                                                              mission_control/jobs/queues#index
+#
+# Routes for RailsPerformance::Engine:
+#                        Prefix Verb URI Pattern             Controller#Action
+#                  engine_asset GET  /assets/*file(.:format) Inline handler (Proc/Lambda)
+#             rails_performance GET  /                       rails_performance/rails_performance#index
+#    rails_performance_requests GET  /requests(.:format)     rails_performance/rails_performance#requests
+#     rails_performance_crashes GET  /crashes(.:format)      rails_performance/rails_performance#crashes
+#      rails_performance_recent GET  /recent(.:format)       rails_performance/rails_performance#recent
+#        rails_performance_slow GET  /slow(.:format)         rails_performance/rails_performance#slow
+#       rails_performance_trace GET  /trace/:id(.:format)    rails_performance/rails_performance#trace
+#     rails_performance_summary GET  /summary(.:format)      rails_performance/rails_performance#summary
+#     rails_performance_sidekiq GET  /sidekiq(.:format)      rails_performance/rails_performance#sidekiq
+# rails_performance_delayed_job GET  /delayed_job(.:format)  rails_performance/rails_performance#delayed_job
+#       rails_performance_grape GET  /grape(.:format)        rails_performance/rails_performance#grape
+#        rails_performance_rake GET  /rake(.:format)         rails_performance/rails_performance#rake
+#      rails_performance_custom GET  /custom(.:format)       rails_performance/rails_performance#custom
+#   rails_performance_resources GET  /resources(.:format)    rails_performance/rails_performance#resources
+
 class AdminConstraint
   def self.matches?(request)
     # otherwise admins who impersonated non admins can't stop
