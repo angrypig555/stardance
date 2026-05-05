@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = ["path"];
-  static values = { startAfter: String };
+  static values = { startAfter: String, speed: { type: Number, default: 1.4 } };
 
   connect() {
     this.onScroll = this.onScroll.bind(this);
@@ -29,8 +29,8 @@ export default class extends Controller {
       const prev = document.querySelector(this.startAfterValue);
       if (prev) {
         const prevBottom = prev.getBoundingClientRect().bottom;
-        if (prevBottom > 0) {
-          console.log("i'm here");
+        const triggerOffset = vh * 0.5;
+        if (prevBottom > triggerOffset) {
           this.pathTarget.style.strokeDashoffset = this.totalLength;
           this._startBottom = null;
           return;
@@ -41,7 +41,10 @@ export default class extends Controller {
         }
         const progress = Math.max(
           0,
-          Math.min(1, 1 - rect.bottom / this._startBottom),
+          Math.min(
+            1,
+            (1 - rect.bottom / this._startBottom) * this.speedValue,
+          ),
         );
         this.pathTarget.style.strokeDashoffset =
           this.totalLength * (1 - progress);
@@ -51,7 +54,7 @@ export default class extends Controller {
 
     const scrolledIn = vh - rect.top;
     const totalRange = rect.height + vh;
-    const progress = Math.max(0, Math.min(1, scrolledIn / totalRange));
+    const progress = Math.max(0, Math.min(1, (scrolledIn / totalRange) * this.speedValue));
 
     this.pathTarget.style.strokeDashoffset = this.totalLength * (1 - progress);
   }

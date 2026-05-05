@@ -35,3 +35,11 @@ button {
     cursor: pointer;
   }
 }
+
+h1,
+h2,
+h3 {
+  text-shadow:
+    0 0 14px rgba(255, 245, 200, 0.22),
+    0 0 32px rgba(255, 245, 200, 0.12);
+}
