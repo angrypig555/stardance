@@ -1,6 +1,6 @@
 class HackatimeService
   BASE_URL = "https://hackatime.hackclub.com"
-  START_DATE = "2025-12-15"
+  START_DATE = "2026-05-01" # 1st may for now. this'll be changed to 1st june
 
   def self.fetch_authenticated_user(access_token)
     response = connection.get("authenticated/me") do |req|
