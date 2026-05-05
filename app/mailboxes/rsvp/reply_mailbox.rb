@@ -1,7 +1,14 @@
 class Rsvp::ReplyMailbox < ApplicationMailbox
   STOP_REGEX = /\bstop\b/i
+  PUBLIC_ADDRESSES = %w[
+    stardance@hackclub.com
+    stardance-inbound@stardance.hackclub.com
+  ].freeze
+  SIGNUP_CONFIRMATION_SUBJECT = "confirm you're in for stardance"
 
   def process
+    return if public_address? && !signup_confirmation_reply?
+
     sender = mail.from.first.to_s.downcase.strip
     rsvp = Rsvp.find_by(email: sender)
     return unless rsvp
@@ -18,6 +25,15 @@ class Rsvp::ReplyMailbox < ApplicationMailbox
   end
 
   private
+
+  def public_address?
+    recipients = Array(mail.to).map { |address| address.to_s.downcase.strip }
+    (recipients & PUBLIC_ADDRESSES).any?
+  end
+
+  def signup_confirmation_reply?
+    mail.subject.to_s.downcase.include?(SIGNUP_CONFIRMATION_SUBJECT)
+  end
 
   def persist_reply(rsvp)
     rsvp.replies.find_or_create_by!(message_id: mail.message_id) do |reply|
