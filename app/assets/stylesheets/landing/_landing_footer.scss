@@ -14,6 +14,15 @@
     font-family: "Exo 2", sans-serif;
   }
 
+  &__scene-block {
+    position: relative;
+    width: 100%;
+    // Sits above the photo panels so the description text and links remain
+    // legible inside the overlap region. Scene-block itself has no fill,
+    // so the empty area just lets the panels show through.
+    z-index: 1;
+  }
+
   &__scene {
     position: relative;
     width: 100%;
@@ -162,6 +171,53 @@
     transition: opacity 0.3s ease;
   }
 
+  // Photo collage panels at the bottom of the footer. Widths come from the
+  // Figma frame (965 / 1280 ≈ 75.39% big, 315 / 1280 ≈ 24.61% small); the
+  // images carry their own intrinsic aspect, so percentage widths preserve
+  // the side-by-side proportions across viewports.
+  //
+  // Mask is applied to the *wrapper* (not to each image) so the fade-out is a
+  // single horizontal line across both panels, regardless of the height
+  // difference between them. The fade starts at the panels' visible top edge
+  // (i.e., directly below the scene-block) — the region above that is hidden
+  // behind the scene-block anyway, so masking it has no visual effect.
+  &__panels {
+    --panel-overlap: clamp(180px, 28vw, 360px);
+    --panel-fade: 220px;
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    line-height: 0;
+    position: relative;
+    z-index: 0;
+    margin-top: calc(-1 * var(--panel-overlap));
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent var(--panel-overlap),
+      black calc(var(--panel-overlap) + var(--panel-fade))
+    );
+            mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent var(--panel-overlap),
+      black calc(var(--panel-overlap) + var(--panel-fade))
+    );
+  }
+
+  &__panel {
+    display: block;
+    height: auto;
+    opacity: 0.45;
+
+    &--big {
+      width: 75.39%;
+    }
+    &--small {
+      width: 24.61%;
+    }
+  }
+
   @media (max-width: 900px) {
     overflow: visible;
 
@@ -199,6 +255,12 @@
     &__rocket {
       width: clamp(180px, 52vw, 280px);
     }
+    &__panel--small {
+      display: none;
+    }
+    &__panel--big {
+      width: 100%;
+    }
   }
 }
 
@@ -217,4 +279,14 @@
   transform: translate(-86%, -46%) rotate(-135deg);
   transform-origin: 86% 46%;
   z-index: 2147483647;
+}
+
+// On the landing page, lift the global dev-footer onto the photo panels so the
+// build-info strip overlays the imagery instead of pushing the page taller.
+// `.dev-footer` is a body child while `.landing-footer` lives inside the yield
+// wrapper — they aren't siblings, so scope via `:has()` on the body.
+body:has(.landing-footer) .dev-footer {
+  position: relative;
+  z-index: 10;
+  margin-top: -2.5rem;
 }

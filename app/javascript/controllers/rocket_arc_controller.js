@@ -6,6 +6,15 @@ export default class extends Controller {
   static targets = ["rocket", "star"];
 
   connect() {
+    // The rocket is absolutely positioned inside .landing-footer__scene-block,
+    // so % coords on its `top`/`left` resolve against the scene-block — not
+    // against the whole footer (which also contains the photo panels). When
+    // those lazy-loaded panel images flow in, the footer's height grows but
+    // the scene-block's doesn't, which would shift the arc if we used the
+    // footer as the reference. Anchor centerOf to the scene-block instead.
+    this.sceneBlock =
+      this.element.querySelector(".landing-footer__scene-block") ||
+      this.element;
     this.handleScroll = this.handleScroll.bind(this);
     this.handleRocketClick = this.handleRocketClick.bind(this);
     this.handleRocketCursorPointermove =
@@ -72,18 +81,17 @@ export default class extends Controller {
     this.rocketCursorElement.style.top = `${event.clientY}px`;
   }
 
-  // Get the center of an element as a % of the footer's dimensions
+  // Get the center of an element as a % of the scene-block's dimensions
+  // (the rocket's containing block).
   centerOf(el) {
-    const footerRect = this.element.getBoundingClientRect();
+    const refRect = this.sceneBlock.getBoundingClientRect();
     const elRect = el.getBoundingClientRect();
     return {
       x:
-        ((elRect.left + elRect.width / 2 - footerRect.left) /
-          footerRect.width) *
+        ((elRect.left + elRect.width / 2 - refRect.left) / refRect.width) *
         100,
       y:
-        ((elRect.top + elRect.height / 2 - footerRect.top) /
-          footerRect.height) *
+        ((elRect.top + elRect.height / 2 - refRect.top) / refRect.height) *
         100,
     };
   }
