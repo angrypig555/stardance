@@ -41,10 +41,7 @@ export default class extends Controller {
         }
         const progress = Math.max(
           0,
-          Math.min(
-            1,
-            (1 - rect.bottom / this._startBottom) * this.speedValue,
-          ),
+          Math.min(1, (1 - rect.bottom / this._startBottom) * this.speedValue),
         );
         this.pathTarget.style.strokeDashoffset =
           this.totalLength * (1 - progress);
@@ -54,7 +51,10 @@ export default class extends Controller {
 
     const scrolledIn = vh - rect.top;
     const totalRange = rect.height + vh;
-    const progress = Math.max(0, Math.min(1, (scrolledIn / totalRange) * this.speedValue));
+    const progress = Math.max(
+      0,
+      Math.min(1, (scrolledIn / totalRange) * this.speedValue),
+    );
 
     this.pathTarget.style.strokeDashoffset = this.totalLength * (1 - progress);
   }

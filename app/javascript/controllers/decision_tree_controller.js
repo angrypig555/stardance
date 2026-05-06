@@ -65,7 +65,9 @@ export default class extends Controller {
     // heading so keyboard + screen-reader users land in the right spot.
     // We skip the initial render so we don't yank the page on load.
     if (!this.firstRender) {
-      const heading = this.nodesTarget.querySelector(".decision-tree__question");
+      const heading = this.nodesTarget.querySelector(
+        ".decision-tree__question",
+      );
       if (heading) {
         heading.setAttribute("tabindex", "-1");
         heading.focus({ preventScroll: true });
@@ -90,9 +92,10 @@ export default class extends Controller {
 
     const sep = `<span class="decision-tree__breadcrumb-sep" aria-hidden="true">›</span>`;
     const trail = items.join(sep);
-    const reset = path.length > 1
-      ? `<button type="button" class="decision-tree__breadcrumb-reset" data-action="click->decision-tree#reset">Start over</button>`
-      : "";
+    const reset =
+      path.length > 1
+        ? `<button type="button" class="decision-tree__breadcrumb-reset" data-action="click->decision-tree#reset">Start over</button>`
+        : "";
 
     this.breadcrumbTarget.innerHTML = trail + reset;
   }
@@ -122,7 +125,9 @@ export default class extends Controller {
 
   #renderQuestion(node, id) {
     const intro = node.intro ? `<p>${this.#escape(node.intro)}</p>` : "";
-    const choices = (node.choices || []).map((c) => `
+    const choices = (node.choices || [])
+      .map(
+        (c) => `
       <button type="button"
               class="decision-tree__choice"
               role="listitem"
@@ -135,11 +140,11 @@ export default class extends Controller {
         </span>
         <span class="decision-tree__choice-arrow" aria-hidden="true">→</span>
       </button>
-    `).join("");
+    `,
+      )
+      .join("");
 
-    const back = id === this.root
-      ? ""
-      : this.#renderBack(node.parent);
+    const back = id === this.root ? "" : this.#renderBack(node.parent);
 
     return `
       <div class="decision-tree__node decision-tree__node--active" role="group" aria-labelledby="dt-q-${this.#escape(id)}">
@@ -154,7 +159,9 @@ export default class extends Controller {
   #renderBack(parentId) {
     const target = parentId || this.root;
     const parent = this.nodes[target];
-    const label = parent ? (parent.question || parent.title || "previous step") : "previous step";
+    const label = parent
+      ? parent.question || parent.title || "previous step"
+      : "previous step";
     return `<button type="button" class="decision-tree__back" data-action="click->decision-tree#back" data-parent="${this.#escape(target)}" aria-label="Back to ${this.#escape(label)}">← Back</button>`;
   }
 
@@ -178,10 +185,13 @@ export default class extends Controller {
       : "";
 
     const examples = (node.examples || []).length
-      ? `<h3>Real examples</h3><ul>${node.examples.map((e) => {
-          if (e.url) return `<li><a href="${this.#escape(e.url)}" target="_blank" rel="noopener">${this.#escape(e.name)}</a> — ${this.#escape(e.note)}</li>`;
-          return `<li><strong>${this.#escape(e.name)}</strong> — ${this.#escape(e.note)}</li>`;
-        }).join("")}</ul>`
+      ? `<h3>Real examples</h3><ul>${node.examples
+          .map((e) => {
+            if (e.url)
+              return `<li><a href="${this.#escape(e.url)}" target="_blank" rel="noopener">${this.#escape(e.name)}</a> — ${this.#escape(e.note)}</li>`;
+            return `<li><strong>${this.#escape(e.name)}</strong> — ${this.#escape(e.note)}</li>`;
+          })
+          .join("")}</ul>`
       : "";
 
     const back = this.#renderBack(node.parent);

@@ -88,11 +88,9 @@ export default class extends Controller {
     const elRect = el.getBoundingClientRect();
     return {
       x:
-        ((elRect.left + elRect.width / 2 - refRect.left) / refRect.width) *
-        100,
+        ((elRect.left + elRect.width / 2 - refRect.left) / refRect.width) * 100,
       y:
-        ((elRect.top + elRect.height / 2 - refRect.top) / refRect.height) *
-        100,
+        ((elRect.top + elRect.height / 2 - refRect.top) / refRect.height) * 100,
     };
   }
 
