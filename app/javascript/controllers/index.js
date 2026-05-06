@@ -31,11 +31,11 @@ application.register("dialogue-iteration", DialogueIterationController);
 import DropdownController from "./dropdown_controller";
 application.register("dropdown", DropdownController);
 
-import FaqAccordionController from "./faq_accordion_controller";
-application.register("faq-accordion", FaqAccordionController);
-
 import FallingStarController from "./falling_star_controller";
 application.register("falling-star", FallingStarController);
+
+import FaqAccordionController from "./faq_accordion_controller";
+application.register("faq-accordion", FaqAccordionController);
 
 import FileUploadController from "./file_upload_controller";
 application.register("file-upload", FileUploadController);
@@ -55,17 +55,20 @@ application.register("hcb-chart", HcbChartController);
 import HeroWarpController from "./hero_warp_controller";
 application.register("hero-warp", HeroWarpController);
 
-import JsonHighlightController from "./json_highlight_controller";
-application.register("json-highlight", JsonHighlightController);
-
 import HomeDialogueController from "./home_dialogue_controller";
 application.register("home-dialogue", HomeDialogueController);
+
+import JsonHighlightController from "./json_highlight_controller";
+application.register("json-highlight", JsonHighlightController);
 
 import LazyLoadController from "./lazy_load_controller";
 application.register("lazy-load", LazyLoadController);
 
 import LoadMoreController from "./load_more_controller";
 application.register("load-more", LoadMoreController);
+
+import LockedTabController from "./locked_tab_controller";
+application.register("locked-tab", LockedTabController);
 
 import MarkdownPreviewController from "./markdown_preview_controller";
 application.register("markdown-preview", MarkdownPreviewController);
@@ -126,9 +129,6 @@ application.register("shop-goals", ShopGoalsController);
 
 import ShopWishlistController from "./shop_wishlist_controller";
 application.register("shop-wishlist", ShopWishlistController);
-
-import SidebarPinController from "./sidebar_pin_controller";
-application.register("sidebar-pin", SidebarPinController);
 
 import SnowController from "./snow_controller";
 application.register("snow", SnowController);
