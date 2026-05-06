@@ -33,7 +33,7 @@ class User
     validates :achievement_slug, uniqueness: { scope: :user_id }
     validates :earned_at, presence: true
 
-    after_create :grant_cookie_reward
+    after_create :grant_stardust_reward
 
     def achievement
       ::Achievement.find(achievement_slug)
@@ -41,11 +41,11 @@ class User
 
     private
 
-    def grant_cookie_reward
-      return unless achievement.has_cookie_reward?
+    def grant_stardust_reward
+      return unless achievement.has_stardust_reward?
 
       ledger_entries.create!(
-        amount: achievement.cookie_reward,
+        amount: achievement.stardust_reward,
         reason: "Achievement: #{achievement.name}",
         created_by: "achievement:#{achievement.slug}"
       )

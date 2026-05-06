@@ -25,7 +25,7 @@
     <h3>Totals</h3>
     <table class="stats-table">
       <tr><td>Orders</td><td><%= @run.total_orders %></td></tr>
-      <tr><td>Tickets</td><td><%= number_with_delimiter(@run.total_amount) %> 🍪</td></tr>
+      <tr><td>Tickets</td><td><%= number_with_delimiter(@run.total_amount) %> <%= stardust_icon %></td></tr>
       <tr><td>Fulfillers</td><td><%= @run.lines.count %></td></tr>
     </table>
   </div>
@@ -56,7 +56,7 @@
       <tr>
         <td><%= link_to line.user.display_name, admin_user_path(line.user) %></td>
         <td><%= line.order_count %></td>
-        <td><%= number_with_delimiter(line.amount) %> 🍪</td>
+        <td><%= number_with_delimiter(line.amount) %> <%= stardust_icon %></td>
       </tr>
     <% end %>
   </tbody>

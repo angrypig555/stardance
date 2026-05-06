@@ -16,9 +16,9 @@
       <div><b>Verification:</b> <%= @user.verification_status.titleize %></div>
       <div><b>YSWS Eligible:</b> <%= @user.ysws_eligible? ? "Yes" : "No" %></div>
       <div>
-        <b>Cookie Balance:</b>
+        <b>Stardust Balance:</b>
         <button type="button" class="btn-primary slim" onclick="document.getElementById('helper-balance-modal').showModal()">
-          🍪 <%= @user.cached_balance %>
+          <%= stardust_icon %> <%= @user.cached_balance %>
         </button>
       </div>
       <div><b>Vote Balance:</b> <%= @user.vote_balance %></div>

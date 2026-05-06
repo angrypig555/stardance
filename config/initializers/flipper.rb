@@ -26,7 +26,7 @@ Rails.application.config.after_initialize do
     Flipper.add(:shop_backlogged) unless Flipper.exist?(:shop_backlogged)
     Flipper.add(:kitchen_comic) unless Flipper.exist?(:kitchen_comic)
     Flipper.add(:admin_dark_brown_buttons) unless Flipper.exist?(:admin_dark_brown_buttons)
-    Flipper.add(:grant_cookies) unless Flipper.exist?(:grant_cookies)
+    Flipper.add(:grant_stardust) unless Flipper.exist?(:grant_stardust)
     Flipper.add(:fraud_daily_summary) unless Flipper.exist?(:fraud_daily_summary)
     Flipper.add(:shop_order_daily_summary) unless Flipper.exist?(:shop_order_daily_summary)
     Flipper.add(:shipping) unless Flipper.exist?(:shipping)

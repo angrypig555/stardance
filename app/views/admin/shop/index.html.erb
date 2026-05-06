@@ -57,7 +57,7 @@
            <th></th>
            <th>Name</th>
            <th>Type</th>
-           <th>Cookie Cost</th>
+           <th>Stardust Cost</th>
            <th>USD Cost</th>
            <th>Regions</th>
            <th>Status</th>
@@ -79,7 +79,7 @@
              </td>
              <td class="manage-shop__name"><%= item.name %></td>
              <td><span class="manage-shop__type"><%= item.type.to_s.gsub("ShopItem::", "") %></span></td>
-             <td>🍪 <%= item.ticket_cost.to_i %></td>
+             <td><%= stardust_icon %> <%= item.ticket_cost.to_i %></td>
              <td><%= item.usd_cost ? number_to_currency(item.usd_cost) : "—" %></td>
              <td class="manage-shop__regions">
                <%

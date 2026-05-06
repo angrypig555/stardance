@@ -39,7 +39,7 @@ class IdentitiesController < ApplicationController
     #   tutorial_message [
     #     "Oh, it would appear that Hackatime is linked, but you don't have any time tracked yet.",
     #     "Don't worry — just install the Hackatime extension in your code editor.",
-    #     "And then cook up tasty projects here, earn cookies, and get free rewards!"
+    #     "And then cook up tasty projects here, earn Stardust, and get free rewards!"
     #   ]
     # end
 

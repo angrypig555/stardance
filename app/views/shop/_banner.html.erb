@@ -3,7 +3,7 @@
     <div class="shop__banner">
       <div class="shop__banner-headings">
         <h3 class="shop__banner-title">Get Started</h3>
-        <h3 class="shop__banner-price"><%= number_to_currency(featured_item.price_for_region(user_region), precision: 0).gsub('$', '🍪') %></h3>
+        <h3 class="shop__banner-price"><%= stardust_icon %><%= number_to_currency(featured_item.price_for_region(user_region), precision: 0).delete('$') %></h3>
       </div>
       <div class="shop__banner-showcase">
         <div class="shop__banner-item-desc">

@@ -1,4 +1,8 @@
 module ApplicationHelper
+  def stardust_icon(extra_class: nil)
+    image_tag "icons/stardust.png", alt: "Stardust", class: [ "currency-icon", extra_class ].compact.join(" ")
+  end
+
   def admin_tool(&block)
     if current_user&.admin?
       content_tag(:div, class: "admin tools-do", &block)

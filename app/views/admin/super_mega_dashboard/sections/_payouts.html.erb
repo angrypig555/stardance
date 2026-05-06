@@ -10,7 +10,7 @@
       <div class="super-mega-dashboard__stats">
         <div class="super-mega-dashboard__stat">
           <span class="super-mega-dashboard__stat--value"><%= number_with_delimiter(@payouts_cap) %></span>
-          <span class="super-mega-dashboard__stat--label yellow">Cookies</span>
+          <span class="super-mega-dashboard__stat--label yellow">Stardust</span>
         </div>
       </div>
     </div>
@@ -38,7 +38,7 @@
     </div>
 
     <div class="super-mega-dashboard__card">
-      <h3>Cookie $ per hour <span id="cookie-dollars-per-hour-formula">ⓘ</span></h3>
+      <h3>Stardust $ per hour <span id="stardust-dollars-per-hour-formula">ⓘ</span></h3>
       <div class="super-mega-dashboard__stats">
         <div class="super-mega-dashboard__stat">
           <span class="super-mega-dashboard__stat--value"><%= @dollars_per_hour.round(2) %></span>
@@ -58,10 +58,10 @@
     </div>
 
     <div class="super-mega-dashboard__card">
-      <h3>Cookie Utilization Ratio</h3>
+      <h3>Stardust Utilization Ratio</h3>
       <div class="super-mega-dashboard__stats">
         <div class="super-mega-dashboard__stat">
-          <span class="super-mega-dashboard__stat--value"><%= @cookie_utilization_percentage %>%</span>
+          <span class="super-mega-dashboard__stat--value"><%= @stardust_utilization_percentage %>%</span>
           <span class="super-mega-dashboard__stat--label">Utilization</span>
         </div>
       </div>
@@ -79,8 +79,8 @@
   </div>
 </div>
 
-<%= render TooltipComponent.new(target_id: "cookie-dollars-per-hour-formula", position: :top) do %>
-  <span>[(total_cookies/5)/weighted_hours]</span>
+<%= render TooltipComponent.new(target_id: "stardust-dollars-per-hour-formula", position: :top) do %>
+  <span>[(total_stardust/5)/weighted_hours]</span>
 <% end %>
 
 <%= render TooltipComponent.new(target_id: "expenses-dollars-per-hour-formula", position: :top) do %>

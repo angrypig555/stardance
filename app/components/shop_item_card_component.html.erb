@@ -63,9 +63,9 @@
           <span class="shop-item-card__hours">⟩ <%= hours %> hours</span>
           <div class="shop-item-card__prices">
             <% if on_sale && original_price %>
-              <span class="shop-item-card__original-price">🍪<span class="shop-item-card__strikethrough"><%= number_to_currency(original_price, precision: 0).delete('$') %></span></span>
+              <span class="shop-item-card__original-price"><%= helpers.stardust_icon %><span class="shop-item-card__strikethrough"><%= number_to_currency(original_price, precision: 0).delete('$') %></span></span>
             <% end %>
-            <span class="shop-item-card__price"><%= number_to_currency(display_price, precision: 0).gsub('$', '🍪') %></span>
+            <span class="shop-item-card__price"><%= helpers.stardust_icon %><%= number_to_currency(display_price, precision: 0).delete('$') %></span>
           </div>
         </div>
       </div>
@@ -74,7 +74,7 @@
       <% if balance >= display_price %>
         <%= link_to "Order Now", order_url, class: "btn btn-primary w-full", data: {turbo_frame: "_top"} %>
       <% else %>
-        <p class="btn btn-primary w-full"><%= number_to_currency(display_price - balance, precision: 0).gsub('$', '🍪') %> more needed!</p>
+        <p class="btn btn-primary w-full"><%= helpers.stardust_icon %><%= number_to_currency(display_price - balance, precision: 0).delete('$') %> more needed!</p>
       <% end %>
     </div>
   <% else %>
@@ -94,9 +94,9 @@
           <span class="shop-item-card__hours">⟩ <%= hours %> hours</span>
           <div class="shop-item-card__prices">
             <% if on_sale && original_price %>
-              <span class="shop-item-card__original-price">🍪<span class="shop-item-card__strikethrough"><%= number_to_currency(original_price, precision: 0).delete('$') %></span></span>
+              <span class="shop-item-card__original-price"><%= helpers.stardust_icon %><span class="shop-item-card__strikethrough"><%= number_to_currency(original_price, precision: 0).delete('$') %></span></span>
             <% end %>
-            <span class="shop-item-card__price"><%= number_to_currency(display_price, precision: 0).gsub('$', '🍪') %></span>
+            <span class="shop-item-card__price"><%= helpers.stardust_icon %><%= number_to_currency(display_price, precision: 0).delete('$') %></span>
           </div>
         </div>
       </div>

@@ -24,9 +24,9 @@ module Admin
             Arel.sql("COALESCE(SUM(ABS(amount)), 0)")
           ).first
 
-          total_distributed_cookies = LedgerEntry.where("amount > 0").sum(:amount)
-          used_cookies = LedgerEntry.where("amount < 0").sum(:amount).abs
-          cookie_utilization_percentage = ((used_cookies.to_f / total_distributed_cookies) * 100).round(2)
+          total_distributed_stardust = LedgerEntry.where("amount > 0").sum(:amount)
+          used_stardust = LedgerEntry.where("amount < 0").sum(:amount).abs
+          stardust_utilization_percentage = ((used_stardust.to_f / total_distributed_stardust) * 100).round(2)
 
           total_approved_ysws_db_hours = fetch_approved_ysws_db_hours
 
@@ -35,7 +35,7 @@ module Admin
           contractor_expenses = transaction_data[:contractor_expenses]
 
           if total_approved_ysws_db_hours > 0
-            dollars_per_hour = (total_distributed_cookies / 5) / total_approved_ysws_db_hours
+            dollars_per_hour = (total_distributed_stardust / 5) / total_approved_ysws_db_hours
             expenses_dollars_per_hour = hcb_expenses / total_approved_ysws_db_hours
           else
             dollars_per_hour = 0
@@ -50,7 +50,7 @@ module Admin
               txns: recent_stats[2],
               volume: recent_stats[3]
             },
-            cookie_utilization_percentage: cookie_utilization_percentage,
+            stardust_utilization_percentage: stardust_utilization_percentage,
             dollars_per_hour: dollars_per_hour,
             expenses_dollars_per_hour: expenses_dollars_per_hour,
             contractor_expenses: contractor_expenses
@@ -61,7 +61,7 @@ module Admin
 
         @dollars_per_hour = cached_data&.dig(:dollars_per_hour) || 0
         @expenses_dollars_per_hour = cached_data&.dig(:expenses_dollars_per_hour) || 0
-        @cookie_utilization_percentage = cached_data&.dig(:cookie_utilization_percentage) || 0
+        @stardust_utilization_percentage = cached_data&.dig(:stardust_utilization_percentage) || 0
         @contractor_expenses = cached_data&.dig(:contractor_expenses) || 0
       rescue StandardError => e
         Rails.logger.error("[SuperMegaDashboard] Error in load_payouts_stats: #{e.class} - #{e.message}")
@@ -69,7 +69,7 @@ module Admin
         @payouts = { created: 0, destroyed: 0, txns: 0, volume: 0 }
         @dollars_per_hour = 0
         @expenses_dollars_per_hour = 0
-        @cookie_utilization_percentage = 0
+        @stardust_utilization_percentage = 0
         @contractor_expenses = 0
       end
 

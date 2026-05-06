@@ -99,7 +99,7 @@ module Admin
         end
       end
 
-      redirect_to admin_special_activities_path(date: date), notice: "Payout of #{PRESENTATION_PAYOUT_AMOUNT} cookies given to #{attendances.size} attendees."
+      redirect_to admin_special_activities_path(date: date), notice: "Payout of #{PRESENTATION_PAYOUT_AMOUNT} Stardust given to #{attendances.size} attendees."
     end
 
     def mark_payout_given
@@ -147,7 +147,7 @@ module Admin
         end
       end
 
-      redirect_to admin_special_activities_path(date: attendance.date), notice: "#{attendance.user.display_name} marked as winner and awarded #{WINNER_PAYOUT_AMOUNT} cookies!"
+      redirect_to admin_special_activities_path(date: attendance.date), notice: "#{attendance.user.display_name} marked as winner and awarded #{WINNER_PAYOUT_AMOUNT} Stardust!"
     end
 
     def toggle_live

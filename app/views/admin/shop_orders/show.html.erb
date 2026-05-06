@@ -165,7 +165,7 @@
         <div style="flex: 1;">
           <strong><%= acc_order.shop_item.name %></strong>
           <br>
-          <small style="color: #6b7280;">🍪 <%= acc_order.frozen_item_price || acc_order.shop_item.ticket_cost %></small>
+          <small style="color: #6b7280;"><%= stardust_icon %> <%= acc_order.frozen_item_price || acc_order.shop_item.ticket_cost %></small>
         </div>
         <div>
           <span class="badge badge-<%= acc_order.aasm_state %>" style="font-size: 0.7rem;">

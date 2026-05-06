@@ -11,7 +11,7 @@
 
 <div class="card" style="margin-top: 1.5rem;">
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-    <h3 style="margin: 0;">🍪 <%= title %></h3>
+    <h3 style="margin: 0;"><%= stardust_icon %> <%= title %></h3>
     <span class="audit-logs__muted"><%= entries.count %> entries</span>
   </div>
 
@@ -46,7 +46,7 @@
             </td>
             <td>
               <span class="badge <%= entry.amount.positive? ? 'badge-create' : 'badge-destroy' %>">
-                <%= entry.amount.positive? ? "+#{entry.amount}" : entry.amount %> 🍪
+                <%= entry.amount.positive? ? "+#{entry.amount}" : entry.amount %> <%= stardust_icon %>
               </span>
             </td>
             <td><%= truncate(entry.reason.to_s, length: 60) %></td>

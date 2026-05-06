@@ -39,7 +39,7 @@
             <%= run.period_end.strftime("%b %d, %Y") %>
           </td>
           <td><%= run.total_orders %></td>
-          <td><%= number_with_delimiter(run.total_amount) %> 🍪</td>
+          <td><%= number_with_delimiter(run.total_amount) %> <%= stardust_icon %></td>
           <td><%= run.created_at.strftime("%b %d, %Y %H:%M") %></td>
           <td><%= run.approved_by_user&.display_name || "-" %></td>
           <td><%= link_to "View", admin_fulfillment_payout_path(run), class: "btn-primary" %></td>

@@ -18,7 +18,12 @@ export default class extends Controller {
     baseTicketCost: Number,
     userBalance: Number,
     blockedCountries: Array,
+    stardustIconUrl: String,
   };
+
+  stardustIconHtml() {
+    return `<img src="${this.stardustIconUrlValue}" alt="Stardust" class="currency-icon">`;
+  }
 
   connect() {
     if (this.hasSubmitButtonTarget) {
@@ -147,7 +152,7 @@ export default class extends Controller {
         this.accessoriesListItemsTarget.innerHTML = accessories
           .map(
             (acc) =>
-              `<li>${acc.name} ${qty > 1 ? `(${qty}x)` : ""} <span>🍪 ${Math.round(acc.price * qty)}</span></li>`,
+              `<li>${acc.name} ${qty > 1 ? `(${qty}x)` : ""} <span>${this.stardustIconHtml()} ${Math.round(acc.price * qty)}</span></li>`,
           )
           .join("");
       } else {
@@ -161,7 +166,7 @@ export default class extends Controller {
     }
 
     if (this.hasSummaryTotalDisplayTarget) {
-      this.summaryTotalDisplayTarget.textContent = `🍪 ${Math.round(total)}`;
+      this.summaryTotalDisplayTarget.innerHTML = `${this.stardustIconHtml()} ${Math.round(total)}`;
     }
 
     if (this.hasSubmitButtonTarget) {
@@ -173,7 +178,7 @@ export default class extends Controller {
         this.submitButtonTarget.innerHTML = this.initialGetButtonHTML;
       } else if (!canAfford) {
         this.submitButtonTarget.disabled = true;
-        this.submitButtonTarget.innerHTML = `You need 🍪 ${shortfall.toFixed(0)} more cookies!`;
+        this.submitButtonTarget.innerHTML = `You need ${this.stardustIconHtml()} ${shortfall.toFixed(0)} more Stardust!`;
       } else {
         this.submitButtonTarget.disabled = true;
         this.submitButtonTarget.innerHTML = this.initialGetButtonHTML;

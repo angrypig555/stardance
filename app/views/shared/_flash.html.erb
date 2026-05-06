@@ -10,8 +10,8 @@
             <span class="achievement-toast__label">Achievement Get!</span>
             <span class="achievement-toast__name"><%= achievement["name"] %></span>
             <span class="achievement-toast__description"><%= achievement["description"] %></span>
-            <% if achievement["cookie_reward"].to_i > 0 %>
-              <span class="achievement-toast__reward">+<%= achievement["cookie_reward"] %> 🍪</span>
+            <% if achievement["stardust_reward"].to_i > 0 %>
+              <span class="achievement-toast__reward">+<%= achievement["stardust_reward"] %> <%= image_tag "icons/stardust.png", alt: "Stardust", class: "currency-icon" %></span>
             <% end %>
           </div>
         <% end %>

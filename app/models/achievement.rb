@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :progress, :visibility, :secret_hint, :excluded_from_count, :cookie_reward) do
+Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :progress, :visibility, :secret_hint, :excluded_from_count, :stardust_reward) do
   include ActiveModel::Conversion
   extend ActiveModel::Naming
 
   VISIBILITIES = %i[visible secret hidden].freeze
 
-  def initialize(slug:, name:, description:, icon:, earned_check:, progress: nil, visibility: :visible, secret_hint: nil, excluded_from_count: false, cookie_reward: 0)
-    super(slug:, name:, description:, icon:, earned_check:, progress:, visibility:, secret_hint:, excluded_from_count:, cookie_reward:)
+  def initialize(slug:, name:, description:, icon:, earned_check:, progress: nil, visibility: :visible, secret_hint: nil, excluded_from_count: false, stardust_reward: 0)
+    super(slug:, name:, description:, icon:, earned_check:, progress:, visibility:, secret_hint:, excluded_from_count:, stardust_reward:)
   end
 
   ALL = [
@@ -24,7 +24,7 @@ Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :pro
       description: "prove you belong in this kitchen!",
       icon: "verified",
       earned_check: ->(user) { user.identity_verified? },
-      cookie_reward: 5
+      stardust_reward: 5
     ),
     new(
       slug: :first_project,
@@ -32,7 +32,7 @@ Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :pro
       description: "fire up the stove and start your first dish",
       icon: "fork_spoon_fill",
       earned_check: ->(user) { user.projects.exists? },
-      cookie_reward: 3
+      stardust_reward: 3
     ),
     new(
       slug: :first_devlog,
@@ -40,7 +40,7 @@ Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :pro
       description: "jot down your cooking process",
       icon: "edit",
       earned_check: ->(user) { user.projects.joins(:posts).exists?(posts: { postable_type: "Post::Devlog" }) },
-      cookie_reward: 2
+      stardust_reward: 2
     ),
     new(
       slug: :first_comment,
@@ -92,7 +92,7 @@ Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :pro
       description: "introduced yourself in #flavortown-introduction",
       icon: "user",
       earned_check: ->(user) { SlackChannelService.user_has_posted_in?(user, :flavortown_introduction) },
-      cookie_reward: 2
+      stardust_reward: 2
     ),
     new(
       slug: :five_projects,
@@ -101,7 +101,7 @@ Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :pro
       icon: "square_fill",
       earned_check: ->(user) { user.projects.count >= 5 },
       progress: ->(user) { { current: user.projects.count, target: 5 } },
-      cookie_reward: 10
+      stardust_reward: 10
     ),
     new(
       slug: :first_ship,
@@ -109,7 +109,7 @@ Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :pro
       description: "ship your first project to the world",
       icon: "ship",
       earned_check: ->(user) { user.projects.where(ship_status: "submitted").exists? },
-      cookie_reward: 3
+      stardust_reward: 3
     ),
     new(
       slug: :ship_certified,
@@ -117,7 +117,7 @@ Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :pro
       description: "your dish has been certified by the critics",
       icon: "trophy",
       earned_check: ->(user) { Post::ShipEvent.joins(:post).where(posts: { user_id: user.id }, certification_status: "approved").exists? },
-      cookie_reward: 3
+      stardust_reward: 3
     ),
     new(
       slug: :ten_devlogs,
@@ -126,7 +126,7 @@ Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :pro
       icon: "fire",
       earned_check: ->(user) { Post.joins(:project).where(projects: { id: user.project_ids }, postable_type: "Post::Devlog").count >= 10 },
       progress: ->(user) { { current: Post.joins(:project).where(projects: { id: user.project_ids }, postable_type: "Post::Devlog").count, target: 10 } },
-      cookie_reward: 15,
+      stardust_reward: 15,
       visibility: :secret
     ),
     new(
@@ -135,7 +135,7 @@ Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :pro
       description: "Cooked so hard you ended up making a fire project that made our staff very happy!",
       icon: "fire",
       earned_check: ->(user) { user.projects.fire.exists? },
-      cookie_reward: 5,
+      stardust_reward: 5,
       visibility: :secret
     ),
     new(
@@ -164,7 +164,7 @@ Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :pro
       icon: "trophy",
        earned_check: ->(user) { ShowAndTellAttendance.where(user_id: user.id).size >= 10 },
       progress: ->(user) { { current: ShowAndTellAttendance.where(user_id: user.id).size, target: 10 } },
-      cookie_reward: 5
+      stardust_reward: 5
     ),
     new(
       slug: :show_and_tell_winner,
@@ -180,7 +180,7 @@ Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :pro
       icon: "trophy",
       earned_check: ->(user) { ShowAndTellAttendance.where(user_id: user.id, winner: true).size >= 10 },
       progress: ->(user) { { current: ShowAndTellAttendance.where(user_id: user.id, winner: true).size, target: 10 } },
-      cookie_reward: 30
+      stardust_reward: 30
     ),
     new(
       slug: :five_ships,
@@ -189,7 +189,7 @@ Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :pro
       icon: "ship",
       earned_check: ->(user) { user.projects.joins(:ship_events).distinct.size >= 5 },
       progress: ->(user) { { current: user.projects.joins(:ship_events).distinct.size, target: 5 } },
-      cookie_reward: 5
+      stardust_reward: 5
     ),
     new(
       slug: :five_certified_ships,
@@ -207,7 +207,7 @@ Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :pro
           .select("post_ship_events.id").distinct.size
         { current: count, target: 5 }
       },
-      cookie_reward: 15
+      stardust_reward: 15
     ),
     new(
       slug: :ten_hours,
@@ -224,7 +224,7 @@ Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :pro
       icon: "fire",
       earned_check: ->(user) { user.devlog_seconds_total >= 50 * 3600 },
       progress: ->(user) { { current: (user.devlog_seconds_total / 3600.0).floor, target: 50 } },
-      cookie_reward: 15
+      stardust_reward: 15
     ),
     new(
       slug: :hundred_hours,
@@ -233,7 +233,7 @@ Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :pro
       icon: "fire",
       earned_check: ->(user) { user.devlog_seconds_total >= 100 * 3600 },
       progress: ->(user) { { current: (user.devlog_seconds_total / 3600.0).floor, target: 100 } },
-      cookie_reward: 30,
+      stardust_reward: 30,
       visibility: :secret
     )
   ].freeze
@@ -290,7 +290,7 @@ Achievement = Data.define(:slug, :name, :description, :icon, :earned_check, :pro
 
   def has_progress? = progress.present?
 
-  def has_cookie_reward? = cookie_reward.positive?
+  def has_stardust_reward? = stardust_reward.positive?
 
   SECRET_DESCRIPTIONS = [
     "the secret ingredient is... secret",

@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["cookie", "counter", "clickEffect"];
+  static targets = ["stardust", "counter", "clickEffect"];
   static values = {
     clicks: Number,
     postUrl: String,
@@ -78,7 +78,7 @@ export default class extends Controller {
       this.clicksValue += clickValue;
       this.pendingClicks += clickValue;
       this.updateCounter();
-      this.animateCookie();
+      this.animateStardust();
       this.showClickEffect(event, !isSuperCrit, isSuperCrit, clickValue);
 
       if (isSuperCrit && this.headshotAudio) {
@@ -92,7 +92,7 @@ export default class extends Controller {
       this.clicksValue += 1;
       this.pendingClicks += 1;
       this.updateCounter();
-      this.animateCookie();
+      this.animateStardust();
       this.showClickEffect(event, false, false, 1);
     }
 
@@ -106,27 +106,30 @@ export default class extends Controller {
     }
   }
 
-  animateCookie() {
-    if (!this.hasCookieTarget) return;
+  animateStardust() {
+    if (!this.hasStardustTarget) return;
 
-    this.cookieTarget.classList.add("cookie-clicker__cookie--clicked");
+    this.stardustTarget.classList.add("stardust-clicker__stardust--clicked");
     setTimeout(() => {
-      this.cookieTarget.classList.remove("cookie-clicker__cookie--clicked");
+      this.stardustTarget.classList.remove(
+        "stardust-clicker__stardust--clicked",
+      );
     }, 100);
   }
 
   showClickEffect(event, isCrit, isSuperCrit, value) {
     const effect = document.createElement("span");
     if (isSuperCrit) {
-      effect.innerHTML = `+${value} <span class="cookie-clicker__crit-text">crit!</span>`;
+      effect.innerHTML = `+${value} <span class="stardust-clicker__crit-text">crit!</span>`;
       effect.className =
-        "cookie-clicker__effect cookie-clicker__effect--super-crit";
+        "stardust-clicker__effect stardust-clicker__effect--super-crit";
     } else if (isCrit) {
       effect.textContent = `+${value}`;
-      effect.className = "cookie-clicker__effect cookie-clicker__effect--crit";
+      effect.className =
+        "stardust-clicker__effect stardust-clicker__effect--crit";
     } else {
       effect.textContent = `+${value}`;
-      effect.className = "cookie-clicker__effect";
+      effect.className = "stardust-clicker__effect";
     }
 
     const randomWobble = () => Math.floor(Math.random() * 20) - 10;

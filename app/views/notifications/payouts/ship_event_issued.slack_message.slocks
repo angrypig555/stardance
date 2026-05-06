@@ -1,4 +1,4 @@
-header ":ft-cookie: Payout issued!"
+header ":stardust: Payout issued!"
 
 ship_event_label = "*#{project_title}*"
 
@@ -9,7 +9,7 @@ section "Ship event: #{ship_event_label}#{ship_date.present? ? " (shipped #{ship
 section "Payout details:",
   fields: [
     mrkdwn_text("*Hours:* #{hours || '—'}"),
-    mrkdwn_text("*Stardust:* :ft-cookie: #{cookies || '—'}"),
+    mrkdwn_text("*Stardust:* :stardust: #{stardust || '—'}"),
     mrkdwn_text("*Multiplier:* #{multiplier || '—'} stardust/hr"),
   ]
 

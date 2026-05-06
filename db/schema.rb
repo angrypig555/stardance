@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_05_173857) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_06_200406) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -778,7 +778,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_05_173857) do
     t.text "banned_reason"
     t.string "club_link"
     t.string "club_name"
-    t.integer "cookie_clicks", default: 0, null: false
     t.datetime "created_at", null: false
     t.string "display_name"
     t.string "email"
@@ -810,6 +809,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_05_173857) do
     t.string "slack_id"
     t.datetime "slack_messages_updated_at"
     t.boolean "special_effects_enabled", default: true, null: false
+    t.integer "stardust_clicks", default: 0, null: false
     t.datetime "synced_at"
     t.string "things_dismissed", default: [], null: false, array: true
     t.string "tutorial_steps_completed", default: [], array: true
@@ -907,7 +907,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_05_173857) do
   add_foreign_key "shop_card_grants", "shop_items"
   add_foreign_key "shop_card_grants", "users"
   add_foreign_key "shop_items", "users"
-  add_foreign_key "shop_items", "users", column: "created_by_user_id", on_delete: :nullify, validate: false
+  add_foreign_key "shop_items", "users", column: "created_by_user_id", on_delete: :nullify
   add_foreign_key "shop_items", "users", column: "default_assigned_user_id", on_delete: :nullify
   add_foreign_key "shop_order_reviews", "shop_orders"
   add_foreign_key "shop_order_reviews", "users"

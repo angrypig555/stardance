@@ -2,7 +2,11 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = ["container", "items", "emptyState"];
-  static values = { balance: Number };
+  static values = { balance: Number, stardustIconUrl: String };
+
+  stardustIconHtml() {
+    return `<img src="${this.stardustIconUrlValue}" alt="Stardust" class="currency-icon">`;
+  }
 
   static STORAGE_KEY = "shop_wishlist";
 
@@ -57,7 +61,7 @@ export default class extends Controller {
                 <div class="shop-goals__progress-fill ${canAfford ? "shop-goals__progress-fill--complete" : ""}" style="width: ${progress}%"></div>
               </div>
               <span class="shop-goals__progress-text">
-                ${canAfford ? "✓ Ready to order!" : `🍪${remaining.toLocaleString()} more needed`}
+                ${canAfford ? "✓ Ready to order!" : `${this.stardustIconHtml()}${remaining.toLocaleString()} more needed`}
               </span>
             </div>
           </div>

@@ -74,7 +74,7 @@
              <% end %>
             <div class="shop-order__customs-warning" data-customs-warning-target="warning" style="display: none;"></div>
         </div>
-        <div class="shop-order__details" data-controller="order-form" data-order-form-has-addresses-value="<%= current_user.addresses.any? %>" data-order-form-base-ticket-cost-value="<%= @sale_price || @shop_item.ticket_cost || 0 %>" data-order-form-user-balance-value="<%= current_user.balance || 0 %>" data-order-form-addresses-value="<%= current_user.addresses.to_json %>" data-order-form-blocked-countries-value="<%= @shop_item.blocked_countries.to_json %>" data-action="address-select:change@document->order-form#addressChanged">
+        <div class="shop-order__details" data-controller="order-form" data-order-form-has-addresses-value="<%= current_user.addresses.any? %>" data-order-form-base-ticket-cost-value="<%= @sale_price || @shop_item.ticket_cost || 0 %>" data-order-form-user-balance-value="<%= current_user.balance || 0 %>" data-order-form-addresses-value="<%= current_user.addresses.to_json %>" data-order-form-blocked-countries-value="<%= @shop_item.blocked_countries.to_json %>" data-order-form-stardust-icon-url-value="<%= image_path('icons/stardust.png') %>" data-action="address-select:change@document->order-form#addressChanged">
             <h2>Complete your order:</h2>
             <%= form_with url: shop_order_path(shop_item_id: @shop_item.id), method: :post, local: true, id: "order-form" do |form| %>
                 <% if not @shop_item.one_per_person_ever %>
@@ -121,11 +121,11 @@
                                                      <%= image_tag accessory.image.variant(:carousel_sm), class: "shop-order__accessory-option-image", loading: "lazy" %>
                                                      <div class="shop-order__accessory-option-details">
                                                          <div class="shop-order__accessory-option-name"><%= accessory.name %></div>
-                                                         <div class="shop-order__accessory-option-price">🍪 <%= accessory.price_for_region(@user_region).round %></div>
+                                                         <div class="shop-order__accessory-option-price"><%= stardust_icon %> <%= accessory.price_for_region(@user_region).round %></div>
                                                      </div>
                                                     <% else %>
                                                      <div class="shop-order__accessory-option-name"><%= accessory.name %></div>
-                                                     <div class="shop-order__accessory-option-price">🍪 <%= accessory.price_for_region(@user_region).round %></div>
+                                                     <div class="shop-order__accessory-option-price"><%= stardust_icon %> <%= accessory.price_for_region(@user_region).round %></div>
                                                  <% end %>
                                              </div>
                                          </label>
@@ -152,7 +152,7 @@
                                                 <% end %>
                                                 <div class="shop-order__accessory-option-details">
                                                     <div class="shop-order__accessory-option-name"><%= accessory.name %></div>
-                                                    <div class="shop-order__accessory-option-price">🍪 <%= accessory.price_for_region(@user_region).round %></div>
+                                                    <div class="shop-order__accessory-option-price"><%= stardust_icon %> <%= accessory.price_for_region(@user_region).round %></div>
                                                 </div>
                                             </div>
                                         </label>
@@ -203,18 +203,18 @@
                 <%= render InputGroupComponent.new(
                     label: "Order Summary",
                     color: :green,
-                    subtitle: "Current Balance: 🍪#{ current_user.balance }",
+                    subtitle: safe_join([ "Current Balance: ", stardust_icon, current_user.balance.to_s ]),
                 ) do %>
                     <div class="shop-order__summary-content">
                         <div class="shop-order__summary-price">
                             <h4>Base Price:</h4>
                             <% if @shop_item.on_sale? %>
                                 <h4>
-                                    <span class="shop-order__original-price">🍪 <span class="shop-order__strikethrough"><%= @regional_base_price %></span></span>
-                                    🍪 <%= @sale_price.round %>
+                                    <span class="shop-order__original-price"><%= stardust_icon %> <span class="shop-order__strikethrough"><%= @regional_base_price %></span></span>
+                                    <%= stardust_icon %> <%= @sale_price.round %>
                                 </h4>
                             <% else %>
-                                <h4>🍪 <%= @regional_base_price %></h4>
+                                <h4><%= stardust_icon %> <%= @regional_base_price %></h4>
                             <% end %>
                         </div>
                         <div class="shop-order__summary-accessories-list" id="shop-order__summary-accessories-list" style="display: none;" data-order-form-target="accessoriesListContainer">
@@ -227,7 +227,7 @@
                         </div>
                         <div class="shop-order__summary-total">
                             <h4>Total:</h4>
-                            <h4 id="shop-order__summary-total-display" data-order-form-target="summaryTotalDisplay">🍪 <%= @sale_price.round %></h4>
+                            <h4 id="shop-order__summary-total-display" data-order-form-target="summaryTotalDisplay"><%= stardust_icon %> <%= @sale_price.round %></h4>
                         </div>
                     </div>
                 <% end %>

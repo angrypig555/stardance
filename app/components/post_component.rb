@@ -91,7 +91,7 @@ class PostComponent < ViewComponent::Base
     hours = postable.hours&.to_f
     percentile = postable.overall_percentile
 
-    return { hours: hours, cookies: nil, multiplier: nil } if hours.nil? || percentile.nil?
+    return { hours: hours, stardust: nil, multiplier: nil } if hours.nil? || percentile.nil?
 
     game_constants = Rails.configuration.game_constants
     low = game_constants.lowest_dollar_per_hour.to_f
@@ -103,10 +103,10 @@ class PostComponent < ViewComponent::Base
     hourly_rate = low + (high - low) * (p ** gamma)
     hourly_rate = hourly_rate.clamp(low, high)
 
-    cookies = (hours * hourly_rate * tickets_per_dollar).round
+    stardust = (hours * hourly_rate * tickets_per_dollar).round
     multiplier = (hourly_rate * tickets_per_dollar).round(2)
 
-    { hours: hours.round(2), cookies: cookies, multiplier: multiplier }
+    { hours: hours.round(2), stardust: stardust, multiplier: multiplier }
   end
 
   def devlog?

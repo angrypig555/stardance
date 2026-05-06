@@ -37,27 +37,27 @@ class ShipEventPayoutCalculator
 
       return if hourly_rate <= 0
 
-      # mult is like if mult is 30 then you have $6/hr. or you get 30 cookies so its how many cookies you get
+      # mult is like if mult is 30 then you have $6/hr. or you get 30 stardust so its how many stardust you get
       mult = (hourly_rate * tickets_per_dollar).round(6)
       is_bridge = apply_legacy_bridge?(project)
       legacy_hours = is_bridge ? (bridge_total_hours(project: project) - hours_used) : 0.0
       payout_hours = is_bridge ? bridge_total_hours(project: project) : hours_used
       legacy_deduction = is_bridge ? project.legacy_payout_total : 0.0
-      cookies = calculate_cookies(
+      stardust = calculate_stardust(
         hours: hours_used,
         multiplier: mult,
         legacy_hours: legacy_hours,
         legacy_deduction: legacy_deduction,
         bridge: is_bridge
       )
-      return if cookies.nil?
+      return if stardust.nil?
 
       blessing = payout_user.vote_verdict&.verdict || "neutral"
-      cookies  = Secrets::VoteVerdictMultiplier.apply(cookies, blessing)
+      stardust  = Secrets::VoteVerdictMultiplier.apply(stardust, blessing)
 
       ActiveRecord::Base.transaction do
         attrs = {
-          payout: cookies,
+          payout: stardust,
           multiplier: mult,
           hours: payout_hours,
           bridge: is_bridge,
@@ -68,18 +68,18 @@ class ShipEventPayoutCalculator
 
         @ship_event.update!(attrs)
 
-        if cookies.positive?
+        if stardust.positive?
           payout_user.ledger_entries.create!(
             ledgerable: @ship_event,
-            amount: cookies,
+            amount: stardust,
             reason: build_payout_reason(project: project, bridge: is_bridge, new_hours: hours_used, legacy_hours: legacy_hours, legacy_deduction: legacy_deduction),
             created_by: "ship_event_payout"
           )
         end
       end
 
-      notify_payout_issued(payout_user, cookies: cookies, hours: payout_hours, multiplier: mult, blessing: blessing)
-      broadcast_payout(payout_user, cookies, payout_hours, mult)
+      notify_payout_issued(payout_user, stardust: stardust, hours: payout_hours, multiplier: mult, blessing: blessing)
+      broadcast_payout(payout_user, stardust, payout_hours, mult)
     end
   end
 
@@ -87,7 +87,7 @@ class ShipEventPayoutCalculator
 
   BROADCAST_CHANNEL_ID = "C0AFB0JU00P"
 
-  def broadcast_payout(user, cookies, hours, multiplier)
+  def broadcast_payout(user, stardust, hours, multiplier)
     project = @ship_event.post&.project
     SendSlackDmJob.perform_later(
       BROADCAST_CHANNEL_ID,
@@ -97,7 +97,7 @@ class ShipEventPayoutCalculator
         project_title: project&.title || "Unknown",
         project_url: "https://flavortown.hackclub.com/projects/#{project&.id}",
         recipient_name: user.display_name,
-        cookies: cookies,
+        stardust: stardust,
         hours: hours&.round(2),
         multiplier: multiplier&.round(2)
       }
@@ -128,7 +128,7 @@ class ShipEventPayoutCalculator
     title = project&.title || "Unknown"
 
     if bridge
-      "Bridge payout: #{title} (#{new_hours.to_f.round(2)}h new + #{legacy_hours.to_f.round(2)}h legacy, minus #{legacy_deduction.to_f.round(0)} legacy cookies)"
+      "Bridge payout: #{title} (#{new_hours.to_f.round(2)}h new + #{legacy_hours.to_f.round(2)}h legacy, minus #{legacy_deduction.to_f.round(0)} legacy stardust)"
     else
       "Ship event payout: #{title}"
     end
@@ -139,18 +139,18 @@ class ShipEventPayoutCalculator
   def dollars_per_mean_hour = @game_constants.dollars_per_mean_hour.to_f
   def tickets_per_dollar = @game_constants.tickets_per_dollar.to_f
 
-  def calculate_cookies(hours:, multiplier:, legacy_hours:, legacy_deduction:, bridge:)
+  def calculate_stardust(hours:, multiplier:, legacy_hours:, legacy_deduction:, bridge:)
     return nil if multiplier <= 0
 
     if bridge
-      new_hours_cookies = (hours * multiplier).round
+      new_hours_stardust = (hours * multiplier).round
       legacy_top_up = ((legacy_hours * multiplier) - legacy_deduction).round.clamp(0, Float::INFINITY)
-      new_hours_cookies + legacy_top_up
+      new_hours_stardust + legacy_top_up
     else
-      cookies = (hours * multiplier).round
-      return nil if cookies <= 0
+      stardust = (hours * multiplier).round
+      return nil if stardust <= 0
 
-      cookies
+      stardust
     end
   end
 
@@ -164,7 +164,7 @@ class ShipEventPayoutCalculator
     !project.has_paid_current_scale_ship_events?(excluding_ship_event_id: @ship_event.id)
   end
 
-  def notify_payout_issued(user, cookies:, hours:, multiplier:, blessing: "neutral")
+  def notify_payout_issued(user, stardust:, hours:, multiplier:, blessing: "neutral")
     return unless user.slack_id.present?
 
     project = @ship_event.post&.project
@@ -179,7 +179,7 @@ class ShipEventPayoutCalculator
         project_title: project_title,
         ship_date: ship_date,
         hours: hours&.round(2),
-        cookies: cookies&.to_i,
+        stardust: stardust&.to_i,
         multiplier: multiplier&.round(2),
         blessing: blessing
       }

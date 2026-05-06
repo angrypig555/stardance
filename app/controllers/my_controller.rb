@@ -30,9 +30,9 @@ class MyController < ApplicationController
     redirect_back fallback_location: root_path, notice: "Club unlinked"
   end
 
-  def cookie_click
+  def stardust_click
     clicks = params[:clicks].to_i.clamp(1, 100)
-    current_user.increment!(:cookie_clicks, clicks)
+    current_user.increment!(:stardust_clicks, clicks)
     head :ok
   end
 

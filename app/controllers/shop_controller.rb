@@ -15,7 +15,7 @@ class ShopController < ApplicationController
       @show_shop_tutorial = free_stickers_step.deps_satisfied?(current_user.tutorial_steps) &&
                             !current_user.tutorial_step_completed?(:free_stickers)
 
-      grant_free_stickers_welcome_cookies! if @show_shop_tutorial
+      grant_free_stickers_welcome_stardust! if @show_shop_tutorial
     else
       @show_shop_tutorial = false
     end
@@ -156,7 +156,7 @@ class ShopController < ApplicationController
         user_balance = current_user.balance
 
         if total_cost > user_balance
-          redirect_to shop_order_path(shop_item_id: @shop_item.id), alert: "Insufficient balance. You need 🍪#{total_cost} but only have 🍪#{user_balance}."
+          redirect_to shop_order_path(shop_item_id: @shop_item.id), alert: safe_join([ "Insufficient balance. You need ", helpers.stardust_icon, total_cost.to_s, " but only have ", helpers.stardust_icon, user_balance.to_s, "." ])
           return
         end
 
@@ -227,7 +227,7 @@ class ShopController < ApplicationController
     item if item&.enabled_in_region?(@user_region)
   end
 
-  def grant_free_stickers_welcome_cookies!
+  def grant_free_stickers_welcome_stardust!
     unless current_user.ledger_entries.exists?(reason: "Free Stickers Welcome Grant")
       current_user.ledger_entries.create!(
         amount: 10, reason: "Free Stickers Welcome Grant", created_by: "System", ledgerable: current_user

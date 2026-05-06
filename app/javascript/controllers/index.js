@@ -13,9 +13,6 @@ application.register("address-select", AddressSelectController);
 import CardSoundController from "./card_sound_controller";
 application.register("card-sound", CardSoundController);
 
-import CookieClickerController from "./cookie_clicker_controller";
-application.register("cookie-clicker", CookieClickerController);
-
 import CountdownClockController from "./countdown_clock_controller";
 application.register("countdown-clock", CountdownClockController);
 
@@ -135,6 +132,9 @@ application.register("sidebar-pin", SidebarPinController);
 
 import SnowController from "./snow_controller";
 application.register("snow", SnowController);
+
+import StardustClickerController from "./stardust_clicker_controller";
+application.register("stardust-clicker", StardustClickerController);
 
 import SuperMegaFunnelController from "./super_mega_funnel_controller";
 application.register("super-mega-funnel", SuperMegaFunnelController);

@@ -8,7 +8,6 @@
 #  banned_reason                           :text
 #  club_link                               :string
 #  club_name                               :string
-#  cookie_clicks                           :integer          default(0), not null
 #  display_name                            :string
 #  email                                   :string
 #  enriched_ref                            :string
@@ -38,6 +37,7 @@
 #  slack_balance_notifications             :boolean          default(FALSE), not null
 #  slack_messages_updated_at               :datetime
 #  special_effects_enabled                 :boolean          default(TRUE), not null
+#  stardust_clicks                         :integer          default(0), not null
 #  synced_at                               :datetime
 #  things_dismissed                        :string           default([]), not null, is an Array
 #  tutorial_steps_completed                :string           default([]), is an Array

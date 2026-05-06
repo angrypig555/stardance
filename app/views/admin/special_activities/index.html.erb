@@ -120,10 +120,11 @@
       <% if frozen %>
         <p class="frozen-notice">Payout system is frozen for this date.</p>
       <% else %>
-        <%= button_to "Give Payout (#{ShowAndTellAttendance::PRESENTATION_PAYOUT_AMOUNT} 🍪 each)",
-              give_payout_admin_special_activities_path(date: @date),
+        <%= button_to give_payout_admin_special_activities_path(date: @date),
               method: :post,
-              class: "btn-primary" %>
+              class: "btn-primary" do %>
+          Give Payout (<%= ShowAndTellAttendance::PRESENTATION_PAYOUT_AMOUNT %> <%= stardust_icon %> each)
+        <% end %>
 
         <%= button_to "Mark Payout Given (Historical)",
               mark_payout_given_admin_special_activities_path(date: @date),

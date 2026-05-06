@@ -13,7 +13,7 @@
       "I've given you 10 Stardust to get started. We'll use them to place your stickers order.",
       "Before we can ship prizes, I need to confirm that you're a teenager and get your address. I'll redirect you to Hack Club Auth to fill that out. It's secure and open source."
     ],
-    sticker: "cookie.svg",
+    sticker: "icons/stardust.png",
     sticker_line_index: 0,
     redirect_url: session[:tutorial_redirect_url]
   ) %>
@@ -22,7 +22,7 @@
 <div class="shop" data-controller="shop" data-shop-user-region-value="<%= @user_region %>">
   <%= render HeadingComponent.new(title: "Shop", tone: :blue, size: :full) %>
 
-  <div class="shop-goals" data-controller="shop-goals" data-shop-goals-balance-value="<%= @user_balance %>">
+  <div class="shop-goals" data-controller="shop-goals" data-shop-goals-balance-value="<%= @user_balance %>" data-shop-goals-stardust-icon-url-value="<%= image_path('icons/stardust.png') %>">
     <div class="shop-goals__container" data-shop-goals-target="container" style="display: none;">
       <h3 class="shop-goals__title"><%= inline_svg_tag "icons/star_fill.svg" %> My Goal Items</h3>
       <div class="shop-goals__items" data-shop-goals-target="items"></div>
@@ -48,7 +48,7 @@
     <% unless current_user %>
       <div class="shop__signup-cta">
         <div class="shop__signup-cta-content">
-          <h3>🍪 Want to order something?</h3>
+          <h3><%= stardust_icon %> Want to order something?</h3>
           <p>Join <%= link_to "Hack Club Stardance", "/" %> to start earning Stardust by building personal projects!</p>
         </div>
         <div class="shop__signup-cta-buttons">
@@ -110,13 +110,13 @@
           label: "Price Range",
           options: [
             { label: "None", value: "none" },
-            { label: "🍪0 - 🍪100", value: "0-100" },
-            { label: "🍪100 - 🍪500", value: "100-500" },
-            { label: "🍪500 - 🍪1000", value: "500-1000" },
-            { label: ">🍪1000", value: "1000+" }
+            { label: safe_join([stardust_icon, "0 - ", stardust_icon, "100"]), value: "0-100" },
+            { label: safe_join([stardust_icon, "100 - ", stardust_icon, "500"]), value: "100-500" },
+            { label: safe_join([stardust_icon, "500 - ", stardust_icon, "1000"]), value: "500-1000" },
+            { label: safe_join(["> ", stardust_icon, "1000"]), value: "1000+" }
           ],
           selected_option: "None",
-          longest_option_string: "🍪100 - 🍪500",
+          longest_option_string: safe_join([stardust_icon, "100 - ", stardust_icon, "500"]),
           color: :pink
         ) %>
         <%= render DropdownComponent.new(

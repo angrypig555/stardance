@@ -1,21 +1,21 @@
 module OgImage
   class MockUser
-    def initialize(display_name:, projects_count:, cookies_earned:, hours_logged:, joined_at: nil)
+    def initialize(display_name:, projects_count:, stardust_earned:, hours_logged:, joined_at: nil)
       @display_name = display_name
       @projects_count = projects_count
-      @cookies_earned = cookies_earned
+      @stardust_earned = stardust_earned
       @hours_logged = hours_logged
       @created_at = joined_at || 3.months.ago
     end
 
-    attr_reader :display_name, :projects_count, :cookies_earned, :hours_logged, :created_at
+    attr_reader :display_name, :projects_count, :stardust_earned, :hours_logged, :created_at
 
     def avatar
       MockAvatar.new
     end
 
     def balance
-      @cookies_earned
+      @stardust_earned
     end
 
     def devlog_seconds_total
@@ -47,16 +47,16 @@ module OgImage
   class User < Base
     PREVIEWS = {
       "default" => -> { new(sample_user) },
-      "new_user" => -> { new(sample_user(display_name: "New Member", projects_count: 0, cookies_earned: 0, hours_logged: 0)) },
-      "prolific" => -> { new(sample_user(display_name: "Super Builder", projects_count: 50, cookies_earned: 2500, hours_logged: 150)) }
+      "new_user" => -> { new(sample_user(display_name: "New Member", projects_count: 0, stardust_earned: 0, hours_logged: 0)) },
+      "prolific" => -> { new(sample_user(display_name: "Super Builder", projects_count: 50, stardust_earned: 2500, hours_logged: 150)) }
     }.freeze
 
     class << self
-      def sample_user(display_name: "hackclub_dev", projects_count: 5, cookies_earned: 350, hours_logged: 42)
+      def sample_user(display_name: "hackclub_dev", projects_count: 5, stardust_earned: 350, hours_logged: 42)
         MockUser.new(
           display_name: display_name,
           projects_count: projects_count,
-          cookies_earned: cookies_earned,
+          stardust_earned: stardust_earned,
           hours_logged: hours_logged
         )
       end
@@ -135,7 +135,7 @@ module OgImage
     def build_stats
       stats = []
       stats << "#{projects_count} #{"project".pluralize projects_count}" if projects_count > 0
-      stats << "#{cookies_earned} #{"cookie".pluralize cookies_earned} earned" if cookies_earned > 0
+      stats << "#{stardust_earned} Stardust earned" if stardust_earned > 0
       stats << "#{hours_logged} #{"hour".pluralize hours_logged} worked" if hours_logged > 0
       stats << "Joined #{joined_ago}"
       stats
@@ -151,11 +151,11 @@ module OgImage
       @user.respond_to?(:projects_count) ? (@user.projects_count || 0) : 0
     end
 
-    def cookies_earned
+    def stardust_earned
       if @user.respond_to?(:balance)
         @user.balance.to_i
-      elsif @user.respond_to?(:cookies_earned)
-        @user.cookies_earned.to_i
+      elsif @user.respond_to?(:stardust_earned)
+        @user.stardust_earned.to_i
       else
         0
       end

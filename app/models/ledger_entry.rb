@@ -81,7 +81,7 @@ class LedgerEntry < ApplicationRecord
     else ledgerable_type.underscore.humanize.downcase
     end
     change_emoji = amount.positive? ? "📈" : "📉"
-    message = "#{change_emoji} Balance #{amount.positive? ? '+' : ''}#{amount} 🍪 (#{source}) → #{user.balance} 🍪"
+    message = "#{change_emoji} Balance #{amount.positive? ? '+' : ''}#{amount} :stardust: (#{source}) → #{user.balance} :stardust:"
 
     SendSlackDmJob.perform_later(user.slack_id, message)
     SendSlackDmJob.perform_later("C0A3JN1CMNE", "<@#{user.slack_id}>: #{message}")

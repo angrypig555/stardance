@@ -40,7 +40,7 @@ module Achievementable
       "name" => achievement.name,
       "description" => achievement.description,
       "icon" => achievement.icon,
-      "cookie_reward" => achievement.cookie_reward
+      "stardust_reward" => achievement.stardust_reward
     }
   end
 
