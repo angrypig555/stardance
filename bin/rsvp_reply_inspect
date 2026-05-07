@@ -1,0 +1,80 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+#
+# Dry-run a raw .eml file through Rsvp::ReplyMailbox without touching the
+# database or sending any email. Prints the plain-text body the parser sees,
+# the visible reply after stripping quotes, the parsed cell, the stop flag,
+# and the mailer action that *would* be invoked.
+#
+# Usage:
+#   bin/rsvp_reply_inspect path/to/email.eml
+#
+# Exit codes: 0 on success, 1 on usage error, 2 on parse failure.
+
+require_relative "../config/environment"
+
+path = ARGV.first
+abort "usage: bin/rsvp_reply_inspect path/to/email.eml" if path.nil? || path.empty?
+abort "no such file: #{path}" unless File.exist?(path)
+
+mail = Mail.read(path)
+
+mailbox = Rsvp::ReplyMailbox.allocate
+mailbox.define_singleton_method(:mail) { mail }
+
+plain   = mailbox.send(:plain_body).to_s
+visible = mailbox.send(:visible_reply)
+cell    = mailbox.send(:parse_cell)
+stop    = mailbox.send(:stop_requested?)
+
+def indent(str, prefix = "  ")
+  str.to_s.each_line.map { |l| prefix + l }.join.chomp
+end
+
+puts "=== Envelope ==="
+puts "  From:    #{Array(mail.from).first}"
+puts "  To:      #{Array(mail.to).first}"
+puts "  Subject: #{mail.subject}"
+puts
+
+puts "=== plain_body (#{plain.bytesize}B) ==="
+puts indent(plain.empty? ? "(empty)" : plain)
+puts
+
+puts "=== visible_reply (#{visible.bytesize}B) ==="
+puts indent(visible.empty? ? "(empty)" : visible)
+puts
+
+puts "=== parser output ==="
+puts "  parse_cell:      #{cell.inspect}#{"  (human cell #{cell + 1})" if cell}"
+puts "  stop_requested?: #{stop}"
+puts
+
+sender = Array(mail.from).first.to_s.downcase.strip
+rsvp = Rsvp.find_by(email: sender)
+
+puts "=== would route to ==="
+if rsvp.nil?
+  puts "  (no Rsvp with email=#{sender.inspect}) - the mailbox would no-op"
+elsif stop
+  puts "  Rsvp::Mailer.tic_tac_toe_stop(rsvp)"
+  puts "  (destroys any in-progress game)"
+else
+  game = Rsvp::Game.current_for(rsvp)
+  if game.nil?
+    puts "  (no current game - would create one)"
+    if cell.nil?
+      puts "  Rsvp::Mailer.tic_tac_toe_start(game)"
+    else
+      puts "  play_user_move(#{cell}) then tic_tac_toe_move (or _over if it ends)"
+    end
+  elsif cell.nil? && game.move_count.zero?
+    puts "  Rsvp::Mailer.tic_tac_toe_start(existing empty game)"
+  elsif cell.nil?
+    puts "  (no cell parsed, mid-game) Rsvp::Mailer.tic_tac_toe_move(game) with unchanged board"
+  elsif game.send(:valid_move?, cell)
+    puts "  play_user_move(#{cell}) then tic_tac_toe_move (or _over if it ends)"
+  else
+    puts "  play_user_move(#{cell}) returns :invalid - no email enqueued"
+  end
+end
