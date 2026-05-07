@@ -16,7 +16,7 @@ export default class extends Controller {
   static values = {
     usersUrl: String,
     projectsUrl: String,
-    initial: String
+    initial: String,
   };
 
   connect() {
@@ -79,8 +79,12 @@ export default class extends Controller {
     }
 
     Promise.all([
-      ids.user.length    ? this._fetch(this.usersUrlValue, "")    : Promise.resolve([]),
-      ids.project.length ? this._fetch(this.projectsUrlValue, "") : Promise.resolve([])
+      ids.user.length
+        ? this._fetch(this.usersUrlValue, "")
+        : Promise.resolve([]),
+      ids.project.length
+        ? this._fetch(this.projectsUrlValue, "")
+        : Promise.resolve([]),
     ]).then(() => {
       // We don't actually rely on the bulk fetch result — we resolve names on the fly.
     });
@@ -91,21 +95,25 @@ export default class extends Controller {
     TOKEN_RE.lastIndex = 0;
     while ((match = TOKEN_RE.exec(text)) !== null) {
       if (match.index > cursor) {
-        this.editorTarget.appendChild(document.createTextNode(text.slice(cursor, match.index)));
+        this.editorTarget.appendChild(
+          document.createTextNode(text.slice(cursor, match.index)),
+        );
       }
       const sigil = match[1];
       const id = match[2];
       const chip = this._buildChip(
         sigil === "@" ? "user" : "project",
         id,
-        sigil === "@" ? `@${id}` : `#${id}` // placeholder until resolved
+        sigil === "@" ? `@${id}` : `#${id}`, // placeholder until resolved
       );
       this.editorTarget.appendChild(chip);
       this._resolveChipLabel(chip, sigil === "@" ? "user" : "project", id);
       cursor = TOKEN_RE.lastIndex;
     }
     if (cursor < text.length) {
-      this.editorTarget.appendChild(document.createTextNode(text.slice(cursor)));
+      this.editorTarget.appendChild(
+        document.createTextNode(text.slice(cursor)),
+      );
     }
   }
 
@@ -117,7 +125,8 @@ export default class extends Controller {
       .then((items) => {
         const item = items.find((i) => String(i.id) === String(id));
         if (!item) return;
-        chip.textContent = kind === "user" ? `@${item.display_name}` : item.title;
+        chip.textContent =
+          kind === "user" ? `@${item.display_name}` : item.title;
       })
       .catch(() => {});
   }
@@ -134,7 +143,8 @@ export default class extends Controller {
     this._triggerKind = ctx.kind;
     this._triggerStart = ctx.start;
 
-    const url = ctx.kind === "user" ? this.usersUrlValue : this.projectsUrlValue;
+    const url =
+      ctx.kind === "user" ? this.usersUrlValue : this.projectsUrlValue;
     this._fetch(url, ctx.query).then((items) => {
       this._suggestions = items;
       this._activeIndex = 0;
@@ -161,13 +171,15 @@ export default class extends Controller {
 
     return {
       kind: match[1] === "@" ? "user" : "project",
-      query: match[2]
+      query: match[2],
     };
   }
 
   _fetch(url, q) {
     const params = new URLSearchParams({ q: q || "" });
-    return fetch(`${url}?${params}`, { headers: { Accept: "application/json" } })
+    return fetch(`${url}?${params}`, {
+      headers: { Accept: "application/json" },
+    })
       .then((r) => (r.ok ? r.json() : []))
       .catch(() => []);
   }
@@ -182,19 +194,21 @@ export default class extends Controller {
       .join("");
     this.suggestTarget.hidden = false;
 
-    Array.from(this.suggestTarget.querySelectorAll("[data-suggest-index]"))
-      .forEach((row) => {
-        row.addEventListener("mousedown", (e) => {
-          e.preventDefault();
-          const idx = parseInt(row.dataset.suggestIndex, 10);
-          const choice = this._suggestions[idx];
-          if (choice) this._insertChoice(choice);
-        });
+    Array.from(
+      this.suggestTarget.querySelectorAll("[data-suggest-index]"),
+    ).forEach((row) => {
+      row.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        const idx = parseInt(row.dataset.suggestIndex, 10);
+        const choice = this._suggestions[idx];
+        if (choice) this._insertChoice(choice);
       });
+    });
   }
 
   _suggestRow(item, idx) {
-    const active = idx === this._activeIndex ? " profile__bio-suggest-item--active" : "";
+    const active =
+      idx === this._activeIndex ? " profile__bio-suggest-item--active" : "";
     if (this._triggerKind === "user") {
       const avatar = item.avatar
         ? `<img class="profile__bio-suggest-avatar" src="${item.avatar}" alt="">`
@@ -206,7 +220,9 @@ export default class extends Controller {
 
   _moveActive(delta) {
     if (!this._suggestions.length) return;
-    this._activeIndex = (this._activeIndex + delta + this._suggestions.length) % this._suggestions.length;
+    this._activeIndex =
+      (this._activeIndex + delta + this._suggestions.length) %
+      this._suggestions.length;
     this._renderSuggestions();
   }
 
@@ -225,7 +241,8 @@ export default class extends Controller {
     if (!sel || !sel.isCollapsed || sel.rangeCount === 0) return;
     const range = sel.getRangeAt(0);
     const node = range.startContainer;
-    if (node.nodeType !== Node.TEXT_NODE || !this.editorTarget.contains(node)) return;
+    if (node.nodeType !== Node.TEXT_NODE || !this.editorTarget.contains(node))
+      return;
 
     // Find where the @/$ trigger started in this text node.
     const before = node.textContent.slice(0, range.startOffset);
@@ -240,7 +257,7 @@ export default class extends Controller {
     const chip = this._buildChip(
       this._triggerKind,
       item.id,
-      this._triggerKind === "user" ? `@${item.display_name}` : item.title
+      this._triggerKind === "user" ? `@${item.display_name}` : item.title,
     );
     // Trailing text starts with a ZWSP + space — the ZWSP gives the caret a
     // safe text-node anchor immediately after the chip (otherwise some
@@ -299,7 +316,8 @@ export default class extends Controller {
     // Drop the zero-width-space anchors we use as caret-safe landings around
     // chips, then trim leading/trailing newlines and collapse runs of
     // newlines added by block-level wrappers around chips or lines.
-    return parts.join("")
+    return parts
+      .join("")
       .replace(/​/g, "")
       .replace(/\n{3,}/g, "\n\n")
       .replace(/^\n+|\n+$/g, "");
@@ -310,13 +328,17 @@ export default class extends Controller {
     if (node.nodeType !== Node.ELEMENT_NODE) return "";
 
     if (node.classList?.contains("bio-chip")) {
-      return node.dataset.kind === "user" ? `<@${node.dataset.id}>` : `<$${node.dataset.id}>`;
+      return node.dataset.kind === "user"
+        ? `<@${node.dataset.id}>`
+        : `<$${node.dataset.id}>`;
     }
 
     if (node.tagName === "BR") return "\n";
 
     let inner = "";
-    node.childNodes.forEach((c) => { inner += this._serializeNode(c); });
+    node.childNodes.forEach((c) => {
+      inner += this._serializeNode(c);
+    });
 
     if (node.tagName === "DIV" || node.tagName === "P") {
       // Each block element becomes a newline-prefixed line, except the first

@@ -12,7 +12,7 @@ export default class extends Controller {
     "cancelBtn",
     "banner",
     "bannerLabel",
-    "bannerInput"
+    "bannerInput",
   ];
   static classes = ["editing"];
   static values = { defaultBanner: String };

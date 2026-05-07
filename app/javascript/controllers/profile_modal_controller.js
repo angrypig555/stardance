@@ -16,7 +16,9 @@ export default class extends Controller {
     if (!dialog) return;
 
     if (this.hasTitleTarget && title) this.titleTarget.textContent = title;
-    if (this.hasBodyTarget) this.bodyTarget.innerHTML = '<p class="followers-modal__loading">Loading…</p>';
+    if (this.hasBodyTarget)
+      this.bodyTarget.innerHTML =
+        '<p class="followers-modal__loading">Loading…</p>';
 
     dialog.showModal?.() || dialog.setAttribute("open", "");
 
@@ -26,7 +28,9 @@ export default class extends Controller {
         if (this.hasBodyTarget) this.bodyTarget.innerHTML = html;
       })
       .catch(() => {
-        if (this.hasBodyTarget) this.bodyTarget.innerHTML = '<p class="follow-list__empty">Could not load.</p>';
+        if (this.hasBodyTarget)
+          this.bodyTarget.innerHTML =
+            '<p class="follow-list__empty">Could not load.</p>';
       });
   }
 

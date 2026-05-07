@@ -18,7 +18,7 @@ body.user-profile-page.signed-in {
 
 .profile-layout {
   --layout-gap: 24px;
-  --nav-reserved: 340px;  // sidebar width + 20px inset
+  --nav-reserved: 340px; // sidebar width + 20px inset
   --aside-reserved: 457px; // aside width + 32px inset
   --main-max: 1200px;
 
@@ -469,8 +469,12 @@ turbo-frame#profile_tabs {
       background: rgba(255, 80, 80, 0.18);
       border-color: rgba(255, 120, 120, 0.7);
 
-      .profile__follow-label-default { display: none; }
-      .profile__follow-label-hover   { display: inline; }
+      .profile__follow-label-default {
+        display: none;
+      }
+      .profile__follow-label-hover {
+        display: inline;
+      }
     }
   }
 }

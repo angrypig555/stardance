@@ -27,7 +27,7 @@
     <div class="profile__banner" data-profile-edit-target="banner" style="--banner-image: url('<%= banner_url %>');">
       <%= link_to home_path, class: "profile__back", "aria-label": "Back to home", data: { turbo_frame: "_top" } do %>
         <svg class="profile__back-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14 6l-6 6 6 6"/>
+          <path d="M14 6l-6 6 6 6" />
         </svg>
       <% end %>
 
@@ -244,7 +244,7 @@
 
   <aside class="profile-layout__aside" aria-label="Discover">
     <div class="right-rail__search">
-      <input type="text" class="right-rail__search-input" placeholder="Search…" aria-label="Search" disabled>
+      <input type="text" class="right-rail__search-input" placeholder="Search…" aria-label="Search" autocomplete="off" disabled>
       <%= inline_svg_tag "icons/search.svg", class: "right-rail__search-icon" %>
     </div>
 
