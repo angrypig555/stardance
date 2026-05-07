@@ -3,6 +3,22 @@ class UserPolicy < ApplicationPolicy
     true
   end
 
+  def update?
+    user.present? && user.id == record.id
+  end
+
+  def follow?
+    user.present? && user.id != record.id
+  end
+
+  def followers?
+    true
+  end
+
+  def following?
+    true
+  end
+
   def impersonate?
     # must be admin or super_admin to impersonate
     return false unless user.admin? || user.super_admin?

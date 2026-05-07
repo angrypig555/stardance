@@ -11,6 +11,9 @@ body {
   margin: 0;
   color: var(--color-text-body);
   background-color: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 main {
@@ -19,12 +22,8 @@ main {
 }
 
 body.signed-in {
-  background-image: url("mask/pattern.webp");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-color: var(--color-bg-2);
+  background-color: var(--color-space-bg);
+  color: var(--color-space-text);
   margin-left: 380px; // space for sidebar
   margin-right: 100px;
 
@@ -40,14 +39,10 @@ body.signed-in {
   }
 }
 
-// Shop page gets the same background even when logged out
+// Shop page keeps the same backdrop even when logged out.
 body.shop-page:not(.signed-in) {
-  background-image: url("mask/pattern.webp");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-color: var(--color-bg-2);
+  background-color: var(--color-space-bg);
+  color: var(--color-space-text);
 }
 
 .dev-footer {
@@ -56,7 +51,9 @@ body.shop-page:not(.signed-in) {
   color: #6b7280;
   opacity: 0.1;
   transition: opacity 0.2s ease;
-  margin-top: 3rem;
+  // Pushes the footer to the bottom of the viewport when page content is
+  // shorter than the screen (relies on body being a flex column).
+  margin-top: auto;
   padding: 0.625rem;
 
   &:hover {

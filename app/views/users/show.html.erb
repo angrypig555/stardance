@@ -1,6 +1,6 @@
 <% content_for :title, @user.display_name %>
 <% content_for :og_title, "#{@user.display_name} on Stardance" %>
-<% content_for :og_description, "#{@stats[:projects_count]} projects · #{@stats[:ships_count]} ships · #{@stats[:posts_count]} posts" %>
+<% content_for :og_description, "#{@stats[:projects_count]} projects · #{@stats[:ships_count]} ships · #{@stats[:devlogs_count]} devlogs" %>
 <% content_for :og_image, user_og_image_url(@user, format: :png) %>
 
 <% if @user.search_engine_indexing_off? %>
@@ -9,136 +9,273 @@
   <% end %>
 <% end %>
 
-<div class="user-profile">
-  <div class="user-profile__left">
-    <div class="user-profile__card">
-        <div class="user-profile__identity">
-        <%= image_tag(@user.avatar, alt: @user.display_name, class: "user-profile__avatar") %>
-            <h1><%= @user.display_name %></h1>
-            <h2>Joined <%= @user.created_at.to_date.to_s %></h2>
-        </div>
-        <div class="user-profile__heading">
-            <%= inline_svg "icons/question.svg" %>
-            Stats
-        </div>
-        <div class="user-profile__stats">
-            <div class="user-profile__stat">
-                <h4 style="color: var(--color-blue-600);"><%= @stats[:posts_count] %></h4>
-                <h3>Posts</h3>
-            </div>
-            <div class="user-profile__stat">
-                <h4 style="color: var(--color-green-500);"><%= @stats[:projects_count] %></h4>
-                <h3>Projects</h3>
-            </div>
-            <div class="user-profile__stat">
-                <h4 style="color: var(--color-brown-700);"><%= @stats[:ships_count] %></h4>
-                <h3>Ships</h3>
-            </div>
-            <div class="user-profile__stat">
-                <h4 style="color: var(--color-red-500);"><%= @stats[:votes_count] %></h4>
-                <h3>Votes</h3>
-            </div>
-        </div>
-        <div class="user-profile__heading">
-            <%= inline_svg "icons/time.svg" %>
-            Time logged
-        </div>
-        <div class="user-profile__times">
-            <div class="user-profile__time">
-                <h4>All time:</h4>
-                <h4><%= @stats[:hours_all_time] %> hrs</h4>
-            </div>
-            <div class="user-profile__time">
-                <h4>Today:</h4>
-                <h4><%= @stats[:hours_today] %> hrs</h4>
-            </div>
-        </div>
+<% own_profile = current_user&.id == @user.id %>
+<% banner_url = @user.banner.attached? ? url_for(@user.banner) : image_path("profile/default-banner.png") %>
+
+<div class="profile-layout">
+  <div class="profile-layout__main">
+    <%= turbo_frame_tag "profile_card" do %>
+    <%= form_with model: @user, url: user_path(@user), method: :patch, multipart: true,
+                  class: "profile",
+                  data: {
+                    controller: "profile-edit",
+                    "profile-edit-editing-class": "profile--editing",
+                    "profile-edit-default-banner-value": image_path("profile/default-banner.png")
+                  } do |f| %>
+
+  <header class="profile__header">
+    <div class="profile__banner" data-profile-edit-target="banner" style="--banner-image: url('<%= banner_url %>');">
+      <%= link_to home_path, class: "profile__back", "aria-label": "Back to home", data: { turbo_frame: "_top" } do %>
+        <svg class="profile__back-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 6l-6 6 6 6"/>
+        </svg>
+      <% end %>
+
+      <% if own_profile %>
+        <label class="profile__banner-upload" data-profile-edit-target="bannerLabel">
+          <span class="profile__banner-upload-text">Change banner</span>
+          <%= f.file_field :banner, accept: "image/*",
+                           class: "profile__banner-input",
+                           data: { action: "change->profile-edit#previewBanner",
+                                   "profile-edit-target": "bannerInput" } %>
+        </label>
+      <% end %>
     </div>
-    <% if @earned_achievements.any? %>
-        <div class="user-profile__card">
-            <h2 style="text-align: left; font-weight: normal;">Achievements</h2>
-            <div class="user-profile__achievements">
-                <% @earned_achievements.each do |achievement| %>
-                    <div class="user-profile__achievement">
-                        <div class="user-profile__achievement-icon">
-                            <%= achievement_icon achievement.icon, earned: true %>
-                        </div>
-                        <div class="user-profile__achievement-title">
-                            <%= achievement.display_name(earned: true) %>
-                        </div>
-                    </div>
-                <% end %>
-            </div>
+
+    <div class="profile__card">
+      <div class="profile__avatar-wrap">
+        <%= image_tag(@user.avatar, alt: @user.display_name, class: "profile__avatar") %>
+      </div>
+
+      <div class="profile__body">
+        <div class="profile__top-row">
+          <div class="profile__identity">
+            <h1 class="profile__handle">@<%= @user.display_name %></h1>
+            <p class="profile__joined">Joined <%= @user.created_at.to_date.strftime("%-d %b %Y").downcase %></p>
+          </div>
+
+          <ul class="profile__stats" aria-label="User stats">
+            <li class="profile__stat"><span class="profile__stat-num"><%= @stats[:devlogs_count] %></span><span class="profile__stat-label">Devlogs</span></li>
+            <li class="profile__stat"><span class="profile__stat-num"><%= @stats[:hours_all_time] %></span><span class="profile__stat-label">Total hours</span></li>
+            <li class="profile__stat"><span class="profile__stat-num"><%= @stats[:projects_count] %></span><span class="profile__stat-label">Projects</span></li>
+            <li class="profile__stat"><span class="profile__stat-num"><%= @stats[:ships_count] %></span><span class="profile__stat-label">Ships</span></li>
+            <li class="profile__stat"><span class="profile__stat-num"><%= @stats[:votes_count] %></span><span class="profile__stat-label">Votes</span></li>
+          </ul>
         </div>
-    <% end %>
-    <div class="user-profile__card">
-        <h2 style="text-align: left; font-weight: normal;">Projects</h2>
-        <% if @projects.any? %>
-        <div class="user-profile__projects">
-            <% @projects.each do |project| %>
-                <%= link_to project_path(project) do %>
-                    <div class="user-profile__project-card">
-                        <div>
-                            <% if project.banner.attached? %>
-                                <%= image_tag project.banner.variant(:card), alt: "#{project.title} banner", class: "project-banner-title-description__banner-image" %>
-                            <% else %>
-                                <%= image_tag "default-banner.png", alt: "#{project.title} banner", class: "project-banner-title-description__banner-image" %>
-                            <% end %>
-                        </div>
-                        <div class="user-profile__project-stats">
-                            <div class="user-profile__project-card-title">
-                                <h3><%= project.title %></h3>
-                                <% if ["approved", "under_review", "submitted"].include?(project.ship_status) %>
-                                    <h6>Shipped</h6>
-                                <% end %>
-                            </div>
-                            <div style="text-align: left;">
-                                <%= time_ago_in_words(project.created_at.to_date) %> ago •
-                                <%= project.devlogs_count %> <%= "devlog".pluralize(project.devlogs_count) %>
-                            </div>
-                        </div>
-                    </div>
-                <% end %>
-            <% end %>
+
+        <div class="profile__bio" data-profile-edit-target="bioView">
+          <% if @user.bio.present? %>
+            <%= render_bio(@user.bio) %>
+          <% elsif own_profile %>
+            <span class="profile__bio-empty">Add a bio to tell folks who you are.</span>
+          <% end %>
         </div>
-        <% else %>
-        <p>No projects yet.</p>
+
+        <% if own_profile %>
+          <div class="profile__bio-editor"
+               data-profile-edit-target="bioEdit"
+               data-controller="bio-editor"
+               data-bio-editor-users-url-value="<%= search_users_path(format: :json) %>"
+               data-bio-editor-projects-url-value="<%= search_projects_path(format: :json) %>"
+               data-bio-editor-initial-value="<%= @user.bio.to_s %>"
+               hidden>
+            <div class="profile__bio-input"
+                 contenteditable="true"
+                 role="textbox"
+                 aria-label="Edit bio. Type @ to mention a user, $ to link a project."
+                 data-bio-editor-target="editor"
+                 data-action="input->bio-editor#onInput keydown->bio-editor#onKeydown blur->bio-editor#onBlur"></div>
+            <%= f.hidden_field :bio, data: { "bio-editor-target": "hidden" } %>
+            <div class="profile__bio-suggest"
+                 data-bio-editor-target="suggest"
+                 role="listbox"
+                 hidden></div>
+            <p class="profile__bio-hint">Type <kbd>@</kbd> to mention a user, <kbd>$</kbd> to link a project.</p>
+          </div>
         <% end %>
-    </div>
-    <% if @fulfilled_orders.present? %>
-        <div class="user-profile__card">
-            <h2 style="text-align: left; font-weight: normal;">Orders</h2>
-            <% colors = %w[red green yellow blue] %>
-            <div class="user-profile__orders">
-                <% @fulfilled_orders.each_with_index do |order, index| %>
-                    <div class="user-profile__order">
-                        <% if order.shop_item.image.attached? %>
-                            <%= image_tag order.shop_item.image, alt: order.shop_item.name, class: "user-profile__order-item-image" %>
-                        <% end %>
-                        <h3>
-                            Ordered
-                            <span class="user-profile__order-item-name--<%= colors[index % colors.size] %>">
-                                <%= order.shop_item.name %>
-                            </span>
-                            <b><%= pluralize(order.quantity, "time") %></b>.
-                        </h3>
-                    </div>
+
+        <div class="profile__footer">
+          <p class="profile__follow-counts">
+            <%= button_tag type: "button",
+                           class: "profile__follow-count",
+                           data: { action: "click->profile-modal#open",
+                                   "profile-modal-url-param": following_user_path(@user),
+                                   "profile-modal-title-param": "Following" } do %>
+              <strong><%= @following_count %></strong> following
+            <% end %>
+            <%= button_tag type: "button",
+                           class: "profile__follow-count",
+                           data: { action: "click->profile-modal#open",
+                                   "profile-modal-url-param": followers_user_path(@user),
+                                   "profile-modal-title-param": "Followers" } do %>
+              <strong><%= @follower_count %></strong> followers
+            <% end %>
+          </p>
+
+          <div class="profile__actions">
+            <% if own_profile %>
+              <button type="button"
+                      class="profile__action-btn"
+                      data-action="click->profile-edit#cancel"
+                      data-profile-edit-target="cancelBtn"
+                      hidden>Cancel</button>
+              <button type="button"
+                      class="profile__action-btn profile__action-btn--primary"
+                      data-action="click->profile-edit#enter"
+                      data-profile-edit-target="editBtn">Edit profile</button>
+              <button type="submit"
+                      class="profile__action-btn profile__action-btn--primary"
+                      data-profile-edit-target="saveBtn"
+                      hidden>Save</button>
+            <% elsif current_user %>
+              <%# link_to + data-turbo-method instead of button_to: button_to renders %>
+              <%# its own <form>, which HTML5 parsing strips when nested inside the %>
+              <%# profile-edit form_with — clicking it would otherwise submit the %>
+              <%# wrong form. %>
+              <%= link_to user_follow_path(@user),
+                          class: [ "profile__action-btn", "profile__action-btn--primary", "profile__action-btn--follow", ("profile__action-btn--following" if @viewer_follows) ].compact.join(" "),
+                          data: { turbo_method: (@viewer_follows ? :delete : :post), turbo_frame: "_top" } do %>
+                <span class="profile__follow-label-default"><%= @viewer_follows ? "Following" : "Follow" %></span>
+                <% if @viewer_follows %>
+                  <span class="profile__follow-label-hover">Unfollow</span>
                 <% end %>
-            </div>
+              <% end %>
+            <% end %>
+          </div>
         </div>
+      </div>
+    </div>
+  </header>
+<% end %>
     <% end %>
+
+<%= turbo_frame_tag "profile_tabs", target: "_top" do %>
+<nav class="profile-tabs" role="tablist" aria-label="Profile sections">
+  <% [
+    [ "feed",     "Feed" ],
+    [ "devlogs",  "Devlogs" ],
+    [ "replies",  "Replies" ],
+    [ "projects", "Projects (#{@stats[:projects_count]})" ]
+  ].each do |key, label| %>
+    <% tab_active = (@active_tab == key) %>
+    <%= link_to label,
+                user_path(@user, tab: key),
+                role: "tab",
+                "aria-selected": tab_active,
+                class: [ "profile-tabs__tab", ("profile-tabs__tab--active" if tab_active) ].compact.join(" "),
+                data: { turbo_frame: "profile_tabs", turbo_action: "advance" } %>
+  <% end %>
+</nav>
+
+<section class="profile-tab-content" role="tabpanel" aria-label="<%= @active_tab.titleize %>">
+  <% case @active_tab %>
+  <% when "feed" %>
+    <% if @activity.any? %>
+      <%= render PostComponent.with_collection(@activity, current_user: current_user, theme: :profile_dark) %>
+    <% else %>
+      <p class="profile-tab-content__empty">No activity yet.</p>
+    <% end %>
+  <% when "devlogs" %>
+    <p class="profile-tab-content__empty">Devlogs</p>
+  <% when "replies" %>
+    <p class="profile-tab-content__empty">Replies</p>
+  <% when "projects" %>
+    <% if @projects.any? %>
+      <ul class="project-list">
+        <% @projects.each do |project| %>
+          <li class="project-list__item">
+            <%= link_to project_path(project), class: "profile-project-card" do %>
+              <div class="profile-project-card__banner">
+                <% if project.banner.attached? %>
+                  <%= image_tag project.banner, alt: "", class: "profile-project-card__banner-img" %>
+                <% end %>
+              </div>
+
+              <div class="profile-project-card__body">
+                <div class="profile-project-card__header">
+                  <h3 class="profile-project-card__title"><%= project.title %></h3>
+                  <ul class="profile-project-card__meta">
+                    <li class="profile-project-card__meta-item">
+                      <%= inline_svg_tag "icons/devlogs.svg", class: "profile-project-card__meta-icon" %>
+                      <span><%= pluralize(project.devlogs_count, "devlog") %></span>
+                    </li>
+                    <li class="profile-project-card__meta-item profile-project-card__meta-item--time">
+                      <%= inline_svg_tag "icons/time.svg", class: "profile-project-card__meta-icon profile-project-card__meta-icon--time" %>
+                      <span><%= (project.duration_seconds / 3600.0).round %>h</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <% authors = project.users.to_a %>
+                <% if authors.any? %>
+                  <p class="profile-project-card__authors">
+                    By
+                    <% authors.each_with_index do |author, idx| %>
+                      <%= "and " if idx > 0 && idx == authors.length - 1 %><span class="profile-project-card__author">@<%= author.display_name %></span><%= "," if idx < authors.length - 2 && authors.length > 2 %>
+                    <% end %>
+                  </p>
+                <% end %>
+
+                <% if project.description.present? %>
+                  <p class="profile-project-card__description"><%= project.description %></p>
+                <% end %>
+
+                <p class="profile-project-card__updated">Last updated <%= time_ago_in_words(project.updated_at) %> ago</p>
+              </div>
+            <% end %>
+          </li>
+        <% end %>
+
+        <% if own_profile %>
+          <li class="project-list__item">
+            <%= link_to new_project_path, class: "profile-project-card profile-project-card--new" do %>
+              <span>Create new +</span>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="profile-tab-content__empty">No projects yet.</p>
+    <% end %>
+  <% end %>
+</section>
+<% end %>
   </div>
 
-  <section class="user-profile__activity">
-    <h2>Activity</h2>
-    <% if @activity.any? %>
-      <div style="display: grid; gap: var(--space-xl);">
-        <% @activity.each do |post| %>
-          <%= render PostComponent.new(post: post, current_user: current_user) %>
-        <% end %>
-      </div>
-    <% else %>
-      <p>No devlogs yet.</p>
-    <% end %>
-  </section>
+  <aside class="profile-layout__aside" aria-label="Discover">
+    <div class="right-rail__search">
+      <input type="text" class="right-rail__search-input" placeholder="Search…" aria-label="Search" disabled>
+      <%= inline_svg_tag "icons/search.svg", class: "right-rail__search-icon" %>
+    </div>
+
+    <section class="right-rail__section" aria-label="Popular projects this week">
+      <h2 class="right-rail__heading">Popular projects this week</h2>
+      <div class="right-rail__placeholder right-rail__placeholder--tall"></div>
+    </section>
+
+    <section class="right-rail__section" aria-label="Sidequests for you">
+      <h2 class="right-rail__heading">Sidequests for you</h2>
+      <div class="right-rail__placeholder"></div>
+      <div class="right-rail__placeholder"></div>
+    </section>
+
+    <section class="right-rail__section" aria-label="Stardance updates">
+      <h2 class="right-rail__heading">Stardance updates</h2>
+      <div class="right-rail__placeholder"></div>
+      <div class="right-rail__placeholder"></div>
+    </section>
+  </aside>
 </div>
+
+<dialog id="followers-modal"
+        class="followers-modal"
+        data-controller="profile-modal"
+        data-profile-modal-target="dialog">
+  <header class="followers-modal__header">
+    <h2 class="followers-modal__title" data-profile-modal-target="title">Followers</h2>
+    <button type="button" class="followers-modal__close" data-action="click->profile-modal#close" aria-label="Close">×</button>
+  </header>
+  <div class="followers-modal__body" data-profile-modal-target="body">
+    <p class="followers-modal__loading">Loading…</p>
+  </div>
+</dialog>

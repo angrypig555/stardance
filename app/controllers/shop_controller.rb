@@ -156,7 +156,7 @@ class ShopController < ApplicationController
         user_balance = current_user.balance
 
         if total_cost > user_balance
-          redirect_to shop_order_path(shop_item_id: @shop_item.id), alert: safe_join([ "Insufficient balance. You need ", helpers.stardust_icon, total_cost.to_s, " but only have ", helpers.stardust_icon, user_balance.to_s, "." ])
+          redirect_to shop_order_path(shop_item_id: @shop_item.id), alert: "Insufficient balance. You need #{total_cost} Stardust but only have #{user_balance} Stardust."
           return
         end
 

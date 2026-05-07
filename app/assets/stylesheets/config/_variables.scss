@@ -42,6 +42,18 @@
   --color-bg: hsl(35, 74%, 90%);
   --color-bg-2: hsl(39, 52%, 80%);
 
+  // Stardance "space" palette — dark navy backdrop, lavender accents.
+  --color-space-bg: hsl(245, 55%, 8%);
+  --color-space-bg-2: hsl(245, 50%, 12%);
+  --color-space-text: hsl(0, 0%, 100%);
+  --color-space-text-muted: hsla(0, 0%, 100%, 0.7);
+  --color-space-accent: hsl(265, 95%, 78%);
+  --color-space-accent-soft: hsla(265, 95%, 78%, 0.18);
+  --color-space-card: hsla(228, 26%, 58%, 0.45);
+  --color-space-surface: hsl(228, 18%, 45%);
+  --color-space-surface-soft: hsla(228, 18%, 45%, 0.5);
+  --color-space-border: hsl(228, 18%, 45%);
+
   // Red
   --color-red-500: hsl(356, 49%, 43%);
   --color-red-450: hsl(359, 66%, 69%);

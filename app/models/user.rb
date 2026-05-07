@@ -6,6 +6,7 @@
 #  banned                                  :boolean          default(FALSE), not null
 #  banned_at                               :datetime
 #  banned_reason                           :text
+#  bio                                     :text
 #  club_link                               :string
 #  club_name                               :string
 #  display_name                            :string
@@ -81,6 +82,17 @@ class User < ApplicationRecord
   has_many :flavortime_sessions, dependent: :destroy
   has_many :project_follows, dependent: :destroy
   has_many :followed_projects, through: :project_follows, source: :project
+
+  has_many :follows_as_follower, class_name: "Follow", foreign_key: :follower_id, dependent: :destroy, inverse_of: :follower
+  has_many :follows_as_followed, class_name: "Follow", foreign_key: :followed_id, dependent: :destroy, inverse_of: :followed
+  has_many :following, through: :follows_as_follower, source: :followed
+  has_many :followers, through: :follows_as_followed, source: :follower
+
+  has_one_attached :banner
+
+  validates :banner, content_type: [ "image/png", "image/jpeg", "image/webp", "image/gif" ],
+                     size: { less_than: 8.megabytes }
+  validates :bio, length: { maximum: 1000 }
   has_many :shop_suggestions, dependent: :destroy
   has_many :sold_items, class_name: "ShopItem::HackClubberItem", foreign_key: :user_id
 
@@ -158,12 +170,25 @@ class User < ApplicationRecord
 
   def tutorial_step_completed?(slug) = tutorial_steps.include?(slug)
 
+  # Tutorial step + dismissal mutations use atomic Postgres array operations
+  # so concurrent requests don't race on the read-modify-write of an array
+  # column. We skip Rails validations intentionally — these are low-level
+  # state flags, not user identity changes that need to honor `validates`.
   def complete_tutorial_step!(slug)
-    update!(tutorial_steps_completed: tutorial_steps + [ slug ]) unless tutorial_step_completed?(slug)
+    return if tutorial_step_completed?(slug)
+    n = self.class.where(id: id).where.not("tutorial_steps_completed @> ARRAY[?]::varchar[]", slug.to_s)
+              .update_all([ "tutorial_steps_completed = array_append(tutorial_steps_completed, ?), updated_at = NOW()", slug.to_s ])
+    return false if n.zero?
+    self.tutorial_steps_completed = (tutorial_steps_completed || []) + [ slug.to_s ]
+    true
   end
 
   def revoke_tutorial_step!(slug)
-    update!(tutorial_steps_completed: tutorial_steps - [ slug ]) if tutorial_step_completed?(slug)
+    return unless tutorial_step_completed?(slug)
+    self.class.where(id: id)
+        .update_all([ "tutorial_steps_completed = array_remove(tutorial_steps_completed, ?), updated_at = NOW()", slug.to_s ])
+    self.tutorial_steps_completed = (tutorial_steps_completed || []) - [ slug.to_s ]
+    true
   end
 
   def has_dismissed?(thing_name) = things_dismissed.include?(thing_name.to_s)
@@ -171,15 +196,21 @@ class User < ApplicationRecord
   def dismiss_thing!(thing_name)
     thing_name_str = thing_name.to_s
     raise ArgumentError, "Invalid thing to dismiss: #{thing_name_str}" unless DISMISSIBLE_THINGS.include?(thing_name_str)
+    return if has_dismissed?(thing_name_str)
 
-    update!(things_dismissed: things_dismissed + [ thing_name_str ]) unless has_dismissed?(thing_name_str)
+    n = self.class.where(id: id).where.not("things_dismissed @> ARRAY[?]::varchar[]", thing_name_str)
+              .update_all([ "things_dismissed = array_append(things_dismissed, ?), updated_at = NOW()", thing_name_str ])
+    return false if n.zero?
+    self.things_dismissed = (things_dismissed || []) + [ thing_name_str ]
+    true
   end
 
   def undismiss_thing!(thing_name)
     thing_name_str = thing_name.to_s
     raise ArgumentError, "Invalid thing to dismiss: #{thing_name_str}" unless DISMISSIBLE_THINGS.include?(thing_name_str)
+    return unless has_dismissed?(thing_name_str)
 
-    update!(things_dismissed: things_dismissed - [ thing_name_str ]) if has_dismissed?(thing_name_str)
+    update_columns(things_dismissed: things_dismissed - [ thing_name_str ], updated_at: Time.current)
   end
 
   def should_show_shop_tutorial?
@@ -354,6 +385,12 @@ class User < ApplicationRecord
   end
   def avatar
     "https://cachet.dunkirk.sh/users/#{slack_id}/r"
+  end
+
+  def follows?(other_user)
+    return false if other_user.blank?
+
+    follows_as_follower.exists?(followed_id: other_user.id)
   end
 
   def grant_email

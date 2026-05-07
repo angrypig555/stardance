@@ -2,11 +2,6 @@ class ProjectsController < ApplicationController
   before_action :set_project_minimal, only: [ :edit, :update, :destroy, :mark_fire, :unmark_fire ]
   before_action :set_project, only: [ :show, :readme ]
 
-  def index
-    authorize Project
-    @projects = current_user.projects.distinct.includes(banner_attachment: :blob)
-  end
-
   def show
     authorize @project
 
@@ -110,17 +105,11 @@ class ProjectsController < ApplicationController
 
       project_hours = @project.total_hackatime_hours
       if project_hours > 0
-        tutorial_message [
-          "Hmmm... your project has #{helpers.distance_of_time_in_words(project_hours.hours)} tracked already — nice work!",
-          "You're ready to post your first devlog.",
-          "Never go over 10 hours without logging progress as it might get lost!"
-        ]
+        tutorial_message OnboardingCopy::PROJECT_CREATED_WITH_HOURS.call(
+          helpers.distance_of_time_in_words(project_hours.hours)
+        )
       else
-        tutorial_message [
-          "Good job — you created a project! Now cook up some code for a bit and track hours in your code editor.",
-          "Once you have some time tracked, come back here and post a devlog.",
-          "Remember, post devlogs every few hours. Not posting a devlog after over 10 hours of tracked time might lead to it being lost!"
-        ]
+        tutorial_message OnboardingCopy::PROJECT_CREATED_NO_HOURS
       end
 
       redirect_to @project
@@ -177,7 +166,7 @@ class ProjectsController < ApplicationController
       @project.soft_delete!(force: force)
       current_user.revoke_tutorial_step! :create_project if current_user.projects.empty?
       flash[:notice] = "Project deleted successfully"
-      redirect_to projects_path
+      redirect_to user_path(current_user, tab: "projects")
     rescue ActiveRecord::RecordInvalid => e
       flash[:alert] = e.record.errors.full_messages.to_sentence
       redirect_to @project

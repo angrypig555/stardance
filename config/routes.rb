@@ -443,8 +443,8 @@ Rails.application.routes.draw do
   get "auth/:provider/callback", to: "sessions#create"
   get "/auth/failure", to: "sessions#failure"
   delete "logout", to: "sessions#destroy"
-  get "dev_login", to: "sessions#dev_login", as: :dev_login_auto if Rails.env.development?
-  get "dev_login/:id", to: "sessions#dev_login", as: :dev_login if Rails.env.development?
+  get "dev_login", to: "sessions#dev_login", as: :dev_login_auto if Rails.env.development? || Rails.env.test?
+  get "dev_login/:id", to: "sessions#dev_login", as: :dev_login if Rails.env.development? || Rails.env.test?
 
   # OAuth callback for HCA
   # get "/oauth/callback", to: "sessions#create"
@@ -635,8 +635,9 @@ Rails.application.routes.draw do
 
   get "queue", to: "queue#index"
 
-  # Projects
-  resources :projects, shallow: true do
+  # Projects — public index lives on the user profile (tab=projects); only
+  # show/new/edit/update/destroy and the nested resources are exposed here.
+  resources :projects, shallow: true, except: [ :index ] do
     resources :memberships, only: [ :create, :destroy ], module: :projects
     resources :devlogs, only: %i[new create edit update destroy], module: :projects, shallow: false do
       member do
@@ -662,9 +663,18 @@ Rails.application.routes.draw do
   end
 
   # Public user profiles
-  resources :users, only: [ :show ] do
+  resources :users, only: [ :show, :update ] do
     resource :og_image, only: [ :show ], module: :users, defaults: { format: :png }
+    resource :follow, only: [ :create, :destroy ]
+    member do
+      get :followers
+      get :following
+    end
   end
+
+  # Autocomplete search endpoints (used by the bio editor and elsewhere).
+  get "search/users",    to: "search#users",    as: :search_users
+  get "search/projects", to: "search#projects", as: :search_projects
 
   get "edu", to: "landing#edu", as: :edu
 

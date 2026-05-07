@@ -117,7 +117,7 @@ class SessionsController < ApplicationController
       return
     end
 
-    redirect_to(user.setup_complete? ? projects_path : home_path, notice: "Signed in with Hack Club")
+    redirect_to(user.setup_complete? ? user_path(user, tab: "projects") : home_path, notice: "Signed in with Hack Club")
   end
 
   def destroy
@@ -130,7 +130,7 @@ class SessionsController < ApplicationController
   end
 
   def dev_login
-    return head :not_found unless Rails.env.development?
+    return head :not_found unless Rails.env.development? || Rails.env.test?
 
     user = if params[:id].present?
       User.find_by(id: params[:id])
@@ -143,7 +143,11 @@ class SessionsController < ApplicationController
     end
 
     session[:user_id] = user.id
-    redirect_to "/projects", notice: "Dev logged in as #{user.display_name}"
+    if Rails.env.test?
+      head :ok
+    else
+      redirect_to "/projects", notice: "Dev logged in as #{user.display_name}"
+    end
   end
 
   private

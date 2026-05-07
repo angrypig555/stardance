@@ -1,306 +1,842 @@
-.user-profile {
-  padding: 2em 5em;
+// User profile page (replaces the legacy Flavortown profile).
+// Layout: banner → profile card overlapping → tab strip → tab content.
+
+// The page has three visual columns: fixed sidebar on the left, main content
+// in the center of the viewport, fixed right rail on the right. The sidebars
+// live in `position: fixed` so the main column can center on the *full*
+// viewport regardless of the sidebars' widths.
+body.user-profile-page.signed-in {
+  margin-left: 0;
+  margin-right: 0;
+
+  @media (max-width: 960px) {
+    margin-left: var(--space-m);
+    margin-right: var(--space-m);
+    margin-bottom: 180px; // preserve safe area for the bottom-bar sidebar
+  }
+}
+
+.profile-layout {
+  --layout-gap: 24px;
+  --nav-reserved: 340px;  // sidebar width + 20px inset
+  --aside-reserved: 457px; // aside width + 32px inset
+  --main-max: 1200px;
+
+  // Sit between the fixed sidebars rather than spanning the full viewport,
+  // so main's centering happens inside the *available* space and the visual
+  // gaps to nav and aside come out even.
+  margin-left: calc(var(--nav-reserved) + var(--layout-gap));
+  margin-right: calc(var(--aside-reserved) + var(--layout-gap));
+  padding: var(--space-xxl) 0 var(--space-xxl);
+}
+
+.profile-layout__main {
+  max-width: var(--main-max);
+  margin: 0 auto;
+  width: 100%;
+}
+
+// The profile_tabs Turbo Frame wraps the tab nav + tab content; give it the
+// same flex/gap rhythm the rest of `.profile-layout__main` uses so the gap
+// between tabs and content is preserved.
+turbo-frame#profile_tabs {
   display: flex;
-  flex-direction: row;
-  gap: 2em;
+  flex-direction: column;
+  gap: var(--space-m);
+}
 
-  &__left {
-    width: 300px;
+@media (max-width: 1500px) {
+  .profile-layout {
+    --nav-reserved: 266px; // narrower sidebar at this breakpoint
+    --layout-gap: 16px;
+  }
+}
+
+@media (max-width: 1280px) {
+  .profile-layout {
+    --aside-reserved: 0px; // aside is hidden at this breakpoint
+  }
+}
+
+@media (max-width: 960px) {
+  .profile-layout {
+    --nav-reserved: 0px; // sidebar drops to the bottom at this breakpoint
+    max-width: 100%;
+  }
+}
+
+.profile-layout__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+
+.profile-layout__aside {
+  position: fixed;
+  right: var(--space-xl);
+  top: var(--space-xxl);
+  width: 425px;
+  max-height: calc(100vh - var(--space-xxl) - var(--space-xl));
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+
+  @media (max-width: 1280px) {
+    display: none;
+  }
+}
+
+.profile {
+  --profile-banner-aspect: 4.7 / 1;
+  --profile-radius: 8px;
+
+  display: block;
+  width: 100%;
+}
+
+.profile__header {
+  display: flex;
+  flex-direction: column;
+}
+
+// Banner
+.profile__banner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--profile-banner-aspect);
+  background-color: var(--color-space-bg-2);
+  background-image: var(--banner-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-top-left-radius: var(--profile-radius);
+  border-top-right-radius: var(--profile-radius);
+  overflow: hidden;
+}
+
+.profile__back {
+  position: absolute;
+  top: var(--space-m);
+  left: var(--space-m);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-space-surface-soft);
+  color: var(--color-space-text);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  backdrop-filter: blur(4px);
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+}
+
+.profile__back-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  color: currentColor;
+}
+
+// Banner upload (visible only in edit mode)
+.profile__banner-upload {
+  position: absolute;
+  inset: auto var(--space-m) var(--space-m) auto;
+  padding: var(--space-xs) var(--space-m);
+  border-radius: 999px;
+  background: var(--color-space-surface);
+  color: var(--color-space-text);
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-s);
+
+  .profile--editing & {
+    display: inline-flex;
+  }
+}
+
+.profile__banner-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+// Profile card (overlapping bottom of banner)
+.profile__card {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  padding: 28px 24px 24px;
+  margin-top: -1px; // join visually
+  background: var(--color-space-surface);
+  color: var(--color-space-text);
+  border-bottom-left-radius: var(--profile-radius);
+  border-bottom-right-radius: var(--profile-radius);
+}
+
+.profile__avatar-wrap {
+  flex-shrink: 0;
+}
+
+.profile__avatar {
+  width: 57px;
+  height: 57px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.profile__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.profile__top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-l);
+  flex-wrap: wrap;
+}
+
+.profile__identity {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.profile__handle {
+  margin: 0;
+  font-size: 2.5rem; // 40px
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-space-text);
+}
+
+.profile__joined {
+  margin: 0;
+  font-size: 1rem; // 16px
+  line-height: 1;
+  color: var(--color-space-text);
+  opacity: 0.6;
+}
+
+// Stats row
+.profile__stats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.profile__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.1;
+}
+
+.profile__stat-num {
+  font-size: 1.375rem; // 22px
+  font-weight: 700;
+}
+
+.profile__stat-label {
+  font-size: 1rem; // 16px
+  opacity: 0.6;
+}
+
+// Bio
+.profile__bio {
+  font-size: 1.375rem; // 22px
+  line-height: 1.3;
+  // No `white-space: pre-wrap` here: render_bio already converts \n to <br>
+  // and pre-wrap would render the ERB-template indentation around the
+  // <%= render_bio %> call as visible leading whitespace.
+  word-wrap: break-word;
+
+  .profile--editing & {
+    display: none;
+  }
+}
+
+.profile__bio-empty {
+  opacity: 0.55;
+  font-style: italic;
+}
+
+.bio-link {
+  color: var(--color-space-text);
+  text-decoration: underline;
+}
+
+.bio-mention {
+  color: var(--color-space-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+// Bio editor (contenteditable + autocomplete)
+.profile__bio-editor {
+  position: relative;
+  display: none;
+  flex-direction: column;
+  gap: var(--space-xs);
+
+  .profile--editing & {
     display: flex;
-    flex-direction: column;
-    gap: 1em;
+  }
+}
 
-    @media (max-width: 960px) {
-      width: 100%;
-    }
+.profile__bio-input {
+  min-height: 4em;
+  // Negative side margins balance the padding so the text starts at the same
+  // x-position as the read-mode bio sitting above.
+  padding: var(--space-xs) var(--space-s);
+  margin: 0 calc(-1 * var(--space-s));
+  border-radius: 6px;
+  border: 1px dashed var(--color-space-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-space-text);
+  // Match read-mode bio typography exactly so text doesn't shift on edit.
+  font-family: inherit;
+  font-size: 1.375rem; // 22px, same as .profile__bio
+  line-height: 1.3;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  outline: none;
+
+  &:focus {
+    border-color: var(--color-space-accent);
+    border-style: solid;
+  }
+}
+
+// Chips inside the editor render with the same underline as the rendered
+// .bio-mention links — keeps the text "shape" identical between the two
+// modes; only a subtle background hint marks them as interactive tokens.
+.profile__bio-input .bio-chip {
+  color: var(--color-space-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: inherit;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  border-radius: 2px;
+}
+
+.profile__bio-input:focus .bio-chip {
+  background: var(--color-space-accent-soft);
+}
+
+.profile__bio-suggest {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 30;
+  margin-top: 4px;
+  min-width: 240px;
+  max-height: 280px;
+  overflow-y: auto;
+  background: var(--color-space-bg-2);
+  border: 1px solid var(--color-space-border);
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.profile__bio-suggest-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-s);
+  cursor: pointer;
+  color: var(--color-space-text);
+  font-size: 0.95rem;
+
+  &--active,
+  &:hover {
+    background: var(--color-space-accent-soft);
+  }
+}
+
+.profile__bio-suggest-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile__bio-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+.profile__bio-hint kbd {
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+// Footer (follow counts + actions)
+.profile__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-m);
+}
+
+.profile__follow-counts {
+  margin: 0;
+  display: flex;
+  gap: var(--space-l);
+}
+
+.profile__follow-count {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+  font-size: 1rem; // 16px
+
+  strong {
+    font-weight: 700;
   }
 
-  &__card {
-    background-color: var(--color-tan-400);
-    color: var(--color-brown-700);
-    border-radius: 8px;
-    padding: 1em;
-    box-shadow: var(--shadow);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    height: fit-content;
-    text-align: center;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.profile__actions {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.profile__action-btn {
+  padding: 3px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--color-space-text);
+  background: transparent;
+  color: var(--color-space-text);
+  font-size: 1rem; // 16px
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
   }
 
-  &__heading {
-    margin-top: 1.5em;
-    text-align: left;
-    font-size: 1rem;
-    color: var(--color-brown-500);
-
-    svg {
-      width: 15px;
-      height: 15px;
-    }
+  &--primary {
+    background: var(--color-space-surface);
   }
 
-  &__identity {
-    img {
-      width: 75px;
-      height: 75px;
-      border-radius: 100%;
-    }
-
-    h1 {
-      font-size: 1.6rem;
-      font-weight: normal;
-    }
-
-    h2 {
-      font-size: 1rem;
-      color: var(--color-brown-500);
-      font-weight: normal;
-    }
+  &--follow {
+    padding: 8px 28px;
+    font-size: 1.25rem; // 20px
+    font-weight: 600;
   }
 
-  &__bio {
-    margin-top: 0.5em;
-    text-align: left;
-    font-size: 1rem;
-    color: var(--color-brown-700);
-  }
-
-  &__edit-profile-btn {
-    margin-top: 1em;
-    padding: 0.5em 1em;
-    background-color: var(--color-brown-500);
-    color: var(--color-bg) !important;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    width: 100%;
-    display: flex;
-    gap: 0.5em;
-    justify-content: center;
-    align-items: center;
-
-    svg {
-      width: 15px;
-      height: 15px;
-      margin-top: -2px;
+  &--following {
+    .profile__follow-label-hover {
+      display: none;
     }
 
     &:hover {
-      background-color: var(--color-brown-700);
-      cursor: pointer;
+      background: rgba(255, 80, 80, 0.18);
+      border-color: rgba(255, 120, 120, 0.7);
+
+      .profile__follow-label-default { display: none; }
+      .profile__follow-label-hover   { display: inline; }
     }
   }
+}
 
-  &__stats {
-    margin-top: 0.5em;
-    display: grid;
-    grid-template-columns: auto auto;
-    gap: 1em;
+.profile__follow-form {
+  display: inline;
+  margin: 0;
+}
 
-    @media (max-width: 960px) {
-      display: flex;
-      justify-content: space-evenly;
-      flex-wrap: wrap;
-    }
+// Tabs
+.profile-tabs {
+  display: flex;
+  gap: 14px;
+}
 
-    h3 {
-      font-size: 1rem;
-      font-weight: normal;
-    }
+.profile-tabs__tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border: 2px solid var(--color-space-border);
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--color-space-text);
+  font-size: 1.375rem; // 22px
+  background: transparent;
 
-    h4 {
-      font-weight: normal;
-      font-size: 1.1rem;
-    }
+  &--active {
+    background: var(--color-space-surface-soft);
   }
 
-  &__time {
-    margin-top: 0.5em;
-    display: flex;
-    justify-content: space-between;
-
-    h4 {
-      font-weight: normal;
-      color: var(--color-brown-700);
-    }
+  &:hover:not(&--active) {
+    background: rgba(94, 102, 135, 0.18);
   }
+}
 
-  &__project-card {
-    margin-top: 0.5em;
-    display: flex;
-    flex-direction: row;
-    gap: 0.5em;
-    padding: 0.5em;
-    border-radius: 4px;
+// Tab content
+.profile-tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
 
-    img {
-      height: 50px;
-      width: 50px;
-      object-fit: cover;
-      border-radius: 4px;
-    }
+.profile-tab-content__empty {
+  padding: var(--space-xl);
+  text-align: center;
+  color: var(--color-space-text);
+  border: 2px dashed var(--color-space-border);
+  border-radius: var(--profile-radius);
+  opacity: 0.7;
+  font-size: 1.4rem;
+  margin: 0;
+}
 
-    h3 {
-      font-weight: normal;
-      text-align: left;
-    }
+// Projects tab — rich cards with banner + meta + description.
+.project-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+}
 
-    &:hover {
-      cursor: pointer;
-      background-color: var(--color-brown-700);
-      color: var(--color-bg);
-    }
+.project-list__item {
+  display: block;
+}
+
+.profile-project-card {
+  display: flex;
+  gap: 21px;
+  padding-right: 24px;
+  background: var(--color-space-surface-soft);
+  // Use box-shadow as a fake border so the banner image can extend over it
+  // without being clipped by border-radius.
+  box-shadow: 0 0 0 2px var(--color-space-border);
+  border-radius: 16px;
+  color: var(--color-space-text);
+  text-decoration: none;
+  overflow: hidden;
+  transition: filter 150ms ease;
+
+  &:hover {
+    filter: brightness(1.1);
   }
+}
 
-  &__project-card-title {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+.profile-project-card__banner {
+  width: 220px;
+  flex-shrink: 0;
+  align-self: stretch;
+  background: rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  // Inherit the parent card's left-side rounding so the image's corners
+  // visually overlap the card's box-shadow border.
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
+}
+
+.profile-project-card__banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.profile-project-card__body {
+  flex: 1;
+  min-width: 0;
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-m);
+}
+
+.profile-project-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  flex-wrap: wrap;
+}
+
+.profile-project-card__title {
+  margin: 0;
+  font-size: 2.5rem; // 40px
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-space-text);
+}
+
+.profile-project-card__meta {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  opacity: 0.75;
+}
+
+.profile-project-card__meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 1rem; // 16px
+  white-space: nowrap;
+}
+
+.profile-project-card__meta-item--time {
+  gap: 8px; // breathing room between clock and "8h"
+}
+
+.profile-project-card__meta-icon {
+  width: 28px;
+  height: 28px;
+  color: currentColor;
+}
+
+.profile-project-card__meta-icon--time {
+  width: 22px;
+  height: 22px;
+}
+
+.profile-project-card__authors {
+  margin: 0;
+  font-size: 1rem; // 16px
+  opacity: 0.6;
+}
+
+.profile-project-card__author {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.profile-project-card__description {
+  margin: 0;
+  font-size: 1.375rem; // 22px
+  line-height: 1.3;
+}
+
+.profile-project-card__updated {
+  margin: 0;
+  font-size: 1rem; // 16px
+  opacity: 0.6;
+}
+
+.profile-project-card--new {
+  background: transparent;
+  border-style: dashed;
+  justify-content: center;
+  padding: 24px;
+  font-size: 1.375rem; // 22px
+  opacity: 0.75;
+
+  &:hover {
+    opacity: 1;
+    filter: none;
   }
+}
 
-  &__activity {
-    > h2 {
-      font-weight: normal;
-      margin-bottom: 1em;
+// Followers/following modal
+.followers-modal {
+  border: none;
+  border-radius: var(--profile-radius);
+  padding: 0;
+  background: var(--color-space-bg-2);
+  color: var(--color-space-text);
+  width: min(440px, 90vw);
+  max-height: 80vh;
 
-      @media (max-width: 960px) {
-        text-align: center;
-      }
-    }
-
-    .post {
-      &::after {
-        display: none;
-      }
-
-      &::before {
-        display: none;
-      }
-
-      .comments-section {
-        display: none;
-      }
-    }
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2px);
   }
+}
 
-  &__project-stats {
-    width: 100%;
+.followers-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-m) var(--space-l);
+  border-bottom: 1px solid var(--color-space-border);
+}
 
-    h6 {
-      background-color: var(--color-green-500);
-      padding: 0.1em 0.5em;
-      color: var(--color-bg);
-      font-weight: normal;
-      border-radius: 16px;
-      text-align: left;
-      font-size: 1rem;
-      width: fit-content;
-      height: fit-content;
-    }
+.followers-modal__title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.followers-modal__close {
+  background: none;
+  border: none;
+  color: var(--color-space-text);
+  font-size: 1.6rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.followers-modal__body {
+  padding: var(--space-m);
+  overflow-y: auto;
+}
+
+.followers-modal__loading {
+  margin: 0;
+  text-align: center;
+  opacity: 0.6;
+}
+
+.follow-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.follow-list__item + .follow-list__item {
+  border-top: 1px solid var(--color-space-border);
+}
+
+.follow-list__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  padding: var(--space-s);
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    background: var(--color-space-surface-soft);
   }
+}
 
-  &__achievements {
-    margin-top: 0.75rem;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
+.follow-list__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
 
-  &__achievement {
-    width: 100px;
-    background: var(--color-bg);
-    border-radius: 12px;
-    padding: 0.2rem;
-    box-shadow: var(--shadow);
-    text-align: center;
-  }
+.follow-list__name {
+  font-weight: 600;
+}
 
-  &__achievement-icon {
-    margin: 0 auto 0.4rem;
-    width: 44px;
-    height: 44px;
+.follow-list__empty {
+  margin: 0;
+  text-align: center;
+  opacity: 0.6;
+  padding: var(--space-l);
+}
 
-    svg,
-    img {
-      width: 44px;
-      height: 44px;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto;
-    }
-  }
+// Edit-mode visual flag (subtle outline on the profile card)
+.profile--editing .profile__card {
+  outline: 2px solid var(--color-space-accent);
+}
 
-  &__achievement-title {
-    font-family: var(--font-family-subtitle);
-    font-size: 0.9rem;
-    color: var(--color-brown-700);
-    line-height: 1.2;
-  }
-
-  &__orders {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
-    margin-top: 1em;
-  }
-
-  &__order {
-    background-color: var(--color-bg);
-    padding: 0.2em;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: var(--shadow);
-
-    h3 {
-      font-weight: normal;
-      font-size: 1rem;
-    }
-  }
-
-  &__order-item-image {
-    width: 44px;
-    height: 44px;
-    object-fit: cover;
-    border-radius: 4px;
-  }
-
-  .user-profile__order-item-name {
-    &--red {
-      color: var(--color-red-500);
-    }
-
-    &--blue {
-      color: var(--color-blue-500);
-    }
-
-    &--green {
-      color: var(--color-green-500);
-    }
-
-    &--yellow {
-      color: var(--color-yellow-500);
-    }
-  }
+// PostComponent :profile_dark theme overrides
+.post.post--profile-dark {
+  background: transparent;
+  border: 2px solid var(--color-space-border);
+  border-radius: var(--profile-radius);
+  color: var(--color-space-text);
 
   a {
     color: inherit;
-    text-decoration: none;
   }
+}
 
-  @media (max-width: 960px) {
-    flex-direction: column;
+// Right rail (placeholder content until populated in a later PR)
+.right-rail__search {
+  position: relative;
+}
+
+.right-rail__search-input {
+  width: 100%;
+  height: 55px;
+  padding: 0 48px 0 16px;
+  border: 2px solid var(--color-space-text);
+  border-radius: var(--profile-radius);
+  background: transparent;
+  color: var(--color-space-text);
+  font-family: inherit;
+  font-size: 1.375rem; // 22px
+
+  &::placeholder {
+    color: var(--color-space-text);
+    opacity: 0.85;
   }
+}
 
-  @media (max-width: 1200px) {
-    padding: 2em 1em;
-  }
+.right-rail__search-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: var(--color-space-text);
+  pointer-events: none;
+}
 
-  @media (max-width: 600px) {
-    padding: 2em 0;
+.right-rail__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  margin-top: var(--space-xs);
+}
+
+.right-rail__heading {
+  margin: 0;
+  font-size: 1.375rem; // 22px
+  font-weight: 400;
+  color: var(--color-space-text);
+}
+
+.right-rail__placeholder {
+  background: rgba(217, 217, 217, 0.5);
+  border-radius: var(--profile-radius);
+  height: 80px;
+
+  &--tall {
+    height: 331px;
   }
 }

@@ -8,6 +8,7 @@
 #  banned                                  :boolean          default(FALSE), not null
 #  banned_at                               :datetime
 #  banned_reason                           :text
+#  bio                                     :text
 #  club_link                               :string
 #  club_name                               :string
 #  display_name                            :string
@@ -62,13 +63,15 @@
 #  index_users_on_slack_id            (slack_id) UNIQUE
 #
 one:
-  email: MyString
+  email: one@example.test
   display_name: MyString
+  slack_id: U_FIXTURE_ONE
   projects_count: 1
   votes_count: 1
 
 two:
-  email: MyString
+  email: two@example.test
   display_name: MyString
+  slack_id: U_FIXTURE_TWO
   projects_count: 1
   votes_count: 1

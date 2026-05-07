@@ -197,7 +197,7 @@
       transparent var(--panel-overlap),
       black calc(var(--panel-overlap) + var(--panel-fade))
     );
-            mask-image: linear-gradient(
+    mask-image: linear-gradient(
       to bottom,
       transparent 0,
       transparent var(--panel-overlap),

@@ -32,8 +32,8 @@ class GuidesControllerTest < ActionDispatch::IntegrationTest
     get guide_path(:how_to_ship)
     assert_response :success
     assert_select '[data-controller="decision-tree"]'
-    assert_select '[data-decision-tree-nodes-value]'
-    assert_select '[data-decision-tree-root-value]', { value: ShipDecisionTree::ROOT_ID }
+    assert_select "[data-decision-tree-nodes-value]"
+    assert_select "[data-decision-tree-root-value]", { value: ShipDecisionTree::ROOT_ID }
   end
 
   test "ShipDecisionTree exposes a complete graph" do

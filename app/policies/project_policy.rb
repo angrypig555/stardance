@@ -1,8 +1,4 @@
 class ProjectPolicy < ApplicationPolicy
-    def index?
-        logged_in?
-    end
-
     def show?
         true
     end

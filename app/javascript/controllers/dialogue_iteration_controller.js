@@ -309,6 +309,17 @@ export default class extends Controller {
     this.#startSpriteAnimation();
     this.isTyping = true;
 
+    // Reduced-motion users skip the typewriter and sprite animation; the
+    // line just appears.
+    if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      this.contentTarget.textContent = line;
+      this.#stopTyping();
+      return;
+    }
+
     if (typeof yap === "function") {
       this.yapGeneration++;
       const currentGeneration = this.yapGeneration;

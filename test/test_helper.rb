@@ -19,7 +19,7 @@ module ActionDispatch
     private
 
     def sign_in(user)
-      session[:user_id] = user.id
+      get dev_login_path(user.id)
     end
   end
 end

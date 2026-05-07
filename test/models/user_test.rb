@@ -6,6 +6,7 @@
 #  banned                                  :boolean          default(FALSE), not null
 #  banned_at                               :datetime
 #  banned_reason                           :text
+#  bio                                     :text
 #  club_link                               :string
 #  club_name                               :string
 #  display_name                            :string

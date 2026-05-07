@@ -43,11 +43,7 @@ class Projects::DevlogsController < ApplicationController
         end
 
         if current_user.complete_tutorial_step! :post_devlog
-          tutorial_message [
-            "Yay! You just earned free stickers for posting your first devlog — claim them from the Kitchen!",
-            "Now ship your project (when it is cooked to your satisfaction) to earn cookies 🍪 and exchange those for stuff in the shop.",
-            "Bonne chance! Remember, anyone can cook — go forth and whip up a storm!"
-          ]
+          tutorial_message OnboardingCopy::FIRST_DEVLOG_POSTED
         end
 
         return redirect_to @project

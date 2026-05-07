@@ -1,47 +1,26 @@
-<aside class="sidebar" aria-label="Main">
+<aside class="sidebar"
+       id="primary-nav"
+       data-controller="sidebar-active"
+       data-turbo-permanent
+       aria-label="Main">
   <%= link_to root_path, class: "sidebar__logo", "aria-label": "Stardance home" do %>
     <%= image_tag "landing/header/stardance-logo.png", alt: "Hack Club Stardance Challenge", class: "sidebar__logo-img" %>
   <% end %>
 
   <nav class="sidebar__nav" aria-label="Primary navigation">
-    <% vote_locked = !current_user.has_shipped? %>
-    <% sidebar_nav_items = [
-      { slug: "home", label: "home", path: home_path, icon: "home" },
-      { slug: "notifications", label: "notifications", path: "#", icon: "bell" },
-      { slug: "vote", label: "vote", path: new_vote_path, icon: "star_outline", locked: vote_locked, locked_message: "The Vote tab unlocks once you ship your first project!" },
-      { slug: "events", label: "events", path: "#", icon: "code_outline" },
-      { slug: "shop", label: "shop", path: "/shop", icon: "cart_outline" },
-      { slug: "resources", label: "resources", path: guides_path, icon: "resources" },
-      { slug: "projects", label: "my projects", path: projects_path, icon: :avatar }
-    ] %>
-
-    <% sidebar_nav_items << { slug: "admin", label: "admin", path: admin_root_path, icon: "code" } if policy(:admin).access_admin_dashboard? %>
-    <% sidebar_nav_items << { slug: "fulfil", label: "fulfil", path: admin_shop_orders_path(view: "fulfillment"), icon: "shopping_cart_1_fill" } if current_user.fulfillment_person? && !current_user.admin? %>
-    <% sidebar_nav_items << { slug: "seller", label: "seller", path: seller_orders_path, icon: "shopping_cart_1_fill" } if current_user.seller? %>
-    <% sidebar_nav_items << { slug: "helper", label: "helper", path: helper_root_path, icon: "help" } if policy(:helper).access_helper_dashboard? %>
-    <% sidebar_nav_items << { slug: "certify", label: "certify", path: "https://review.hackclub.com/", icon: "ship" } if current_user.project_certifier? %>
-
     <ul class="sidebar__nav-list">
-      <% sidebar_nav_items.each do |item| %>
-        <% candidate_path = item[:path] %>
-        <% active = if candidate_path == "#"
-                      false
-                    else
-                      current_page?(candidate_path) ||
-                        request.path == candidate_path ||
-                        request.path.start_with?("#{candidate_path}/")
-                    end %>
-        <% link_classes = ["sidebar__nav-link", ("sidebar__nav-link--active" if active)].compact.join(" ") %>
+      <% nav_items.each do |item| %>
+        <% link_classes = link_classes_for(item) %>
 
         <li class="sidebar__nav-item" data-onboarding-target="<%= item[:slug] %>">
           <% icon_block = capture do %>
             <span class="sidebar__nav-icon-wrapper" aria-hidden="true">
               <% if item[:icon] == :avatar %>
-                <% if current_user.slack_id.present? %>
-                  <%= image_tag current_user.avatar, alt: "", class: "sidebar__nav-avatar" %>
+                <% if user.slack_id.present? %>
+                  <%= image_tag user.avatar, alt: "", class: "sidebar__nav-avatar" %>
                 <% else %>
                   <span class="sidebar__nav-avatar sidebar__nav-avatar--placeholder">
-                    <%= current_user.display_name.first.upcase %>
+                    <%= user.display_name.first.upcase %>
                   </span>
                 <% end %>
               <% else %>
@@ -70,7 +49,7 @@
               <span class="sidebar__nav-label"><%= item[:label] %></span>
             </span>
           <% else %>
-            <%= link_to item[:path], class: link_classes, aria: (active ? { current: "page" } : {}) do %>
+            <%= link_to item[:path], class: link_classes, aria: (active?(item) ? { current: "page" } : {}), data: { active_prefix: item[:active_prefix] }.compact do %>
               <%= icon_block %>
               <span class="sidebar__nav-label"><%= item[:label] %></span>
             <% end %>
@@ -84,8 +63,8 @@
     <div class="sidebar__user-card">
       <div class="sidebar__user-meta">
         <span class="sidebar__user-meta-label">logged in as</span>
-        <%= link_to user_path(current_user), class: "sidebar__user-meta-handle" do %>
-          @<%= current_user.display_name %>
+        <%= link_to user_path(user), class: "sidebar__user-meta-handle" do %>
+          @<%= user.display_name %>
         <% end %>
       </div>
 
@@ -105,17 +84,17 @@
   </div>
 
   <%= render layout: "shared/modal", locals: { id: "settings-modal", title: "Settings" } do %>
-    <%= form_with url: my_settings_path, method: :patch, local: true, class: "settings-form", id: "settings-form" do |f| %>
+    <%= form_with url: my_settings_path, method: :patch, local: true, class: "settings-form", id: "settings-form", data: { turbo: false } do |f| %>
       <div class="settings-form__field">
         <label class="settings-form__label" for="hcb_email">HCB Email</label>
-        <%= text_field_tag :hcb_email, current_user.hcb_email, id: "hcb_email", class: "settings-form__input", placeholder: current_user.email, autocomplete: "email" %>
+        <%= text_field_tag :hcb_email, user.hcb_email, id: "hcb_email", class: "settings-form__input", placeholder: user.email, autocomplete: "email" %>
         <small class="settings-form__hint">Email used for receiving HCB grants. Leave blank to use your default
           email.</small>
       </div>
 
       <div class="settings-form__field">
         <label class="settings-form__checkbox">
-          <%= check_box_tag :send_votes_to_slack, "1", current_user.send_votes_to_slack, id: "send_votes_to_slack" %>
+          <%= check_box_tag :send_votes_to_slack, "1", user.send_votes_to_slack, id: "send_votes_to_slack" %>
           <span>Send votes to Slack</span>
         </label>
         <small class="settings-form__hint">Share your votes in #flavortown-share-votes</small>
@@ -123,7 +102,7 @@
 
       <div class="settings-form__field">
         <label class="settings-form__checkbox">
-          <%= check_box_tag :leaderboard_optin, "1", current_user.leaderboard_optin, id: "leaderboard_optin" %>
+          <%= check_box_tag :leaderboard_optin, "1", user.leaderboard_optin, id: "leaderboard_optin" %>
           <span>Opt in to the leaderboard</span>
         </label>
         <small class="settings-form__hint">Check this if you want to be shown on the leaderboard</small>
@@ -131,7 +110,7 @@
 
       <div class="settings-form__field">
         <label class="settings-form__checkbox">
-          <%= check_box_tag :slack_balance_notifications, "1", current_user.slack_balance_notifications, id: "slack_balance_notifications" %>
+          <%= check_box_tag :slack_balance_notifications, "1", user.slack_balance_notifications, id: "slack_balance_notifications" %>
           <span>Balance change notifications</span>
         </label>
         <small class="settings-form__hint">Receive a Slack DM when your Stardust balance changes</small>
@@ -139,7 +118,7 @@
 
       <div class="settings-form__field">
         <label class="settings-form__checkbox">
-          <%= check_box_tag :send_notifications_for_followed_devlogs, "1", current_user.send_notifications_for_followed_devlogs, id: "send_notifications_for_followed_devlogs" %>
+          <%= check_box_tag :send_notifications_for_followed_devlogs, "1", user.send_notifications_for_followed_devlogs, id: "send_notifications_for_followed_devlogs" %>
           <span>Followed project notifications</span>
         </label>
         <small class="settings-form__hint">Receive a Slack DM when a project you're following has a new devlog</small>
@@ -147,7 +126,7 @@
 
       <div class="settings-form__field">
         <label class="settings-form__checkbox">
-          <%= check_box_tag :send_notifications_for_new_followers, "1", current_user.send_notifications_for_new_followers, id: "send_notifications_for_new_followers" %>
+          <%= check_box_tag :send_notifications_for_new_followers, "1", user.send_notifications_for_new_followers, id: "send_notifications_for_new_followers" %>
           <span>New follower notifications</span>
         </label>
         <small class="settings-form__hint">Receive a Slack DM when someone starts following a project you're making</small>
@@ -155,7 +134,7 @@
 
       <div class="settings-form__field">
         <label class="settings-form__checkbox">
-          <%= check_box_tag :send_notifications_for_new_comments, "1", current_user.send_notifications_for_new_comments, id: "send_notifications_for_new_comments" %>
+          <%= check_box_tag :send_notifications_for_new_comments, "1", user.send_notifications_for_new_comments, id: "send_notifications_for_new_comments" %>
           <span>New comment notifications</span>
         </label>
         <small class="settings-form__hint">Receive a Slack DM when someone comments on a project you made</small>
@@ -163,7 +142,7 @@
 
       <div class="settings-form__field">
         <label class="settings-form__checkbox">
-          <%= check_box_tag :special_effects_enabled, "1", current_user.special_effects_enabled, id: "special_effects_enabled" %>
+          <%= check_box_tag :special_effects_enabled, "1", user.special_effects_enabled, id: "special_effects_enabled" %>
           <span>Special effects</span>
         </label>
         <small class="settings-form__hint">Enable/Disable visual effects during special events</small>
@@ -171,7 +150,7 @@
 
       <div class="settings-form__field">
         <label class="settings-form__checkbox">
-          <%= check_box_tag :search_engine_indexing_off, "1", current_user.search_engine_indexing_off, id: "search_engine_indexing_off" %>
+          <%= check_box_tag :search_engine_indexing_off, "1", user.search_engine_indexing_off, id: "search_engine_indexing_off" %>
           <span>Opt out of search engine indexing</span>
         </label>
         <small class="settings-form__hint">Your profile will not be indexed by search engines</small>
@@ -185,14 +164,14 @@
 
     <div class="settings-form__section">
       <label class="settings-form__label">Club</label>
-      <% if current_user.club_name.present? %>
+      <% if user.club_name.present? %>
         <p class="settings-form__club-status">
-          🏫 Linked to <strong><%= current_user.club_name %></strong>
+          🏫 Linked to <strong><%= user.club_name %></strong>
         </p>
         <%= button_to "Unlink club", my_club_path, method: :delete, class: "settings-form__club-unlink", form: { onsubmit: "return confirm('Are you sure you want to unlink your club?')" } %>
-      <% elsif current_user.airtable_record_id.present? %>
+      <% elsif user.airtable_record_id.present? %>
         <%= link_to "Link your club",
-              current_user.fillout_club_url,
+              user.fillout_club_url,
               target: "_blank",
               rel: "noopener",
               class: "settings-form__club-link" %>

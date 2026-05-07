@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_06_200406) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_06_215815) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -223,6 +223,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_200406) do
     t.datetime "updated_at", null: false
     t.text "value"
     t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
+  end
+
+  create_table "follows", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "followed_id", null: false
+    t.bigint "follower_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["followed_id"], name: "index_follows_on_followed_id"
+    t.index ["follower_id", "followed_id"], name: "index_follows_on_follower_id_and_followed_id", unique: true
+    t.index ["follower_id"], name: "index_follows_on_follower_id"
+    t.check_constraint "follower_id <> followed_id", name: "follows_no_self_follow"
   end
 
   create_table "fulfillment_payout_lines", force: :cascade do |t|
@@ -776,6 +787,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_200406) do
     t.boolean "banned", default: false, null: false
     t.datetime "banned_at"
     t.text "banned_reason"
+    t.text "bio"
     t.string "club_link"
     t.string "club_name"
     t.datetime "created_at", null: false
@@ -883,6 +895,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_200406) do
   add_foreign_key "devlog_versions", "post_devlogs", column: "devlog_id"
   add_foreign_key "devlog_versions", "users"
   add_foreign_key "flavortime_sessions", "users"
+  add_foreign_key "follows", "users", column: "followed_id"
+  add_foreign_key "follows", "users", column: "follower_id"
   add_foreign_key "fulfillment_payout_lines", "fulfillment_payout_runs"
   add_foreign_key "fulfillment_payout_lines", "users"
   add_foreign_key "fulfillment_payout_runs", "users", column: "approved_by_user_id"

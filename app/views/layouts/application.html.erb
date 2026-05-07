@@ -75,7 +75,7 @@
       </div>
     <% end %>
     <% if current_user.present? && !current_user.banned? && !@hide_sidebar %>
-      <%= render "shared/sidebar" %>
+      <%= render SidebarComponent.new(user: current_user) %>
     <% end %>
     <%= render "shared/flash" %>
     <% if tutorial_messages.present? %>
