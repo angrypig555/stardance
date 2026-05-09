@@ -78,7 +78,10 @@ export default class extends Controller {
       window.removeEventListener("scroll", this._onPinScroll);
     }
     if (this._onFullscreenChange) {
-      document.removeEventListener("fullscreenchange", this._onFullscreenChange);
+      document.removeEventListener(
+        "fullscreenchange",
+        this._onFullscreenChange,
+      );
     }
     if (this.player) this.player.destroy().catch(() => {});
   }
